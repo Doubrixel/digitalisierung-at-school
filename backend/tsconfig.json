@@ -1,4 +1,9 @@
 {
+  "exclude": [
+    "node_modules",
+    "client",
+    "build"
+  ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
 
