@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
+# sh statt bash, weil wir im docker image kein bash haben
 
 echo Building digitalisierung at school project
 
