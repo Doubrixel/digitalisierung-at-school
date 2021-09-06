@@ -11,7 +11,10 @@ function App() {
       <Toolbar />
       <Switch>
         <Route exact path="/"><h1>HOME</h1></Route>
-        <Route exact path="/ag"><h1>AG BUCHUNG</h1></Route>
+        <Route exact path="/ag"><h1>AG Buchung</h1></Route>
+        <Route exact path="/facharbeit"><h1>Facharbeit</h1></Route>
+        <Route exact path="/wahlpflicht"><h1>Wahlpflicht</h1></Route>
+        <Route exact path="/pruefungskomponente"><h1>Prüfungskomponente</h1></Route>
       </Switch>
     </BrowserRouter>
   );
