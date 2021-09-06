@@ -5,16 +5,23 @@ import {
 } from 'react-router-dom';
 import Toolbar from './components/Toolbar/Toolbar';
 
+// Pages Import
+import HomePage from './pages/HomePage';
+import AGEntryPage from './pages/AGEntryPage';
+import FacharbeitsEntryPage from './pages/FacharbeitsEntryPage';
+import WahlpflichtEntryPage from './pages/WahlpflichtEntryPage';
+import PruefungskomponenteEntryPage from './pages/PruefungskomponenteEntryPage';
+
 function App() {
   return (
     <BrowserRouter>
       <Toolbar />
       <Switch>
-        <Route exact path="/"><h1>HOME</h1></Route>
-        <Route exact path="/ag"><h1>AG Buchung</h1></Route>
-        <Route exact path="/facharbeit"><h1>Facharbeit</h1></Route>
-        <Route exact path="/wahlpflicht"><h1>Wahlpflicht</h1></Route>
-        <Route exact path="/pruefungskomponente"><h1>Prüfungskomponente</h1></Route>
+        <Route exact path="/"><HomePage /></Route>
+        <Route exact path="/ag"><AGEntryPage /></Route>
+        <Route exact path="/facharbeit"><FacharbeitsEntryPage /></Route>
+        <Route exact path="/wahlpflicht"><WahlpflichtEntryPage /></Route>
+        <Route exact path="/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
       </Switch>
     </BrowserRouter>
   );
