@@ -1,0 +1,34 @@
+#footer {
+    background-color: #1b2b4b;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    color: #cdc9c9;
+}
+
+#erreichbarkeit {
+    right: 10px;
+    margin-left:10px;
+}
+
+#copyright{
+    bottom: 0;
+    text-align: center;
+    background-color: #1e62a9;
+}
+
+.kontakt-element{
+
+}
+
+h4{
+    border-bottom: 4px solid #4f9eff;
+    width: 15%;
+    margin-bottom: auto;
+}
+
+hr{
+    width:50%;
+    text-align:left;
+    margin-left:0
+}
