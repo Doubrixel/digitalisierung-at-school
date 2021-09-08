@@ -1,0 +1,58 @@
+.nav-logo {
+  width: 100px;
+}
+
+.nav-logo-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.toolbar {
+  background-color: var(--toolbar-main);
+}
+
+.nav-link h4 {
+  font-size: 1.5rem;
+  color: black;
+  text-decoration: none;
+}
+
+.nav-toggle {
+  font-size: 1.5rem;
+  color: var(--blue);
+  background: transparent;
+  border-color: transparent;
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.nav-link {
+  padding: 0;
+  margin: 0 1.5rem;
+}
+
+.nav-link h4:hover {
+  font-weight: bold;
+  color: var(--blue);
+}
+
+.links-container {
+  padding: 10px 5px
+}
+
+@media screen and (min-width: 1000px) {
+  .toolbar {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+  }
+
+  .links-container {
+    display: flex;
+    align-self: flex-end;
+  }
+}
