@@ -1,11 +1,17 @@
 import React from 'react';
 import './App.css';
 
+import { TextFormInputFifthExamComponent } from './components/forminputElementText';
+import { RadioButtonFormInputFifthExamComponent } from './components/forminputElementRadioButton';
+import { SubmitButtonFormInputFifthExamComponent } from './components/forminputElementSubmitButton';
+
 function App() {
   return (
-    <div className="App">
-      <h1>Hello Digitalisierung</h1>
-    </div>
+    <form>
+      <TextFormInputFifthExamComponent />
+      <RadioButtonFormInputFifthExamComponent />
+      <SubmitButtonFormInputFifthExamComponent />
+    </form>
   );
 }
 
