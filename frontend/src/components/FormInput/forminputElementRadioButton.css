@@ -1,5 +1,5 @@
 .radioButtonInputFormElement{
-    border: 2px #3062A4 solid;
+    border: 2px var(--blue) solid;
     border-radius: 20px;
     margin: 5px;
 }
