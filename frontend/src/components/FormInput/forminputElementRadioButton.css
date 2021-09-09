@@ -1,0 +1,17 @@
+.radioButtonInputFormElement{
+    border: 2px #3062A4 solid;
+    border-radius: 20px;
+    margin: 5px;
+}
+.radioButtonInput{
+    width:100%;
+}
+.inputDivRadioElement{
+    display:table-cell;
+    width:100%;
+    padding-right: 20px;
+    padding-left: 0.5%;
+    vertical-align: middle;
+}
+
+/* label css see text-input css file */
