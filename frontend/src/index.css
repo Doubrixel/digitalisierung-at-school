@@ -4,3 +4,8 @@ body {
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 }
+
+:root {
+  --toolbar-main: #E2E2E2;
+  --blue: #3062A4;
+}
