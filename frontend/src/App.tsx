@@ -1,9 +1,29 @@
 import React from 'react';
 import './App.css';
+import {
+  BrowserRouter, Switch, Route,
+} from 'react-router-dom';
+import Toolbar from './components/Toolbar/Toolbar';
+
+// Pages Import
+import HomePage from './pages/HomePage';
+import AGEntryPage from './pages/AGEntryPage';
+import FacharbeitsEntryPage from './pages/FacharbeitsEntryPage';
+import WahlpflichtEntryPage from './pages/WahlpflichtEntryPage';
+import PruefungskomponenteEntryPage from './pages/PruefungskomponenteEntryPage';
 
 function App() {
   return (
-    <div />
+    <BrowserRouter>
+      <Toolbar />
+      <Switch>
+        <Route exact path="/"><HomePage /></Route>
+        <Route exact path="/ag"><AGEntryPage /></Route>
+        <Route exact path="/facharbeit"><FacharbeitsEntryPage /></Route>
+        <Route exact path="/wahlpflicht"><WahlpflichtEntryPage /></Route>
+        <Route exact path="/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
+      </Switch>
+    </BrowserRouter>
   );
 }
 
