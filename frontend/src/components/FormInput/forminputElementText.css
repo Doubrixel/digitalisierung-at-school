@@ -1,0 +1,28 @@
+.textInputFormElement{
+    border: 2px #3062A4 solid;
+    border-radius: 20px;
+    margin: 5px;
+}
+.textInput{
+    width:100%;
+}
+.inputDivTextElement{
+    display:table-cell;
+    width:100%;
+    padding-right: 20px;
+    padding-left: 0.5%;
+    vertical-align: middle;
+}
+
+.labelTextDiv{
+    display:table-cell;
+    max-width: 500px;
+    min-width: 200px;
+    word-wrap: break-word;
+    padding: 5px;
+    text-align: center;
+    border: 2px transparent solid;
+    border-radius: 20px;
+    background-color: #CCCCCC;
+    color: #707070;
+}
