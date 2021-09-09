@@ -1,7 +1,7 @@
 import React from 'react';
 import './forminputElementRadioButton.css';
 
-export function RadioButtonFormInputFifthExamComponent() {
+function RadioButtonFormInputFifthExamComponent() {
   return (
     <div className="radioButtonInputFormElement">
       <label htmlFor="theInput">

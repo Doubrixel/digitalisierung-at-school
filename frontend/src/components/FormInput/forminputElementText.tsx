@@ -1,7 +1,7 @@
 import React from 'react';
 import './forminputElementText.css';
 
-export function TextFormInputFifthExamComponent() {
+function TextFormInputFifthExamComponent() {
   return (
     <div className="textInputFormElement">
       <label htmlFor="theInput">
