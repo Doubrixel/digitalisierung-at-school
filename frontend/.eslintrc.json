@@ -23,6 +23,7 @@
     ],
     "rules": {
         "react/jsx-filename-extension": [1, { "extensions": [".ts", ".tsx"] }],
-        "linebreak-style": 0
+        "linebreak-style": 0,
+        "react/prop-types": 0
     }
 }

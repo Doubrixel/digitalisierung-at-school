@@ -9,6 +9,7 @@ import { FaBars } from 'react-icons/fa';
 import Logo from '../../images/kant.png';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import './Toolbar.css';
+import { LoginLogoutButton } from './LoginLogoutButton/LoginLogoutButton';
 
 const links = [
   {
@@ -59,7 +60,7 @@ function Toolbar() {
         /*
           Wenn das Menü über den Toggle Button nicht ausklappt wird und
           die Fensterbreite unter 1000 Pixel ist, so wird das Menü nicht angezeigt
-         */
+          */
         windowDimensions.width > 1000 || isToggleActivated ? (
           <div className="links-container">
             {
@@ -71,6 +72,7 @@ function Toolbar() {
                 </div>
               ))
             }
+            <LoginLogoutButton />
           </div>
         ) : (
           undefined
