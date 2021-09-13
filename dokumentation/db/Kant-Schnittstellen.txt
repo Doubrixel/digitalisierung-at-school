@@ -1,0 +1,150 @@
+legende:
+/api/example (requestMethod) #path and method
+	{requestBody}
+	-> {returnBody}
+
+#components
+
+#status ändern, 0 - entsperrt, 1 - gesperrt, 2 - dokumentupload möglich
+api/components/changeStatus (POST)
+	{Int id, Int newStatus}
+	->{}
+
+#setze status übergangszeitpunkt
+/api/components/setNextStatusTransition
+	{Int id, Int nextStatus, String, transitionTime}
+	->{}
+
+
+
+#AGs
+
+#erstelle AG
+/api/ag/create (POST)
+	{String name, String description, Blob freetext, Int minClass, Int maxClass, Int maxSpaces}
+	-> {Int id}
+
+#AG bearbeiten
+api/ag/edit (POST)
+	{Int agId, String name, String description, Blob freetext, Int minClass, Int maxClass, Int maxSpaces}
+	-> {}
+
+#AG löschen
+api/ag/delete (POST)
+	{Int agId}
+	-> {}
+
+#Hole alle AGs
+/api/ag/getAll (GET)
+	{}
+	-> {Int id, String name, String description, Blob freetext, Int minClass, Int maxClass, Int maxSpaces}
+
+#buche ag. wenn die role admin ist, wird der schüler in jedemfall eingetragen. ist die rolle ein schüler, wird in die nachrückliste eingetragen
+/api/ag/enroll (POST)
+	{Int userId(or token), Int studentToEnrollId, Int agId}
+	->{Int bookingStatus} (0 - booking successfull, 1 - AG voll belegt, auf nachrückliste eingetragen)
+
+/api/ag/removeEnrollment (POST)
+	{Int userId(or token), Int studentToRemoveId, Int agId}
+	->{}
+	
+#zeige alle AGs für Schüler
+/api/ag/getAllAgsForStudent (POST)
+	{Int studentId}
+	->{Int id, String name, String description, Blob freetext}
+
+#zeige liste an gebuchten AGs für Admins
+/api/ag/getEnrollingLists (GET)
+	{}
+	->{[
+	    Int agId,
+	    String agName,
+	    String agDescription,
+	    ArrayOfInt enrolledStudents,
+	 ]}
+
+
+
+
+#Facharbeiten
+
+#Thema festlegen
+/api/facharbeit/chooseTopic (POST)
+	{Int studentId, String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId}
+	->{}
+
+#Thema für schüler holen
+/api/facharbeit/getTopicForStudent (POST)
+	{Int studentId}
+	->{String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId}
+
+#Thema bearbeiten
+/api/facharbeit/editTopic (POST)
+	{Int studentId, String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId}
+	->{}
+
+#Arbeit hochladen
+/api/facharbeit/uploadDocument (POST)
+	{Int studentId, Blob document}
+	->{string deliveryTime}
+
+#alle Facharbeiten anzeigen lassen
+/api/facharbeit/getAll (GET)
+	{}
+	->{ArrayOfObjects facharbeiten[Int studentId, String topic, String deliveryTime]}
+
+#Facharbeiten runterladen
+/api/facharbeit/downloadAll (GET)
+	{}
+	->{ArrayOfObjects facharbeiten[Int studentId, String topic, String deliveryTime, Blob document]}	
+
+
+
+#Wahlpflichtfächer
+
+#schüler wählt wpf
+/api/wahlpflichtfach/choose (POST)
+	{Int studentId, Int firstSubjectId, Int secondSubjectId} (Alternativ auch mit Array, wo zukünftig beliebig viele wpf. eingetragen werden können
+	->{}
+
+#Admin bearbeiter wpf von Schüler (Alternativ kann man die schnittstelle /api/wahlpflichtfach/choose und /api/wahlpflichtfach/edi auch zusammen legen, und von der rolle abhängig machen, ob es erlaubt ist die Daten zu ändern
+/api/wahlpflichtfach/edit (POST)
+	{Int studentId, Int firstSubjectId, Int secondSubjectId}
+	-> {}
+
+
+#Abiturprüfungen
+
+#Schüler beantragen Thema
+/api/abitur/applyForTopic (POST)
+	{Int studentId, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
+	->{Int examId}
+
+#admin ändert Daten (ähnlich wie bei  wahlfplichtfach, man kann die beiden Schnittstellen auch zusammenlegen und von der Rolle abhängig machen
+/api/abitur/editData (POST)
+	{Int studentId, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
+	->{}
+
+#admin bekommt alle Schüler mit Abiprüfungen
+/api/abitur/getAllExams (GET)
+	{}
+	->{ArrayOfObjects allExams[{Int examId, Int studentId, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}]}
+
+#Schüler sieht date zu seiner Prüfung ein
+/api/abitur/getExamData (POST)
+	{Int studentId}
+	-> {Int studentId, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic, Bool approved, String(optional) rejectionReason}
+
+#hole alle Schüler (nötig um zu prüfen, ob alle Schüler abgegeben haben
+/api/getAllStudents (GET)
+	{}
+	->{ArrayOfInt studentIds[Int studentId]}
+
+#Admin setzt Genehmigungsstatus
+/api/abitur/setApprovalState (POST)
+	{Int examId, Bool approved, string(optional) reason}
+
+
+
+
+
