@@ -14,4 +14,13 @@
     vertical-align: middle;
 }
 
-/* label css see text-input css file */
+.labelTextDiv{
+    display:table-cell;
+    word-wrap: break-word;
+    padding: 5px;
+    text-align: center;
+    border: 2px transparent solid;
+    border-radius: 20px;
+    background-color: var(--buttongrey);
+    color: var(--textGrey);
+}
