@@ -3,6 +3,9 @@
     text-align: center;
     font-size: 13px;
 }
+#HeadlineStart{
+    margin-left: 40px;
+}
 
 @media screen and (min-width: 1200px){
     .flexboxHomePage{
