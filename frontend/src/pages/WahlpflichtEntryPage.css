@@ -1,0 +1,47 @@
+/*@media screen and (max-width: 1000px){#flexContainer {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 10;
+    flex-basis: 0;
+    }
+}*/
+
+@media screen and (min-width: 550px){
+    #flexContainer{
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        padding: 0.5rem;
+    }
+    .links-container{
+        display: flex;
+        align-self: flex-end;
+    }
+}
+
+#pdfButton{
+    margin: 5px;
+    border-radius: 20px;
+    border-color: black;
+    border-style: solid;
+    background-color: white;
+    color: var(--blue);
+    font-weight: 700;
+    width: 100px;
+    height:35px;
+    cursor: pointer;
+}
+
+#underline{
+    text-decoration: underline;
+}
+
+#hinweis{
+    text-align: center;
+}
+
+#buttonRow{
+    /*margin:auto;*/
+}
+
