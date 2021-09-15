@@ -4,6 +4,7 @@ import {
   BrowserRouter, Switch, Route,
 } from 'react-router-dom';
 import Toolbar from './components/Toolbar/Toolbar';
+import Footer from './components/Footer/Footer';
 
 // Pages Import
 import HomePage from './pages/HomePage';
@@ -23,6 +24,7 @@ function App() {
         <Route exact path="/wahlpflicht"><WahlpflichtEntryPage /></Route>
         <Route exact path="/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
       </Switch>
+      <Footer />
     </BrowserRouter>
   );
 }
