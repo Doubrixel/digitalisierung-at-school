@@ -1,33 +1,39 @@
 import React, { useState } from 'react';
 import '../FormInput/forminputElementText.css';
 import '../FormInput/forminputElementSubmitButton.css';
+import PropTypes from 'prop-types';
+/* eslint-disable */
 
 function ComponentToggleButton(
   {
-    componentLabel,
-  }:
-  { componentLabel:string, },
+    componentLabel, buttonHandleClickFunction,
+  }:{ componentLabel:string, buttonHandleClickFunction: any }
 ) {
   const [buttonIsOn, setButtonIsOn] = useState(false);
   const handleButtonClick = () => {
     setButtonIsOn(!buttonIsOn);
+    buttonHandleClickFunction();
   };
   return (
-    <div id="componentToggleButtonContainer" style={{ display: 'flex' }}>
-      <div className="textInputFormElement" style={{ display: 'flex' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} className="labelTextDiv">
+      <div style={{ display: 'flex', alignItems: 'center', height: 'max-content' }} className='labelTextDiv'>
+        <div style={{display: 'flex', alignItems: 'center' }} >
           { componentLabel }
         </div>
         <button
           type="button"
           onClick={() => handleButtonClick()}
           className="submitButton"
-          style={{ backgroundColor: buttonIsOn ? 'green' : 'red', borderStyle: 'hidden' }}
+          style={{ backgroundColor: buttonIsOn ? 'green' : 'red', borderStyle: 'hidden', marginLeft: '1vw' }}
         >
           {buttonIsOn ? 'On' : 'Off'}
         </button>
       </div>
-    </div>
   );
 }
+
+ComponentToggleButton.propTypes = {
+  componentLabel: PropTypes.string.isRequired,
+  buttonHandleClickFunction: PropTypes.func.isRequired,
+};
+
 export default ComponentToggleButton;
