@@ -1,33 +1,34 @@
 import React from 'react';
-import './forminputElementRadioButton.css';
+import './ForminputElementText.css';
 import PropTypes from 'prop-types';
 
-function RadioButtonFormInputFifthExamComponent(
+function ForminputElementText(
   {
     labelText, name, maxLabelWidth, minLabelWidth,
   }:
   { labelText:string, name:string, maxLabelWidth:string, minLabelWidth:string },
 ) {
   return (
-    <div className="radioButtonInputFormElement">
-      <label htmlFor="theInput">
+    <div className="textInputFormElement">
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label>
         <div className="labelTextDiv" style={{ maxWidth: maxLabelWidth, minWidth: minLabelWidth }}>{labelText}</div>
-        <div className="inputDivRadioElement"><input type="radio" name={name} className="radioButtonInput" id="theInput" /></div>
+        <div className="inputDivTextElement"><input type="text" name={name} className="textInput" /></div>
       </label>
     </div>
   );
 }
 
-RadioButtonFormInputFifthExamComponent.propTypes = {
+ForminputElementText.propTypes = {
   labelText: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   maxLabelWidth: PropTypes.string,
   minLabelWidth: PropTypes.string,
 };
 
-RadioButtonFormInputFifthExamComponent.defaultProps = {
+ForminputElementText.defaultProps = {
   maxLabelWidth: '500px',
   minLabelWidth: '200px',
 };
 
-export default RadioButtonFormInputFifthExamComponent;
+export default ForminputElementText;

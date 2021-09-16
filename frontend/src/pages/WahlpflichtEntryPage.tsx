@@ -3,9 +3,9 @@
  */
 
 import React from 'react';
-import RadioButtonFormInputFifthExamComponent from '../components/FormInput/forminputElementRadioButton';
+import ForminputElementRadioButton from '../components/FormInput/ForminputElementRadioButton';
 import './WahlpflichtEntryPage.css';
-import SubmitButtonFormInputFifthExamComponent from '../components/FormInput/forminputElementSubmitButton';
+import ForminputElementSubmitButton from '../components/FormInput/ForminputElementSubmitButton';
 
 const maxLabelWidth = '300px';
 const minLabelWidth = '100px';
@@ -25,33 +25,34 @@ function WahlpflichtEntryPage() {
                 &nbsp;Fächer ausgewählt werden!
       </div>
 
-      <div id="flexContainer">
-        <form action="WahlpflichtEntryPage.tsx" id="Wahlpflichtfach1">
-          <h3>1. Wahlpflichtfach</h3>
-          <RadioButtonFormInputFifthExamComponent labelText="Deutsch" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <RadioButtonFormInputFifthExamComponent labelText="Englisch" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <RadioButtonFormInputFifthExamComponent labelText="Französisch" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <RadioButtonFormInputFifthExamComponent labelText="Latein" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <RadioButtonFormInputFifthExamComponent labelText="Mathematik" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-        </form>
+      <form action="WahlpflichtEntryPage.tsx" id="Wahlpflichtfach1">
 
-        <form action="WahlpflichtEntryPage.tsx" id="Wahlpflichtfach2">
+        <div>
+          <h3>1. Wahlpflichtfach</h3>
+          <ForminputElementRadioButton labelText="Deutsch" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+          <ForminputElementRadioButton labelText="Englisch" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+          <ForminputElementRadioButton labelText="Französisch" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+          <ForminputElementRadioButton labelText="Latein" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+          <ForminputElementRadioButton labelText="Mathematik" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+        </div>
+
+        <div>
           <h3>2. Wahlpflichtfach</h3>
-          <RadioButtonFormInputFifthExamComponent labelText="Deutsch" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <RadioButtonFormInputFifthExamComponent labelText="Englisch" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <RadioButtonFormInputFifthExamComponent labelText="Französisch" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <RadioButtonFormInputFifthExamComponent labelText="Latein" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <RadioButtonFormInputFifthExamComponent labelText="Mathematik" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-        </form>
+          <ForminputElementRadioButton labelText="Deutsch" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+          <ForminputElementRadioButton labelText="Englisch" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+          <ForminputElementRadioButton labelText="Französisch" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+          <ForminputElementRadioButton labelText="Latein" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+          <ForminputElementRadioButton labelText="Mathematik" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+        </div>
 
         <div id="buttonRow">
           <span id="submitButton">
-            <SubmitButtonFormInputFifthExamComponent onClickMethod={submitWahlpflichtWahl} />
+            <ForminputElementSubmitButton onClickMethod={submitWahlpflichtWahl} />
           </span>
-          <input type="submit" value="PDF erstellen" id="pdfButton" />
+          <button type="button" id="pdfButton">PDF erstellen </button>
         </div>
+      </form>
 
-      </div>
     </>
 
   );
