@@ -3,3 +3,8 @@
     align-items: center;
     height: max-content;
 }
+
+.componentToggleButtonLabel {
+    display: flex;
+    align-items: center;
+}

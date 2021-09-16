@@ -16,7 +16,7 @@ function ComponentToggleButton(
   };
   return (
     <div className="componentToggleButtonWrapper labelTextDiv">
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div className="componentToggleButtonLabel">
         { componentLabel }
       </div>
       <button
