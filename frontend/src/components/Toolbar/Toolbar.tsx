@@ -31,6 +31,11 @@ const links = [
     name: 'Prüfungkomponente',
     path: '/pruefungskomponente',
   },
+  {
+    id: 5,
+    name: 'Einstellungen',
+    path: '/settings',
+  },
 ];
 
 function Toolbar() {

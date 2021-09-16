@@ -43,6 +43,14 @@ function ModulCollection() {
           path="/pruefungskomponente"
         />
       </div>
+      <div className="flexModulItem">
+        <SelectionComponent
+          image={PK_Image}
+          title="Einstellungen"
+          buttontext="Einstellungen"
+          path="/settings"
+        />
+      </div>
     </div>
   );
 }

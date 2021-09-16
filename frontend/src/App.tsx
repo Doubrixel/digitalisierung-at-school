@@ -11,6 +11,7 @@ import AGEntryPage from './pages/AGEntryPage';
 import FacharbeitsEntryPage from './pages/FacharbeitsEntryPage';
 import WahlpflichtEntryPage from './pages/WahlpflichtEntryPage';
 import PruefungskomponenteEntryPage from './pages/PruefungskomponenteEntryPage';
+import SettingsPage from './pages/SettingsPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route exact path="/facharbeit"><FacharbeitsEntryPage /></Route>
         <Route exact path="/wahlpflicht"><WahlpflichtEntryPage /></Route>
         <Route exact path="/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
+        <Route exact path="/settings"><SettingsPage /></Route>
       </Switch>
     </BrowserRouter>
   );
