@@ -3,6 +3,7 @@ import { Button } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import { login, logout } from '../../../actions/authActions';
 import { RootState } from '../../../reducer';
+import './LoginLogoutButton.css';
 
 export const LoginLogoutButton = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export const LoginLogoutButton = () => {
   };
 
   return (
-    <div style={{ width: '100px', alignSelf: 'center' }}>
+    <div id="loginButtonContainer">
       {
         isLoggedIn ? (
           <Button variant="contained" color="secondary" onClick={onClickLogout}>Logout</Button>
