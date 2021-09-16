@@ -2,8 +2,12 @@ import React, { useState } from 'react';
 import '../FormInput/forminputElementText.css';
 import '../FormInput/forminputElementSubmitButton.css';
 
-// eslint-disable-next-line react/prop-types
-function ComponentToggleButton({ componentLabel }) {
+function ComponentToggleButton(
+  {
+    componentLabel,
+  }:
+  { componentLabel:string, },
+) {
   const [buttonIsOn, setButtonIsOn] = useState(false);
   const handleButtonClick = () => {
     setButtonIsOn(!buttonIsOn);
