@@ -21,7 +21,7 @@ const createColumnContentMock = columnContentMock.map((content) => ([
   <TextareaAutosize />,
 ]));
 
-export const tablePropsMock = { columnHeaderMock: ['column 1', 'column 2', 'column 3', 'textarea column'], dataRowsMock: createColumnContentMock };
+const tablePropsMock = { columnHeaderMock: ['column 1', 'column 2', 'column 3', 'textarea column'], dataRowsMock: createColumnContentMock };
 
 /*
 The TableListComponent has three props:
@@ -41,11 +41,14 @@ The TableListComponent has three props:
 
 function TableListComponent(
   {
-    columnHeaders, dataRows, tableStyleObject, firstColumnStyleObject,
+    columnHeaders = tablePropsMock.columnHeaderMock,
+    dataRows = tablePropsMock.dataRowsMock,
+    tableStyleObject,
+    firstColumnStyleObject,
     // the styleObjects need no default prop.
     // if the componets get no styleObjects, defaultstyles apply anyway
     // eslint-disable-next-line react/require-default-props,max-len
-  }: { columnHeaders: Array<String>, dataRows: Array<Array<Object>>, tableStyleObject?: Object, firstColumnStyleObject?: Object },
+  }: { columnHeaders?: Array<String>, dataRows?: Array<Array<Object>>, tableStyleObject?: Object, firstColumnStyleObject?: Object },
 ) {
   function createTableHeader() {
     return (
