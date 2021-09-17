@@ -1,0 +1,11 @@
+.tableContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.tableHeader {
+    font-size: x-large !important;
+    font-weight: bold !important;
+    color: #707070 !important;
+
+}
