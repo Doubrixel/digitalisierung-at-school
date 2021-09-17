@@ -1,33 +1,39 @@
 import React, { useState } from 'react';
 import '../FormInput/forminputElementText.css';
 import '../FormInput/forminputElementSubmitButton.css';
+import './ComponentToggleButton.css';
+import PropTypes from 'prop-types';
 
 function ComponentToggleButton(
   {
-    componentLabel,
-  }:
-  { componentLabel:string, },
+    componentLabel, buttonHandleClickFunction,
+  }:{ componentLabel:string, buttonHandleClickFunction: any },
 ) {
   const [buttonIsOn, setButtonIsOn] = useState(false);
   const handleButtonClick = () => {
     setButtonIsOn(!buttonIsOn);
+    buttonHandleClickFunction();
   };
   return (
-    <div id="componentToggleButtonContainer" style={{ display: 'flex' }}>
-      <div className="textInputFormElement" style={{ display: 'flex' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }} className="labelTextDiv">
-          { componentLabel }
-        </div>
-        <button
-          type="button"
-          onClick={() => handleButtonClick()}
-          className="submitButton"
-          style={{ backgroundColor: buttonIsOn ? 'green' : 'red', borderStyle: 'hidden' }}
-        >
-          {buttonIsOn ? 'On' : 'Off'}
-        </button>
+    <div className="componentToggleButtonWrapper labelTextDiv">
+      <div className="componentToggleButtonLabel">
+        { componentLabel }
       </div>
+      <button
+        type="button"
+        onClick={() => handleButtonClick()}
+        className="submitButton"
+        style={{ backgroundColor: buttonIsOn ? 'green' : 'red', borderStyle: 'hidden', marginLeft: '1vw' }}
+      >
+        {buttonIsOn ? 'On' : 'Off'}
+      </button>
     </div>
   );
 }
+
+ComponentToggleButton.propTypes = {
+  componentLabel: PropTypes.string.isRequired,
+  buttonHandleClickFunction: PropTypes.func.isRequired,
+};
+
 export default ComponentToggleButton;

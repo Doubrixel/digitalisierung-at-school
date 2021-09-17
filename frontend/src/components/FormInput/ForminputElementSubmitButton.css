@@ -3,7 +3,7 @@
     border-radius: 20px;
     border-color: black;
     border-style: solid;
-    background-color: #3062A4;
+    background-color: var(--blue);
     color: white;
     font-weight: 700;
     width: 100px;
