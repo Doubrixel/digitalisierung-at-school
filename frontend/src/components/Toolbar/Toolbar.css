@@ -1,12 +1,12 @@
 .nav-logo {
-  width: 100px;
+  width: 6vw;
 }
 
 .nav-logo-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1rem;
+  padding: 1em;
 }
 
 .toolbar {
@@ -54,5 +54,11 @@
   .links-container {
     display: flex;
     align-self: flex-end;
+  }
+}
+
+@media screen and (min-width: 3000px) {
+  .nav-link h4 {
+    font-size: 3rem;
   }
 }
