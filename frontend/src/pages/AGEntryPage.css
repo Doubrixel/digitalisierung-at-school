@@ -1,0 +1,204 @@
+.GridLayoutAG{
+    display: grid;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    grid-template-columns: 7% 14% 7% 7% 7% 14% 7% 7% 14% 7% ;
+}
+
+#HeadlineAG{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    margin-left: 2vw;
+}
+#HeadlineAGBuchung{
+    grid-column-start: 5;
+    grid-column-end: 7;
+    grid-row-start: 1;
+    width: 20vw;
+    height: 5vh;
+    border-radius: 20px;
+    background-color: #3062A4;
+    color: white;
+    font-size: 30px;
+    text-align: center;
+    margin-top: 5vh;
+}
+
+#HeadlineWhenAG{
+    grid-column-start: 2;
+    grid-row-start: 3;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 20vw;
+}
+#TextWhenAG{
+    grid-column-start: 3;
+    grid-column-end: 6;
+    grid-row-start: 3;
+    font-size: 25px;
+}
+
+#HeadlineWhoAG{
+    grid-column-start: 2;
+    grid-row-start: 4;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 20vw;
+}
+#TextWhoAG{
+    grid-column-start: 3;
+    grid-column-end: 6;
+    grid-row-start: 4;
+    font-size: 25px;
+}
+
+#HeadlineWhereAG{
+    grid-column-start: 2;
+    grid-row-start: 5;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 20vw;
+}
+#TextWhereAG{
+    grid-column-start: 3;
+    grid-column-end: 6;
+    grid-row-start: 5;
+    font-size: 25px;
+}
+
+#HeadlineAGManagement{
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 6;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 20vw;
+}
+#TextAGManagement{
+    grid-column-start: 3;
+    grid-column-end: 8;
+    grid-row-start: 6;
+    font-size: 25px;
+}
+
+#SubmitButtonAG{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 9;
+    grid-row-end: 10;
+    border-radius: 20px;
+    background-color: #3062A4;
+    color: white;
+    font-size: 20px;
+    width: 300px;
+    height: 50px;
+}
+
+#ImageAGBuchung{
+    grid-column-start: 9;
+    grid-row-start: 2;
+    grid-row-end: 8;
+    height: 296px;
+    width: 296px;
+}
+#TextVerfügbarAG{
+    grid-column-start: 9;
+    grid-row-start: 8;
+    border-radius: 20px;
+    background-color: #CCCCCC;
+    width: 15vw;
+    height: 5vh;
+    text-align: center;
+}
+
+@media screen and (max-width: 1000px){
+    .GridLayoutAG{
+        display: grid;
+        grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+        grid-template-columns: 50% 50% ;
+    }
+
+    #HeadlineAG{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+    }
+    #HeadlineAGBuchung{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 2;
+        width: 400px;
+        height: 50px;
+        border-radius: 20px;
+        background-color: #3062A4;
+        color: white;
+        font-size: 30px;
+        text-align: center;
+        margin-left: 30vw;
+        
+    }
+
+    #ImageAGBuchung{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 3;
+        grid-row-end: 4;
+        height: 200px;
+        width: 200px;
+        margin-left: 30vw;
+    }
+
+    #HeadlineWhenAG{
+        grid-column-start: 1;
+        grid-row-start: 4;
+    }
+    #TextWhenAG{
+        grid-column-start: 2;
+        grid-row-start: 4;
+    }
+
+    #HeadlineWhoAG{
+        grid-column-start: 1;
+        grid-row-start: 5;
+    }
+    #TextWhoAG{
+        grid-column-start: 2;
+        grid-row-start: 5;
+    }
+
+    #HeadlineWhereAG{
+        grid-column-start: 1;
+        grid-row-start: 6;
+    }
+    #TextWhereAG{
+        grid-column-start: 2;
+        grid-row-start: 6;
+    }
+
+    #HeadlineAGManagement{
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 7;
+    }
+    #TextAGManagement{
+        grid-column-start: 2;
+        grid-row-start: 7;
+    }
+
+    #TextVerfügbarAG{
+        grid-column-start: 2;
+        grid-row-start: 3;
+        margin-left: 10vw;
+        margin-top: 5vh;
+    }
+
+    #SubmitButtonAG{
+        grid-column-start: 1;
+        grid-row-start: 9;
+        margin-left: 35vw;
+    }
+}
