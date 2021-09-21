@@ -11,6 +11,7 @@ body {
   --darkBlue: #1E2B49;
   --textGrey: #707070;
   --buttongrey: #CCCCCC ;
-
-
+  --componentToggleButtonActivatedColor: #3ece47;
+  --componentToggleButtonDeactivatedColor: #ff3d3d;
+  --footerHeight: 130px;
 }

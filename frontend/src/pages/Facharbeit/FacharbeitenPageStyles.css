@@ -1,0 +1,13 @@
+.pageTitleAndComponentButton {
+    display: flex;
+    justify-content: space-between;
+    width: 95vw;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+.pageRoot {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
