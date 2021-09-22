@@ -64,25 +64,25 @@ function TableListComponent(
 
   function createTableBody() {
     return (
-      <TableBody>
+      <TableBody className="tableContent">
         {dataRows.map((dataRow) => (
           <TableRow>
             {
-                  dataRow.map((tableCellContent, index) => {
-                    if (index === 0 && firstColumnStyleObject) {
-                      return (
-                        <TableCell align="center" style={firstColumnStyleObject}>
-                          {tableCellContent}
-                        </TableCell>
-                      );
-                    }
-                    return (
-                      <TableCell align="center">
-                        {tableCellContent}
-                      </TableCell>
-                    );
-                  })
+              dataRow.map((tableCellContent, index) => {
+                if (index === 0 && firstColumnStyleObject) {
+                  return (
+                    <TableCell align="center" style={firstColumnStyleObject}>
+                      {tableCellContent}
+                    </TableCell>
+                  );
                 }
+                return (
+                  <TableCell align="center">
+                    {tableCellContent}
+                  </TableCell>
+                );
+              })
+            }
           </TableRow>
         ))}
       </TableBody>

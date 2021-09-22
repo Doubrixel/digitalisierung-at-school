@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import FacharbeitApplicationForm from './FacharbeitApplicationForm';
 import FacharbeitStudentListPage from './FacharbeitStudentListPage';
 
-function Facharbeit() {
+function FacharbeitEntryPage() {
   const [role] = useState('student');
   return (
     <div>
@@ -15,4 +15,4 @@ function Facharbeit() {
   );
 }
 
-export default Facharbeit;
+export default FacharbeitEntryPage;

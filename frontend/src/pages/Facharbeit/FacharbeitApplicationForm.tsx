@@ -68,10 +68,10 @@ function FacharbeitApplicationForm() {
   };
   return (
     <div className="pageRoot">
-      <div style={{ width: '94vw' }}>
+      <div className="facharbeitRootPaperWrapper">
         <h1>Facharbeit beantragen</h1>
       </div>
-      <Paper style={{ display: 'flex', width: '90vw', padding: '2vw' }}>
+      <Paper className="facharbeitRootPaper">
         <div
           id="studentAndTopicInputs"
           style={{
@@ -81,8 +81,8 @@ function FacharbeitApplicationForm() {
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <h2>Schüler:in</h2>
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-              <TextField label="Name" variant="outlined" style={{ width: '50%' }} onChange={handleStudentNameInputChange} />
-              <TextField label="Klasse" variant="outlined" style={{ width: '30%' }} onChange={handleStudentClassInputChange} />
+              <TextField label="Name" variant="outlined" style={{ width: '50%', minWidth: '65px'}} onChange={handleStudentNameInputChange} />
+              <TextField label="Klasse" variant="outlined" style={{ width: '30%', minWidth: '65px' }} onChange={handleStudentClassInputChange} />
             </div>
           </div>
           <TextField
