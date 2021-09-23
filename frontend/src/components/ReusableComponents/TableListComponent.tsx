@@ -90,7 +90,7 @@ function TableListComponent(
   }
 
   return (
-    <TableContainer id="tableContainer" className="tableContainer">
+    <TableContainer id="tableContainer" style={tableStyleObject}>
       <Table aria-label="simple table" component={Paper} style={tableStyleObject}>
         {createTableHeader()}
         {createTableBody()}

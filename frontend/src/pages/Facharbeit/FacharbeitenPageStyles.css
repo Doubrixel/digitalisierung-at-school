@@ -27,3 +27,8 @@
     width: 90vw;
     padding: 2vw;
 }
+
+.tableWrapper {
+    display: flex;
+    justify-content: center;
+}

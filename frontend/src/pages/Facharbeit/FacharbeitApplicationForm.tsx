@@ -8,6 +8,7 @@ import {
   Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField,
 } from '@material-ui/core';
 import CreatePDFButton from "../../components/Buttons/CreatePDFButton";
+import UploadedFileInformationPanel from "../../components/FileInformationPanel/UploadedFileInformationPanel";
 
 const lehrkraefteMock = [{ id: 1, name: 'Miss X' }, { id: 2, name: 'Mister A' }, { id: 3, name: 'Lady Y' }];
 const subjectMock = [{ id: 1, name: 'Mathe' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'English' }];
@@ -135,23 +136,7 @@ function FacharbeitApplicationForm() {
           <CreatePDFButton style={{ marginTop: '3vh' }} onClick={handleGeneratePDF} />
         </div>
       </Paper>
-      <Paper style={{
-        display: 'flex', flexDirection: 'column', width: '90vw', padding: '2vw', marginTop: '2vh',
-      }}
-      >
-        <h3>Dateien anhängen und speichern</h3>
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <text>
-            Dateiname:
-          </text>
-          <text>
-            Dateigröße:
-          </text>
-          <text>
-            Datei bereitgestellt am:
-          </text>
-        </div>
-      </Paper>
+      <UploadedFileInformationPanel />
     </div>
   );
 }
