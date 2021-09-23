@@ -10,6 +10,8 @@ function ForminputElementText(
 ) {
   return (
     <div className="textInputFormElement">
+      {/* htmlFor in label with corresponding id on input creates problems when used multiple times,
+      generating different ids that are never used elsewhere makes little sense */}
       {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
       <label>
         <div className="labelTextDiv" style={{ maxWidth: maxLabelWidth, minWidth: minLabelWidth }}>{labelText}</div>
