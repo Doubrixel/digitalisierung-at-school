@@ -1,5 +1,58 @@
 .SelectionModul {
   position: relative;
+  width: 15vw;
+  height: 35vh;
+  border-style: solid;
+  border-radius: 2.2vh;
+  border-color: #3062A4;
+  margin: 20px;
+  text-align: center;
+}
+
+.SelectionTop {
+  width: 15vw;
+  margin-top: 0;
+  border-top-left-radius: 1.6vh;
+  border-top-right-radius: 1.6vh;
+  background-color: #3062A4;
+  color: #3062A4;
+  font-size: 1.5vh;
+}
+
+.SelectionPicture {
+width: 5vw;
+margin-top: 1vh;
+margin-bottom: 1vh;
+}
+
+.SelectionText {
+  margin: 1vh;
+  font-size: 2.7vh;
+}
+
+.SelcetionButton {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 15vw;
+  height: 7vh;
+  border-bottom-left-radius: 1.6vh;
+  border-bottom-right-radius: 1.6vh;
+  border: 0;
+  font-size: 3vh;
+  font-weight: bold;
+  color: #707070;
+  background-color: #CCCCCC;
+}
+
+.SelcetionButton:hover {
+  color: #3062A4;
+}
+
+@media screen and (max-width: 1700px) {
+  .SelectionModul {
+  position: relative;
   width: 250px;
   height: 300px;
   border-style: solid;
@@ -9,7 +62,7 @@
   text-align: center;
 }
 
-.SelectionTop {
+  .SelectionTop {
   width: 250px;
   margin-top: 0;
   border-top-left-radius: 16px;
@@ -18,24 +71,24 @@
   color: #3062A4;
 }
 
-.SelectionPicture {
-width: 60px;
-height: 60px;
-margin: 0px 80px;
-}
+  .SelectionPicture {
+  width: 80px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  }
 
-.SelectionText {
-  margin: 15px;
+  .SelectionText {
+  margin: 10px;
   font-size: 22px;
-}
+  }
 
-.SelcetionButton {
+  .SelcetionButton {
   position: absolute;
   bottom: 0;
   right: 0;
   left: 0;
   width: 250px;
-  height: 70px;
+  height: 60px;
   border-bottom-left-radius: 17px;
   border-bottom-right-radius: 17px;
   border: 0;
@@ -43,8 +96,5 @@ margin: 0px 80px;
   font-weight: bold;
   color: #707070;
   background-color: #CCCCCC;
-}
-
-.SelcetionButton:hover {
-  color: #3062A4;
+  }
 }
