@@ -1,6 +1,8 @@
 {
   "scripts": {
-    "test": "backend/src/test"
+    "test": "jest"
+  },
+  "devDependencies": {
+    "jest": "^27.2.1"
   }
 }
-
