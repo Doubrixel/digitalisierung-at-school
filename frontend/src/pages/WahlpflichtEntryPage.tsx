@@ -3,18 +3,50 @@
  */
 
 import React from 'react';
-import ForminputElementRadioButton from '../components/FormInput/ForminputElementRadioButton';
 import './WahlpflichtEntryPage.css';
-import ForminputElementSubmitButton from '../components/FormInput/ForminputElementSubmitButton';
-
-const maxLabelWidth = '300px';
-const minLabelWidth = '100px';
-
-function submitWahlpflichtWahl() {
-
-}
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import Radio from '@material-ui/core/Radio';
+import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 function WahlpflichtEntryPage() {
+  const [wahlpflichtfach1, setWahlpflichtfach1] = React.useState('');
+  const [wahlpflichtfach2, setWahlpflichtfach2] = React.useState('');
+
+  // const maxLabelWidth = '300vw';
+  // const minLabelWidth = '100vw';
+
+  const subjectList = [
+    { id: '1', label: 'Deutsch' },
+    { id: '2', label: 'Englisch' },
+    { id: '3', label: 'Französisch' },
+    { id: '4', label: 'Latein' },
+    { id: '5', label: 'Mathematik' },
+  ];
+
+  function handleSubmitWahlpflichtWahl() {
+    console.log(wahlpflichtfach1);
+    console.log(wahlpflichtfach2);
+    if (wahlpflichtfach1 === '') {
+      console.log('Fehler, nichts ausgewählt für Wahlpflichtfach1! Toastanzeige?');
+    }
+    if (wahlpflichtfach1 === wahlpflichtfach2) {
+      console.log('Fehler, zweimal dasselbe Fach ausgewählt! Toastanzeige?');
+    }
+  }
+
+  const handleWahlpflichtfach1Change = (event) => {
+    console.log('Wahlpflichtfach 1 changed!');
+    setWahlpflichtfach1(event.target.value);
+  };
+
+  const handleWahlpflichtfach2Change = (event) => {
+    console.log('Wahlpflichtfach 2 changed!');
+    setWahlpflichtfach2(event.target.value);
+  };
+
   return (
     <>
       <h1>Wahlpflichtfächer</h1>
@@ -25,34 +57,53 @@ function WahlpflichtEntryPage() {
                 &nbsp;Fächer ausgewählt werden!
       </div>
 
-      <form action="WahlpflichtEntryPage.tsx" id="Wahlpflichtfach1">
+      <div id="Wahlpflichtfachauswahlreihe">
+        <FormControl id="Wahlpflichtfach1" component="fieldset">
+          <FormLabel component="legend">Wahlpflichtfach 1</FormLabel>
+          <RadioGroup
+            aria-label="Wahlpflichtfach 1"
+            name="radio-buttons-group"
+            onChange={handleWahlpflichtfach1Change}
+          >
+            {subjectList.map((subject) => (
+              <FormControlLabel
+                value={subject.id}
+                control={<Radio />}
+                label={subject.label}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
 
-        <div>
-          <h3>1. Wahlpflichtfach</h3>
-          <ForminputElementRadioButton labelText="Deutsch" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <ForminputElementRadioButton labelText="Englisch" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <ForminputElementRadioButton labelText="Französisch" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <ForminputElementRadioButton labelText="Latein" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <ForminputElementRadioButton labelText="Mathematik" name="Wahlpflichtfach1" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Wahlpflichtfach 2</FormLabel>
+          <RadioGroup
+            aria-label="Wahlpflichtfach 2"
+            name="radio-buttons-group"
+            onChange={handleWahlpflichtfach2Change}
+          >
+            {subjectList.map((subject) => (
+              <FormControlLabel
+                value={subject.id}
+                control={<Radio />}
+                label={subject.label}
+              />
+            ))}
+          </RadioGroup>
+        </FormControl>
+
+        <div id="Wahlpflichtfach1">
+          {/* / jsx-no-bind should be false warning from Eslint / */}
+          {/* eslint-disable-next-line react/jsx-no-bind */}
+          <Button style={{ marginTop: '3vh', marginRight: '1vh' }} variant="contained" color="primary" onClick={handleSubmitWahlpflichtWahl}>
+            Endgültig Speichern
+          </Button>
+          {/* eslint-disable-next-line react/jsx-no-bind */}
+          <Button style={{ marginTop: '3vh' }} variant="contained" color="secondary" onClick={handleSubmitWahlpflichtWahl}>
+            PDF erstellen
+          </Button>
         </div>
-
-        <div>
-          <h3>2. Wahlpflichtfach</h3>
-          <ForminputElementRadioButton labelText="Deutsch" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <ForminputElementRadioButton labelText="Englisch" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <ForminputElementRadioButton labelText="Französisch" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <ForminputElementRadioButton labelText="Latein" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-          <ForminputElementRadioButton labelText="Mathematik" name="Wahlpflichtfach2" maxLabelWidth={maxLabelWidth} minLabelWidth={minLabelWidth} />
-        </div>
-
-        <div id="buttonRow">
-          <span id="submitButton">
-            <ForminputElementSubmitButton onClickMethod={submitWahlpflichtWahl} />
-          </span>
-          <button type="button" id="pdfButton">PDF erstellen </button>
-        </div>
-      </form>
-
+      </div>
     </>
 
   );
