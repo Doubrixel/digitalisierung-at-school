@@ -1,13 +1,5 @@
-/*@media screen and (max-width: 1000px){#flexContainer {
-    display: flex;
-    flex-direction: row;
-    flex-grow: 10;
-    flex-basis: 0;
-    }
-}*/
-
-@media screen and (min-width: 550px){
-    #Wahlpflichtfach1{
+@media screen and (min-width: 600px){
+    #Wahlpflichtfachauswahlreihe{
         margin: 0 auto;
         display: flex;
         align-items: center;
