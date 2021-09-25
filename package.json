@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "test": "backend/test"
+    "test": "backend/src/test"
   }
 }
 
