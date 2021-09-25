@@ -8,7 +8,6 @@ import FifthExamFormComponent from '../components/FifthExamComponent/FifthExamFo
 function PruefungskomponenteEntryPage() {
   return (
     <div>
-      <h1>Pruefungskomponente</h1>
       <FifthExamFormComponent />
     </div>
   );
