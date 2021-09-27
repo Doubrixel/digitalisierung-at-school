@@ -1,6 +1,4 @@
 #loginButtonContainer {
-  display: flex;
-  justify-content: space-around;
   width: 175px;
   align-self: center;
 }

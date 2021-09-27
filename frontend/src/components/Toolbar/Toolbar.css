@@ -30,7 +30,6 @@
 
 .nav-link {
   padding: 0;
-  margin: 0 1.5rem;
 }
 
 .nav-link h4:hover {
@@ -53,7 +52,9 @@
 
   .links-container {
     display: flex;
+    justify-content: space-between;
     align-self: flex-end;
+    width: 1000px;
   }
 }
 
