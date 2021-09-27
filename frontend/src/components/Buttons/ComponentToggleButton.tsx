@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import '../FormInput/forminputElementText.css';
-import '../FormInput/forminputElementSubmitButton.css';
+import '../FormInput/ForminputElementText.css';
+import '../FormInput/ForminputElementSubmitButton.css';
 import './ComponentToggleButton.css';
 import PropTypes from 'prop-types';
+import { Button } from '@material-ui/core';
 
 function ComponentToggleButton(
   {
@@ -19,14 +20,13 @@ function ComponentToggleButton(
       <div className="componentToggleButtonLabel">
         { componentLabel }
       </div>
-      <button
+      <Button
         type="button"
         onClick={() => handleButtonClick()}
-        className="submitButton"
-        style={{ backgroundColor: buttonIsOn ? 'green' : 'red', borderStyle: 'hidden', marginLeft: '1vw' }}
+        className={buttonIsOn ? 'componentToggleButtonStyle buttonActivated' : 'componentToggleButtonStyle buttonDeactivated'}
       >
         {buttonIsOn ? 'On' : 'Off'}
-      </button>
+      </Button>
     </div>
   );
 }

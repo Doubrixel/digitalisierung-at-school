@@ -1,11 +1,15 @@
-.tableContainer {
-    display: flex;
-    justify-content: center;
-}
-
 .tableHeader {
-    font-size: x-large !important;
+    font-size: x-large;
     font-weight: bold !important;
     color: #707070 !important;
 
+}
+
+@media screen and (max-width: 600px){
+    .tableHeader {
+        font-size: small;
+    }
+    .tableContent {
+        font-size: x-small;
+    }
 }

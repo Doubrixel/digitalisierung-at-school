@@ -4,6 +4,7 @@
     bottom: 0;
     width: 100%;
     color: #cdc9c9;
+    height: var(--footerHeight);
 }
 
 #erreichbarkeit {
