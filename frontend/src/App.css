@@ -1,3 +1,7 @@
 .App {
   text-align: left;
 }
+
+#pageBody {
+  margin-bottom: var(--footerHeight);
+}

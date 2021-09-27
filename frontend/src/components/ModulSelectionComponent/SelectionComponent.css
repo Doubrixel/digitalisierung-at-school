@@ -6,6 +6,7 @@
   border-radius: 20px;
   border-color: #3062A4;
   margin: 20px;
+  text-align: center;
 }
 
 .SelectionTop {
@@ -20,11 +21,12 @@
 .SelectionPicture {
 width: 60px;
 height: 60px;
+margin: 0px 80px;
 }
 
 .SelectionText {
-  margin: 20px;
-  font-size: 23px;
+  margin: 15px;
+  font-size: 22px;
 }
 
 .SelcetionButton {

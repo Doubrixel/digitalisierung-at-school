@@ -1,39 +1,23 @@
+import express, { Express } from 'express';
 import { join } from 'path';
 import pathExists from './util/filesystem/path-exists';
-import express from 'express';
-import cookieParser from 'cookie-parser';
+import setupRouting from './routing/setup';
 import * as auth from './auth';
-import * as dotenv from 'dotenv';
 
-dotenv.config();
-
-const main = async () =>
+const main = async (port: number) =>
 {
     console.log('NodeJS running with TypeScript.');
-
-    console.log(process.env.OAUTH_CLIENT_SECRET);
-    console.log(process.env.OAUTH_CLIENT_ID);
-
-
-    const app = express();
-
-    app.use(cookieParser());
-
-    app.use(auth.initialize);
-    app.use(auth.routesSso());
 
     const clientExists = await pathExists(join(__dirname, '../client/index.html'));
     if (!clientExists) console.warn('No client available. Serving only API.');
 
-    app.get('/private', (req, res) => {
-        res.send('private');
-    });
+    const app: Express = express();
+    setupRouting(app);
+    app.use(auth.initialize);
 
-    app.listen(process.env.PORT, () => {
-        console.log('Express started on port' + process.env.PORT);
+    app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
     });
 };
 
-main();
-
-
+main(5000);
