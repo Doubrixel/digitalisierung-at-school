@@ -21,9 +21,9 @@ export const LoginLogoutButton = () => {
     <div id="loginButtonContainer">
       {
         isLoggedIn ? (
-          <Button variant="contained" color="secondary" onClick={onClickLogout}>Logout</Button>
+          <Button variant="contained" color="secondary" size="large" onClick={onClickLogout}><div id="authBtnText">Logout</div></Button>
         ) : (
-          <Button variant="contained" color="primary" onClick={onClickLogin}>Login</Button>
+          <Button variant="contained" color="primary" size="large" onClick={onClickLogin}><div id="authBtnText">Login</div></Button>
         )
       }
     </div>
