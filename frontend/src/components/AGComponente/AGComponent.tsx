@@ -1,12 +1,12 @@
 import React from 'react';
-import './AGComponente.css';
+import './AGComponent.css';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const AGComponente = (
+const AGComponent = (
   {
     image, buttontext, path,
-  }: { image: any, buttontext: any, path: any },
+  }: { image: any, buttontext: string, path: string },
 ) => (
   <div className="AGModul">
     <img className="AGImage" src={image} alt="Beispielbild" />
@@ -14,14 +14,14 @@ const AGComponente = (
   </div>
 );
 
-AGComponente.propTypes = {
+AGComponent.propTypes = {
   image: PropTypes.string,
   buttontext: PropTypes.string.isRequired,
   path: PropTypes.string.isRequired,
 };
 
-AGComponente.defaultProps = {
+AGComponent.defaultProps = {
   image: '',
 };
 
-export default AGComponente;
+export default AGComponent;
