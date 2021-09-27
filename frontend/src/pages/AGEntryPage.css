@@ -110,6 +110,7 @@
     height: 296px;
     width: 296px;
 }
+
 #TextVerfügbarAG{
     grid-column-start: 9;
     grid-row-start: 8;
@@ -197,7 +198,7 @@
     #TextVerfügbarAG{
         grid-column-start: 2;
         grid-row-start: 3;
-        margin-left: 10vw;
+        margin-left: 14vw;
         margin-top: 5vh;
     }
 
@@ -240,60 +241,59 @@
         grid-row-end: 4;
         height: 200px;
         width: 200px;
-        margin-left: 1vw;
+        margin-left: 23vw;
     }
 
     #HeadlineWhenAG{
         grid-column-start: 1;
-        grid-row-start: 4;
+        grid-row-start: 5;
         margin-right: 25vw;
     }
     #TextWhenAG{
         grid-column-start: 2;
-        grid-row-start: 4;
+        grid-row-start: 5;
         margin-right: 20vw;
     }
 
     #HeadlineWhoAG{
         grid-column-start: 1;
-        grid-row-start: 5;
+        grid-row-start: 6;
         margin-right: 25vw;
     }
     #TextWhoAG{
         grid-column-start: 2;
-        grid-row-start: 5;
+        grid-row-start: 6;
         margin-right: 20vw;
     }
 
     #HeadlineWhereAG{
         grid-column-start: 1;
-        grid-row-start: 6;
+        grid-row-start: 7;
         margin-right: 25vw;
     }
     #TextWhereAG{
         grid-column-start: 2;
-        grid-row-start: 6;
+        grid-row-start: 7;
         margin-right: 20vw;
     }
 
     #HeadlineAGManagement{
         grid-column-start: 1;
         grid-column-end: 1;
-        grid-row-start: 7;
+        grid-row-start: 8;
         margin-right: 25vw;
     }
     #TextAGManagement{
         grid-column-start: 2;
-        grid-row-start: 7;
+        grid-row-start: 8;
         margin-right: 20vw;
     }
 
     #TextVerfügbarAG{
-        grid-column-start: 2;
-        grid-row-start: 3;
-        margin-left: 4vw;
-        margin-top: 10vh;
-        width: 170px;
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 4;
+        width: 280px;
     }
 
     #SubmitButtonAG{
