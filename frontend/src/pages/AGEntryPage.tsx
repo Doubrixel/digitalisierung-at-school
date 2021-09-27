@@ -4,17 +4,14 @@
 
 import React from 'react';
 import './AGEntryPage.css';
+import { Button } from '@material-ui/core';
 import Ballbild from '../images/Wahlpflicht.png';
 
 function AGEntryPage() {
   return (
     <div className="GridLayoutAG">
-      <h1 id="HeadlineAG">AG-Buchung</h1>
-      <input
-        type="text"
-        id="HeadlineAGBuchung"
-        placeholder="Basketball"
-      />
+      <Button variant="contained" color="secondary" id="HeadlineAG">AG-Buchung</Button>
+      <p id="HeadlineAGBuchung">Basketball</p>
       <p id="HeadlineWhenAG">Wann?</p>
       <p id="TextWhenAG">Freitag, 4.Block</p>
       <p id="HeadlineWhoAG">Wer?</p>
@@ -24,16 +21,8 @@ function AGEntryPage() {
       <p id="HeadlineAGManagement">AG-Leitung?</p>
       <p id="TextAGManagement">Herr Meier, Herr Leonardo</p>
       <img id="ImageAGBuchung" src={Ballbild} alt="Ballbild" />
-      <input
-        type="submit"
-        id="SubmitButtonAG"
-        value="AG buchen"
-      />
-      <input
-        type="text"
-        id="TextVerfügbarAG"
-        value="Verfügbar: 12/30 Personen"
-      />
+      <Button variant="contained" color="secondary" id="SubmitButtonAG">AG buchen</Button>
+      <Button variant="contained" color="secondary" id="TextVerfügbarAG">Verfügbar: 12/30 Personen</Button>
     </div>
   );
 }
