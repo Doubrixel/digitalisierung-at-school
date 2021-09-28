@@ -3,13 +3,13 @@ import './AGCollection.css';
 
 import AGComponent from '../AGComponente/AGComponent';
 
-import AGlist from '../AGComponente/AGlist';
+import AGListMock from '../AGComponente/AGListMock';
 
 function AGCollection() {
   return (
     <div className="AG-flexboxCollection">
       {
-        AGlist.map(({
+        AGListMock.map(({
           id, image, buttontext, path,
         }) => (
           <div key={id} className="AG-flexboxItem">

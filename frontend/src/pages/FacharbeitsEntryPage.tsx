@@ -3,10 +3,11 @@
  */
 
 import React from 'react';
+import './Headline.css';
 
 function facharbeit() {
   return (
-    <h1>Facharbeit</h1>
+    <h1 className="Headline">Facharbeit</h1>
   );
 }
 

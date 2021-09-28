@@ -3,10 +3,11 @@
  */
 
 import React from 'react';
+import './Headline.css';
 
 function PruefungskomponenteEntryPage() {
   return (
-    <h1>Pruefungskomponente</h1>
+    <h1 className="Headline">Pruefungskomponente</h1>
   );
 }
 

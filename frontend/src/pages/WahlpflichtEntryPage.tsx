@@ -3,10 +3,11 @@
  */
 
 import React from 'react';
+import './Headline.css';
 
 function WahlpflichtEntryPage() {
   return (
-    <h1>Wahlpflicht</h1>
+    <h1 className="Headline">Wahlpflicht</h1>
   );
 }
 
