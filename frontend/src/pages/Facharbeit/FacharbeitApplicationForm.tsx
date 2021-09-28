@@ -2,13 +2,12 @@
  * Übersichtsseite für die Facharbeit.
  */
 
-/* eslint-disable*/
 import React, { useState } from 'react';
 import {
   Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField,
 } from '@material-ui/core';
-import CreatePDFButton from "../../components/Buttons/CreatePDFButton";
-import UploadedFileInformationPanel from "../../components/FileInformationPanel/UploadedFileInformationPanel";
+import CreatePDFButton from '../../components/Buttons/CreatePDFButton';
+import UploadedFileInformationPanel from '../../components/FileInformationPanel/UploadedFileInformationPanel';
 
 const lehrkraefteMock = [{ id: 1, name: 'Miss X' }, { id: 2, name: 'Mister A' }, { id: 3, name: 'Lady Y' }];
 const subjectMock = [{ id: 1, name: 'Mathe' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'English' }];
@@ -68,7 +67,7 @@ function FacharbeitApplicationForm() {
     console.log(pdf.toString());
   };
   return (
-    <div className="pageRoot">
+    <div>
       <div className="facharbeitRootPaperWrapper">
         <h1>Facharbeit beantragen</h1>
       </div>
@@ -82,7 +81,7 @@ function FacharbeitApplicationForm() {
           <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             <h2>Schüler:in</h2>
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-              <TextField label="Name" variant="outlined" style={{ width: '50%', minWidth: '65px'}} onChange={handleStudentNameInputChange} />
+              <TextField label="Name" variant="outlined" style={{ width: '50%', minWidth: '65px' }} onChange={handleStudentNameInputChange} />
               <TextField label="Klasse" variant="outlined" style={{ width: '30%', minWidth: '65px' }} onChange={handleStudentClassInputChange} />
             </div>
           </div>
