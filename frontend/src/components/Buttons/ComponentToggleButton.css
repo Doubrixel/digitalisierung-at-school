@@ -1,0 +1,26 @@
+.componentToggleButtonWrapper {
+    display: flex;
+    align-items: center;
+    height: max-content;
+    justify-content: space-between;
+}
+
+.componentToggleButtonLabel {
+    display: flex;
+    align-items: center;
+}
+
+.componentToggleButtonStyle {
+    border-style: hidden!important;
+    margin-left: 2vw!important;
+    border-Radius: 20px!important;
+    font-weight: 700!important;
+    cursor: pointer!important;
+}
+
+.buttonActivated {
+    background-color: var(--componentToggleButtonActivatedColor) !important;
+}
+.buttonDeactivated {
+    background-color: var(--componentToggleButtonDeactivatedColor) !important;
+}

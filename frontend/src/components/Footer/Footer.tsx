@@ -5,7 +5,7 @@ export default function Footer() {
   return (
     <div id="footer">
       <div id="erreichbarkeit">
-        <h4>Erreichbarkeit</h4>
+        <h4 id="header_erreichbarkeit">Erreichbarkeit</h4>
         <div className="kontakt-element">Tel:&nbsp; 030 - 513 97 48</div>
         <div className="kontakt-element">Fax: 030 - 510 98 927</div>
         <div className="kontakt-element">sekretariat@kant-gymnasium.de</div>

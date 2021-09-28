@@ -1,0 +1,26 @@
+.radioButtonInputFormElement{
+    border: 2px var(--blue) solid;
+    border-radius: 20px;
+    margin: 5px;
+}
+.radioButtonInput{
+    width:100%;
+}
+.inputDivRadioElement{
+    display:table-cell;
+    width:100%;
+    padding-right: 20px;
+    padding-left: 0.5%;
+    vertical-align: middle;
+}
+
+.labelTextDiv{
+    display:table-cell;
+    word-wrap: break-word;
+    padding: 5px;
+    text-align: center;
+    border: 2px transparent solid;
+    border-radius: 20px;
+    background-color: var(--buttongrey);
+    color: var(--textGrey);
+}

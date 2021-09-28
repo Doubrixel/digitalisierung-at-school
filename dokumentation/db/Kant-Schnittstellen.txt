@@ -6,13 +6,13 @@ legende:
 #components
 
 #status ändern, 0 - entsperrt, 1 - gesperrt, 2 - dokumentupload möglich
-api/components/changeStatus (POST)
-	{Int id, Int newStatus}
+api/components/changeStatus/{componentId}/{newStatusId} (POST) (oder GET?)
+	{}
 	->{}
 
 #setze status übergangszeitpunkt
-/api/components/setNextStatusTransition
-	{Int id, Int nextStatus, String, transitionTime}
+/api/components/setNextStatusTransition/{componentId}/{newStatusId} (POST)
+	{String, transitionTime}
 	->{}
 
 
@@ -25,13 +25,13 @@ api/components/changeStatus (POST)
 	-> {Int id}
 
 #AG bearbeiten
-api/ag/edit (POST)
-	{Int agId, String name, String description, Blob freetext, Int minClass, Int maxClass, Int maxSpaces}
+api/ag/edit/{adId} (POST)
+	{String name, String description, Blob freetext, Int minClass, Int maxClass, Int maxSpaces}
 	-> {}
 
 #AG löschen
-api/ag/delete (POST)
-	{Int agId}
+api/ag/delete/{agId} (POST) (oder GET?)
+	{}
 	-> {}
 
 #Hole alle AGs
@@ -40,17 +40,17 @@ api/ag/delete (POST)
 	-> {Int id, String name, String description, Blob freetext, Int minClass, Int maxClass, Int maxSpaces}
 
 #buche ag. wenn die role admin ist, wird der schüler in jedemfall eingetragen. ist die rolle ein schüler, wird in die nachrückliste eingetragen
-/api/ag/enroll (POST)
-	{Int userId(or token), Int studentToEnrollId, Int agId}
+/api/ag/enroll/{agId} (POST)
+	{Int userId(or token), Int studentToEnrollId}
 	->{Int bookingStatus} (0 - booking successfull, 1 - AG voll belegt, auf nachrückliste eingetragen)
 
-/api/ag/removeEnrollment (POST)
-	{Int userId(or token), Int studentToRemoveId, Int agId}
+/api/ag/removeEnrollment/{agId} (POST)
+	{Int userId(or token), Int studentToRemoveId}
 	->{}
 	
 #zeige alle AGs für Schüler
-/api/ag/getAllAgsForStudent (POST)
-	{Int studentId}
+/api/ag/getAllAgsForStudent/{studentId} (GET)
+	{
 	->{Int id, String name, String description, Blob freetext}
 
 #zeige liste an gebuchten AGs für Admins
@@ -74,8 +74,8 @@ api/ag/delete (POST)
 	->{}
 
 #Thema für schüler holen
-/api/facharbeit/getTopicForStudent (POST)
-	{Int studentId}
+/api/facharbeit/getTopicForStudent/{Int studentId} (GET)
+	{}
 	->{String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId}
 
 #Thema bearbeiten
@@ -121,8 +121,8 @@ api/ag/delete (POST)
 	->{Int examId}
 
 #admin ändert Daten (ähnlich wie bei  wahlfplichtfach, man kann die beiden Schnittstellen auch zusammenlegen und von der Rolle abhängig machen
-/api/abitur/editData (POST)
-	{Int studentId, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
+/api/abitur/editData/{Int studentId} (POST)
+	{Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
 	->{}
 
 #admin bekommt alle Schüler mit Abiprüfungen
@@ -131,8 +131,8 @@ api/ag/delete (POST)
 	->{ArrayOfObjects allExams[{Int examId, Int studentId, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}]}
 
 #Schüler sieht date zu seiner Prüfung ein
-/api/abitur/getExamData (POST)
-	{Int studentId}
+/api/abitur/getExamData/{Int studentId} GET
+	{}
 	-> {Int studentId, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic, Bool approved, String(optional) rejectionReason}
 
 #hole alle Schüler (nötig um zu prüfen, ob alle Schüler abgegeben haben

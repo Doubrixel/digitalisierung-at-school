@@ -22,7 +22,7 @@ function ModulCollection() {
       <div className="flexModulItem">
         <SelectionComponent
           image={Facharbeit_Image}
-          title="Facharbeit/Belegarbeit für SuS der Klasse 9 einreichen"
+          title="Facharbeit für die SuS der Klasse 9 einreichen"
           buttontext="Facharbeit"
           path="/facharbeit"
         />
@@ -30,7 +30,7 @@ function ModulCollection() {
       <div className="flexModulItem">
         <SelectionComponent
           image={Wahlpflicht_Image}
-          title="Wahlpflichtfächer für das kommende Jahr bestimmen"
+          title="Wahlpflichtfächer bestimmen"
           buttontext="Wählfächer"
           path="/wahlpflicht"
         />

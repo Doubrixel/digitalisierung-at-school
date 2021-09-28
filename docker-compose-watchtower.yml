@@ -1,0 +1,18 @@
+version: '3.7'
+services:
+
+ watchtower:
+      image: containrrr/watchtower
+      command: --monitor-only --cleanup -i 300 --include-stopped  --stop-timeout 30s
+      
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      restart: always
+      networks:
+        frontend-nw:
+
+networks:
+  frontend-nw:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.name: br-toolsfe
