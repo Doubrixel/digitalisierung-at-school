@@ -12,7 +12,7 @@ const SelectionComponent = (
     <p className="SelectionTop">.</p>
     <img className="SelectionPicture" src={image} alt="Beispielbild" />
     <p className="SelectionText">{title}</p>
-    <Link to={path}><button type="button" className="SelcetionButton">{buttontext}</button></Link>
+    <Link to={path}><button type="button" className="SelectionButton">{buttontext}</button></Link>
   </div>
 );
 
