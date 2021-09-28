@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import '../FormInput/forminputElementText.css';
-import '../FormInput/forminputElementSubmitButton.css';
+import '../FormInput/ForminputElementText.css';
+import '../FormInput/ForminputElementSubmitButton.css';
 import './ComponentToggleButton.css';
 import PropTypes from 'prop-types';
 

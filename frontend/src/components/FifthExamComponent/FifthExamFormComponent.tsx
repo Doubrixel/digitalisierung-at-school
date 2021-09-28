@@ -5,12 +5,14 @@ import {
   FormControlLabel, Radio,
 } from '@material-ui/core';
 import CreatePDFButton from '../Buttons/CreatePDFButton';
+import ComponentToggleButton from '../Buttons/ComponentToggleButton';
 
 const referenzfachMock = [{ id: 1, name: 'Mathe' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'English' }];
 const examinerMock = [{ id: 1, name: 'Mr. Jonson' }, { id: 2, name: 'Mrs. Heathrow' }, { id: 3, name: 'Miss Daisy' }];
 const bezugsfachMock = [{ id: 1, name: 'Geschichte' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'Geografie' }];
 
 function FifthExamFormComponent() {
+  const verticalComponentDistance = '2vh';
   const aDate = new Date();
   const dueDate = `${aDate.getDate()}.${aDate.getMonth() + 1}.${aDate.getFullYear()}`;
 
@@ -62,17 +64,27 @@ function FifthExamFormComponent() {
     console.log(pdf.toString());
   };
 
+  const handleComponentActivation = () => {};
+
   const handleSubmitFifthExamForm = () => {};
 
   return (
     <div style={{ overflow: 'scroll' }}>
+      <div id="firstLine">
+        <h1>Fünfte PK</h1>
+        <span style={{
+          marginRight: '0', marginLeft: 'auto', width: '50vw', maxWidth: '320px',
+        }}
+        >
+          <ComponentToggleButton buttonHandleClickFunction={handleComponentActivation} componentLabel="Komponente deaktivieren" />
+        </span>
+      </div>
       <Paper
         className="fifthExamPaper"
         style={{
-          display: 'flex', flexDirection: 'column', width: '70%', marginRight: '3vw', padding: '5vw', margin: 'auto',
+          display: 'flex', flexDirection: 'column', width: '70%', marginRight: '3vw', padding: '5vw', margin: 'auto', marginTop: '1vh',
         }}
       >
-        <h1 id="headingFifthExaam">Pruefungskomponente</h1>
 
         <FormControl component="fieldset">
           <FormLabel component="legend" />
@@ -91,11 +103,11 @@ function FifthExamFormComponent() {
           </RadioGroup>
         </FormControl>
 
-        <TextField label="Prüfling" variant="outlined" style={{ marginTop: '2vh' }} onChange={handleStudentNameInputChange} />
+        <TextField label="Prüfling" variant="outlined" style={{ marginTop: verticalComponentDistance }} onChange={handleStudentNameInputChange} />
 
-        <TextField label="ggf. Partner:in" variant="outlined" style={{ marginTop: '2vh' }} onChange={handleStudentPartnerInputChange} />
+        <TextField label="ggf. Partner:in" variant="outlined" style={{ marginTop: verticalComponentDistance }} onChange={handleStudentPartnerInputChange} />
 
-        <FormControl style={{ width: '100%', marginTop: '2vh' }} variant="outlined">
+        <FormControl style={{ width: '100%', marginTop: verticalComponentDistance }} variant="outlined">
           <InputLabel>Referenzfach</InputLabel>
           <Select
             label="Referenzfach"
@@ -106,7 +118,7 @@ function FifthExamFormComponent() {
             ))}
           </Select>
         </FormControl>
-        <FormControl style={{ width: '100%', marginTop: '2vh' }} variant="outlined">
+        <FormControl style={{ width: '100%', marginTop: verticalComponentDistance }} variant="outlined">
           <InputLabel>Prüfer:in</InputLabel>
           <Select
             label="Prüfer:in"
@@ -117,7 +129,7 @@ function FifthExamFormComponent() {
             ))}
           </Select>
         </FormControl>
-        <FormControl style={{ width: '100%', marginTop: '2vh' }} variant="outlined">
+        <FormControl style={{ width: '100%', marginTop: verticalComponentDistance }} variant="outlined">
           <InputLabel>Bezugsfach</InputLabel>
           <Select
             label="Bezugsfach"
@@ -132,12 +144,12 @@ function FifthExamFormComponent() {
         <TextField
           label="gewählter Themenbereich"
           variant="outlined"
-          style={{ marginTop: '2vh' }}
+          style={{ marginTop: verticalComponentDistance }}
           onChange={handleChosenTopicAreaInputChange}
           multiline
           rows={3}
         />
-        <p style={{ color: 'red', fontWeight: 'bold', marginTop: '2vh' }}>
+        <p style={{ color: 'red', fontWeight: 'bold', marginTop: verticalComponentDistance }}>
           Abgabe Termin:
           {' '}
           {dueDate}
@@ -146,7 +158,7 @@ function FifthExamFormComponent() {
           <Button
             id="submitButtonFifthExam"
             style={{
-              marginTop: '2vh', marginRight: '3vw', width: '18vw', minWidth: '188px',
+              marginTop: verticalComponentDistance, marginRight: '3vw', width: '18vw', minWidth: '188px',
             }}
             variant="contained"
             color="primary"
@@ -154,7 +166,7 @@ function FifthExamFormComponent() {
           >
             einreichen / ändern
           </Button>
-          <CreatePDFButton style={{ marginTop: '2vh', width: '18vw', minWidth: '188px' }} onClick={handleGeneratePDF} />
+          <CreatePDFButton style={{ marginTop: verticalComponentDistance, width: '18vw', minWidth: '188px' }} onClick={handleGeneratePDF} />
         </div>
       </Paper>
     </div>
