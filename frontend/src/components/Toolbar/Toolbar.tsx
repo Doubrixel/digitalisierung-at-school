@@ -39,6 +39,14 @@ function Toolbar() {
 
   const [isToggleActivated, setIsToggleActicated] = useState(false);
 
+  const HomeLink = (
+    <div key="0" className="nav-link">
+      <Link to="/" style={{ textDecoration: 'none' }}>
+        <h4>Home</h4>
+      </Link>
+    </div>
+  );
+
   return (
     <div className="toolbar">
       <div className="nav-logo-container">
@@ -63,6 +71,7 @@ function Toolbar() {
           */
         windowDimensions.width > 1000 || isToggleActivated ? (
           <div className="links-container">
+            {windowDimensions.width < 1000 && HomeLink}
             {
               links.map((link) => (
                 <div key={link.id} className="nav-link">
