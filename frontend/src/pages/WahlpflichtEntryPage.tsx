@@ -10,13 +10,13 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import { Paper, Typography } from '@material-ui/core';
+import CreatePDFButton from '../components/Buttons/CreatePDFButton';
+import ComponentToggleButton from '../components/Buttons/ComponentToggleButton';
 
 function WahlpflichtEntryPage() {
   const [wahlpflichtfach1, setWahlpflichtfach1] = React.useState('');
   const [wahlpflichtfach2, setWahlpflichtfach2] = React.useState('');
-
-  // const maxLabelWidth = '300vw';
-  // const minLabelWidth = '100vw';
 
   const subjectList = [
     { id: '1', label: 'Deutsch' },
@@ -26,7 +26,7 @@ function WahlpflichtEntryPage() {
     { id: '5', label: 'Mathematik' },
   ];
 
-  function handleSubmitWahlpflichtWahl() {
+  const handleSubmitWahlpflichtWahl = () => {
     console.log(wahlpflichtfach1);
     console.log(wahlpflichtfach2);
     if (wahlpflichtfach1 === '') {
@@ -35,7 +35,7 @@ function WahlpflichtEntryPage() {
     if (wahlpflichtfach1 === wahlpflichtfach2) {
       console.log('Fehler, zweimal dasselbe Fach ausgewählt! Toastanzeige?');
     }
-  }
+  };
 
   const handleWahlpflichtfach1Change = (event) => {
     console.log('Wahlpflichtfach 1 changed!');
@@ -47,62 +47,79 @@ function WahlpflichtEntryPage() {
     setWahlpflichtfach2(event.target.value);
   };
 
+  const handleGeneratePDF = () => {
+
+  };
+
+  const handleComponentActivation = () => {
+
+  };
+
   return (
     <>
-      <h1>Wahlpflichtfächer</h1>
-
-      <div id="hinweis">
-        Es müssen&nbsp;
-        <span id="underline">zwei</span>
-                &nbsp;Fächer ausgewählt werden!
-      </div>
-
-      <div id="Wahlpflichtfachauswahlreihe">
-        <FormControl id="Wahlpflichtfach1" component="fieldset">
-          <FormLabel component="legend">Wahlpflichtfach 1</FormLabel>
-          <RadioGroup
-            aria-label="Wahlpflichtfach 1"
-            name="radio-buttons-group"
-            onChange={handleWahlpflichtfach1Change}
+      <div id="pageRoot">
+        <div id="firstRow">
+          <div id="title">
+            <h1>Wahlpflichtfächer</h1>
+          </div>
+          <span style={{
+            marginRight: '0', marginLeft: 'auto', width: '50vw', maxWidth: '320px',
+          }}
           >
-            {subjectList.map((subject) => (
-              <FormControlLabel
-                value={subject.id}
-                control={<Radio />}
-                label={subject.label}
-              />
-            ))}
-          </RadioGroup>
-        </FormControl>
-
-        <FormControl component="fieldset">
-          <FormLabel component="legend">Wahlpflichtfach 2</FormLabel>
-          <RadioGroup
-            aria-label="Wahlpflichtfach 2"
-            name="radio-buttons-group"
-            onChange={handleWahlpflichtfach2Change}
-          >
-            {subjectList.map((subject) => (
-              <FormControlLabel
-                value={subject.id}
-                control={<Radio />}
-                label={subject.label}
-              />
-            ))}
-          </RadioGroup>
-        </FormControl>
-
-        <div id="Wahlpflichtfach1">
-          {/* / jsx-no-bind should be false warning from Eslint / */}
-          {/* eslint-disable-next-line react/jsx-no-bind */}
-          <Button style={{ marginTop: '3vh', marginRight: '1vh' }} variant="contained" color="primary" onClick={handleSubmitWahlpflichtWahl}>
-            Endgültig Speichern
-          </Button>
-          {/* eslint-disable-next-line react/jsx-no-bind */}
-          <Button style={{ marginTop: '3vh' }} variant="contained" color="secondary" onClick={handleSubmitWahlpflichtWahl}>
-            PDF erstellen
-          </Button>
+            <ComponentToggleButton componentLabel="Komponente deaktivieren" buttonHandleClickFunction={handleComponentActivation} />
+          </span>
         </div>
+
+        <Paper id="wahlpflichtRootPaper">
+          <div id="hinweis">
+            Es müssen&nbsp;
+            <span id="underline">zwei</span>
+                    &nbsp;Fächer ausgewählt werden!
+          </div>
+
+          <div id="Wahlpflichtfachauswahlreihe">
+            <FormControl id="Wahlpflichtfach1" component="fieldset">
+              <FormLabel id="subtitle-size" component="legend">Wahlpflichtfach 1</FormLabel>
+              <RadioGroup
+                aria-label="Wahlpflichtfach 1"
+                name="radio-buttons-group"
+                onChange={handleWahlpflichtfach1Change}
+              >
+                {subjectList.map((subject) => (
+                  <FormControlLabel
+                    value={subject.id}
+                    control={<Radio />}
+                    label={<Typography id="label-size" variant="body1" color="textPrimary">{subject.label}</Typography>}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+
+            <FormControl component="fieldset">
+              <FormLabel id="subtitle-size" component="legend">Wahlpflichtfach 2</FormLabel>
+              <RadioGroup
+                aria-label="Wahlpflichtfach 2"
+                name="radio-buttons-group"
+                onChange={handleWahlpflichtfach2Change}
+              >
+                {subjectList.map((subject) => (
+                  <FormControlLabel
+                    value={subject.id}
+                    control={<Radio />}
+                    label={<Typography id="label-size" variant="body1" color="textPrimary">{subject.label}</Typography>}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </div>
+
+          <div id="button-row">
+            <Button style={{ marginTop: '3vh' }} variant="contained" color="primary" onClick={handleSubmitWahlpflichtWahl}>
+              Endgültig Speichern
+            </Button>
+            <CreatePDFButton style={{ marginTop: '3vh' }} onClick={handleGeneratePDF} />
+          </div>
+        </Paper>
       </div>
     </>
 

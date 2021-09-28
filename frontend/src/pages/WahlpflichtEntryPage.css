@@ -1,36 +1,80 @@
-@media screen and (min-width: 600px){
-    #Wahlpflichtfachauswahlreihe{
-        margin: 0 auto;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        padding: 0.5rem;
+@media screen and (min-width: 1000px){
+    #label-size{
+        font-size: 1.2vw;
     }
-    .links-container{
+    #subtitle-size{
+        font-size: 1.5vw;
+    }
+    #hinweis{
+        text-align: center;
+        font-size: 2.2vw;
+    }
+    #firstRow{
         display: flex;
-        align-self: flex-end;
+        margin-top: 10px;
+    }
+    #title{
+        width: 64vw;
     }
 }
 
-#pdfButton{
-    margin: 5px;
-    border-radius: 20px;
-    border-color: black;
-    border-style: solid;
-    background-color: white;
-    color: var(--blue);
-    font-weight: 700;
-    width: 100px;
-    height:35px;
-    cursor: pointer;
+@media screen and (min-width: 600px) and (max-width: 1000px){
+    #hinweis{
+        font-size: 22px;
+        text-align: center;
+    }
+    #subtitle-size{
+        font-size: 17px;
+    }
+    #firstRow{
+        display: flex;
+        margin-top: 10px;
+    }
+    #title{
+        width: 44vw;
+    }
+}
+
+@media screen and (max-width: 600px){
+    #hinweis{
+        font-size: 4vw;
+        text-align: center;
+    }
+    #subtitle-size{
+        font-size: 3.5vw;
+    }
+    #title{
+        width: 64vw;
+    }
+}
+
+#Wahlpflichtfachauswahlreihe{
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    gap: 1.5vw;
+}
+
+#button-row{
+    display: flex;
+    justify-content: center;
+    gap: 1.5vw;
 }
 
 #underline{
     text-decoration: underline;
 }
 
-#hinweis{
-    text-align: center;
+#pageRoot {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
+
+#wahlpflichtRootPaper {
+    width: 90vw;
+    padding: 2vw;
+}
+
 
 
