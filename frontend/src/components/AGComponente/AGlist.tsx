@@ -5,7 +5,7 @@ import Schach_Image from '../../images/Schach.png';
 import Theater_Image from '../../images/Theater.png';
 import Chor_Image from '../../images/Chor.png';
 
-const AGListMock = [
+const AGlist = [
   {
     id: 1,
     image: Handball_Image,
@@ -44,4 +44,4 @@ const AGListMock = [
   },
 ];
 
-export default AGListMock;
+export default AGlist;
