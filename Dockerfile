@@ -10,6 +10,8 @@ COPY build.sh ./
 # Die build.sh baut aus frontend und backend den "build" Ordner
 RUN ./build.sh
 
+#TODO: db-migrate up ausführen & testdaten dabei nicht ausführen
+
 # Frontend und backend nehmen nun nur noch unnötig Platz weg, darum werden sie gelöscht
 RUN rm -rf frontend/ backend/
 

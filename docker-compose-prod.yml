@@ -5,3 +5,5 @@ services:
     image: digitalisierungatschool/prod
     ports:
       - "6000:5000"
+    volumes:
+      - /digitalisierung-at-school-db-prod:/usr/share/html/db
