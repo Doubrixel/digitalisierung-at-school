@@ -1,11 +1,11 @@
 INSERT INTO abiturpuefungen (betreuendeLehrkraftID, art, bezugsfachID, genehmigt, ablehnungsgrund)
-VALUES (0, 'BLL', 0, true, ''),
-       (1, 'PP', 1, false, 'schlechtes Thema')
+VALUES (1, 'BLL', 1, true, ''),
+       (2, 'PP', 2, false, 'schlechtes Thema')
 ;
 
-INSERT INTO ag2Nutzer (agID, nutzerID)
-VALUES (0, 1),
-       (0, 0)
+INSERT INTO ag2nutzer (agID, nutzerID)
+VALUES (1, 2),
+       (1, 1)
 ;
 
 INSERT INTO ags (name, beschreibung, freitext, minKlasse, maxKlasse, platzanzahl)
@@ -19,8 +19,8 @@ VALUES ('Deutsch'),
 ;
 
 INSERT INTO facharbeiten (thema, fach, gewaehlterLehrerID, unterrichtenderLehrerID, dokumentpfad, abgabezeitpunkt)
-VALUES ('Digitalisierung des Mondes', 'Weltraumtelematik', 0, 0, './hier/und/da', datetime(1092941466, 'unixepoch')),
-       ('Reiten lernen mit Schaukelpferden', 'Biologie', 1, 0, './dort', datetime(1096441466, 'unixepoch'))
+VALUES ('Digitalisierung des Mondes', 'Weltraumtelematik', 1, 1, './hier/und/da', datetime(1092941466, 'unixepoch')),
+       ('Reiten lernen mit Schaukelpferden', 'Biologie', 2, 1, './dort', datetime(1096441466, 'unixepoch'))
 ;
 
 INSERT INTO komponenten (name, aktuellerStatus, naechsterStatus, statusUebergangsZeitpunkt)
@@ -39,6 +39,6 @@ VALUES ('Weltraumtelematik'),
 ;
 
 INSERT INTO wahlpflichtfaecher2nutzer (fachID, schuelerID)
-VALUES (0, 0),
-       (1, 0)
+VALUES (1, 1),
+       (2, 1)
 ;

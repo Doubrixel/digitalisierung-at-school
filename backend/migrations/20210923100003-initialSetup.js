@@ -29,7 +29,7 @@ const TABLES = {
         name: 'bezugsfach'
     },
     ag2Nutzer: {
-        name: 'ag2Nutzer'
+        name: 'ag2nutzer'
     },
     wahlpflichtfaecher2nutzer: {
         name: 'wahlpflichtfaecher2nutzer'
