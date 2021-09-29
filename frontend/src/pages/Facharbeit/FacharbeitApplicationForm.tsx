@@ -68,7 +68,7 @@ function FacharbeitApplicationForm() {
   };
   return (
     <div>
-      <div className="facharbeitRootPaperWrapper">
+      <div>
         <h1>Facharbeit beantragen</h1>
       </div>
       <Paper className="facharbeitRootPaper">

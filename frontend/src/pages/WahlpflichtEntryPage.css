@@ -1,0 +1,73 @@
+@media screen and (min-width: 1000px){
+    #label-size{
+        font-size: 1.2vw;
+    }
+    #subtitle-size{
+        font-size: 1.5vw;
+    }
+    #hinweis{
+        text-align: center;
+        font-size: 2.2vw;
+    }
+    #firstRow{
+        display: flex;
+        margin-top: 10px;
+    }
+    #title{
+        width: 64vw;
+    }
+}
+
+@media screen and (min-width: 600px) and (max-width: 1000px){
+    #hinweis{
+        font-size: 22px;
+        text-align: center;
+    }
+    #subtitle-size{
+        font-size: 17px;
+    }
+    #firstRow{
+        display: flex;
+        margin-top: 10px;
+    }
+    #title{
+        width: 44vw;
+    }
+}
+
+@media screen and (max-width: 600px){
+    #hinweis{
+        font-size: 4vw;
+        text-align: center;
+    }
+    #subtitle-size{
+        font-size: 3.5vw;
+    }
+    #title{
+        width: 64vw;
+    }
+}
+
+#Wahlpflichtfachauswahlreihe{
+    display: flex;
+    justify-content: center;
+    padding: 0.5rem;
+    gap: 1.5vw;
+}
+
+#button-row{
+    display: flex;
+    justify-content: center;
+    gap: 1.5vw;
+}
+
+#underline{
+    text-decoration: underline;
+}
+
+#wahlpflichtRootPaper {
+    padding: 2vw;
+}
+
+
+
