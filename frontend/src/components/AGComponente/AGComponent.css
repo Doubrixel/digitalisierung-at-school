@@ -33,18 +33,13 @@
 
 @media screen and (max-width: 1700px) {
   .AGModul {
-    position: relative;
     width: 200px;
     height: 250px;
     margin: 20px;
-    border-style: solid;
-    border-color: var(--blue);
     border-radius: 20px;
 }
 
   .AGImage {
-    width: 90%;
-    object-fit: cover;
     height: 170px; 
     margin: 10px;
   }
@@ -52,16 +47,9 @@
   .AGButton {
     width: 200px;
     height: 55px;
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    left: 0;
     border-bottom-left-radius: 17px;
     border-bottom-right-radius: 17px;
-    border: 0;
     font-size: 25px;
-    font-weight: bold;
-    color: var(--textGrey);
-    background-color: var(--buttongrey);
+    
   }
 }
