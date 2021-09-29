@@ -7,7 +7,7 @@ import FifthExamFormComponent from '../components/FifthExamComponent/FifthExamFo
 
 function PruefungskomponenteEntryPage() {
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       <FifthExamFormComponent />
     </div>
   );

@@ -79,13 +79,7 @@ function FifthExamFormComponent() {
           <ComponentToggleButton buttonHandleClickFunction={handleComponentActivation} componentLabel="Komponente deaktivieren" />
         </span>
       </div>
-      <Paper
-        className="fifthExamPaper"
-        style={{
-          display: 'flex', flexDirection: 'column', width: '80%', marginRight: '3vw', padding: '5vw', margin: 'auto', marginTop: '1vh',
-        }}
-      >
-
+      <Paper className="fifthExamPaper">
         <FormControl component="fieldset">
           <FormLabel component="legend" />
           <RadioGroup
@@ -154,7 +148,7 @@ function FifthExamFormComponent() {
           {' '}
           {dueDate}
         </p>
-        <div id="rightContainer5PK">
+        <div id="buttonContainer5PK">
           <Button
             id="submitButtonFifthExam"
             style={{
