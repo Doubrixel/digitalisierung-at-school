@@ -30,7 +30,7 @@ function ModulCollection() {
       <div className="flexModulItem">
         <SelectionComponent
           image={Wahlpflicht_Image}
-          title="Wahlpflichtfächer für das kommende Jahr bestimmen"
+          title="Wahlpflichtfächer bestimmen"
           buttontext="Wählfächer"
           path="/wahlpflicht"
         />

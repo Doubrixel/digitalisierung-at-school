@@ -13,11 +13,6 @@
 
 }
 
-.pageRoot {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
 .facharbeitRootPaperWrapper {
     width: 94vw;
 }

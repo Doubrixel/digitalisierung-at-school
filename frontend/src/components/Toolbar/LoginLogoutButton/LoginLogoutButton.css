@@ -1,4 +1,14 @@
 #loginButtonContainer {
-  width: 100px;
+  width: 175px;
   align-self: center;
+}
+
+#authBtnText {
+  font-size: larger;
+}
+
+@media screen and (min-width: 3000px) {
+  #authBtnText {
+    font-size: xx-large;
+  }
 }

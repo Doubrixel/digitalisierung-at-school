@@ -5,6 +5,11 @@ legende:
 
 #components
 
+#status abfragen
+api/components/getStatusOfAll (GET)
+	{}
+	->{Int componentId, Int componentStatusId}
+
 #status ändern, 0 - entsperrt, 1 - gesperrt, 2 - dokumentupload möglich
 api/components/changeStatus/{componentId}/{newStatusId} (POST) (oder GET?)
 	{}
