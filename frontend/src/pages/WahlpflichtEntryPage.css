@@ -65,16 +65,5 @@
     text-decoration: underline;
 }
 
-#pageRoot {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
-
-#wahlpflichtRootPaper {
-    width: 90vw;
-    padding: 2vw;
-}
-
 
 
