@@ -1,0 +1,15 @@
+
+@media screen and (min-width: 550px){
+
+    #rightContainer5PK{
+        display: flex;
+        align-self: flex-end;
+        justify-content: space-around;
+    }
+
+}
+
+#firstLine{
+    display: flex;
+    margin-top: 10px;
+}
