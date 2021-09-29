@@ -2,7 +2,7 @@
   text-align: left;
 }
 
-#pageRoot {
+#applicationRootDiv {
   margin-bottom: var(--footerHeight);
   display: flex;
   align-items: center;

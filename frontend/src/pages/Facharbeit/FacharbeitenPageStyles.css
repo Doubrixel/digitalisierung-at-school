@@ -19,8 +19,7 @@
 
 .facharbeitRootPaper {
     display: flex;
-    width: 90vw;
-    padding: 2vw;
+    padding: var(--defaultFormPaperPadding);
 }
 
 .tableWrapper {

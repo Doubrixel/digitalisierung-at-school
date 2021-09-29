@@ -9,7 +9,7 @@ import FacharbeitStudentListPage from './FacharbeitStudentListPage';
 function FacharbeitEntryPage() {
   const [role] = useState('student');
   return (
-    <div>
+    <div style={{ width: '100%' }}>
       {role === 'student' ? <FacharbeitApplicationForm /> : <FacharbeitStudentListPage /> }
     </div>
   );
