@@ -57,7 +57,7 @@ function WahlpflichtEntryPage() {
 
   return (
     <>
-      <div id="pageRoot">
+      <div style={{ width: '100%' }}>
         <div id="firstRow">
           <div id="title">
             <h1>Wahlpflichtfächer</h1>

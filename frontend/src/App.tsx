@@ -19,7 +19,7 @@ function App() {
   return (
     <BrowserRouter>
       <Toolbar />
-      <div id="pageRoot">
+      <div id="applicationRootDiv">
         <Switch>
           <Route exact path="/"><HomePage /></Route>
           <Route exact path="/ag"><AGEntryPage /></Route>
