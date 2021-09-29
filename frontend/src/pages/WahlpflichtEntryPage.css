@@ -66,8 +66,7 @@
 }
 
 #wahlpflichtRootPaper {
-    padding: 2vw;
-    width: 100%;
+    padding: var(--defaultFormPaperPadding);
 }
 
 
