@@ -5,18 +5,18 @@ legende:
 
 #components
 
-#status abfragen
+1 status abfragen
 api/components/getStatusOfAll (GET)
 	{}
 	->{Int componentId, Int componentStatusId}
 
-#status ändern, 0 - entsperrt, 1 - gesperrt, 2 - dokumentupload möglich
-api/components/changeStatus/{componentId}/{newStatusId} (POST) (oder GET?)
+1 status ändern, 0 - entsperrt, 1 - gesperrt, 2 - dokumentupload möglich
+api/components/{componentId}/setStatus/{newStatusId} (PUT)
 	{}
 	->{}
 
-#setze status übergangszeitpunkt
-/api/components/setNextStatusTransition/{componentId}/{newStatusId} (POST)
+2 (low priority) setze status übergangszeitpunkt
+/api/components/{componentId}/setNextStatusTransition/{newStatusId} (PUT)
 	{String, transitionTime}
 	->{}
 
@@ -24,95 +24,100 @@ api/components/changeStatus/{componentId}/{newStatusId} (POST) (oder GET?)
 
 #AGs
 
-#erstelle AG
+1 erstelle AG
 /api/ag/create (POST)
 	{String name, String description, Blob freetext, Int minClass, Int maxClass, Int maxSpaces}
 	-> {Int id}
 
-#AG bearbeiten
+7 AG bearbeiten
 api/ag/edit/{adId} (POST)
 	{String name, String description, Blob freetext, Int minClass, Int maxClass, Int maxSpaces}
 	-> {}
 
-#AG löschen
+9 AG löschen
 api/ag/delete/{agId} (POST) (oder GET?)
 	{}
 	-> {}
 
-#Hole alle AGs
+2 Hole alle AGs
 /api/ag/getAll (GET)
 	{}
-	-> {Int id, String name, String description, Blob freetext, Int minClass, Int maxClass, Int maxSpaces}
+	-> {Int id, String name, String description, Blob freetext, Int minClass, Int maxClass, Int maxSpaces, Int freeSpaces}
 
-#buche ag. wenn die role admin ist, wird der schüler in jedemfall eingetragen. ist die rolle ein schüler, wird in die nachrückliste eingetragen
+3 buche ag. wenn die role admin ist, wird der schüler in jedemfall eingetragen. ist die rolle ein schüler, wird in die nachrückliste eingetragen
 /api/ag/enroll/{agId} (POST)
-	{Int userId(or token), Int studentToEnrollId}
+	{ (Optional) Int studentToEnrollId} (Wenn studentToEnrollId übergeben wird, muss geprüft werden ob der sender ein admin ist. weil nur admins können andere user enrollen)
 	->{Int bookingStatus} (0 - booking successfull, 1 - AG voll belegt, auf nachrückliste eingetragen)
 
-/api/ag/removeEnrollment/{agId} (POST)
-	{Int userId(or token), Int studentToRemoveId}
+8 /api/ag/removeEnrollment/{agId} (POST)
+	{(Optional) Int studentToRemoveId} (Wenn studentToRemoveId übergeben wird, muss geprüft werden ob der sender ein admin ist. weil nur admins können andere user deleten)
 	->{}
 	
-#zeige alle AGs für Schüler
+4 zeige alle AGs für Schüler
 /api/ag/getAllAgsForStudent/{studentId} (GET)
-	{
-	->{Int id, String name, String description, Blob freetext}
+	{}
+	->{Int agId, String name, String description, Blob freetext}
 
-#zeige liste an gebuchten AGs für Admins
+5 zeige liste an gebuchten AGs für Admins
 /api/ag/getEnrollingLists (GET)
 	{}
-	->{[
-	    Int agId,
-	    String agName,
-	    String agDescription,
-	    ArrayOfInt enrolledStudents,
-	 ]}
+	->{Array of Objects enrollingList [{Int agId, String agName, String agDescription, ArrayOfInt enrolledStudents}]}
 
 
 
 
 #Facharbeiten
 
-#Thema festlegen
+1 Formdaten abfragen
+/api/facharbeit/getFormData (GET)
+	{}
+	-> {Array of Objects [{teacherId, teacherName}], Array of objects [{faecherId, facherName}]} 
+
+2 Thema festlegen
 /api/facharbeit/chooseTopic (POST)
-	{Int studentId, String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId}
+	{String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId}
 	->{}
 
-#Thema für schüler holen
+5 Thema für schüler holen
 /api/facharbeit/getTopicForStudent/{Int studentId} (GET)
 	{}
 	->{String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId}
 
-#Thema bearbeiten
+4 Thema bearbeiten
 /api/facharbeit/editTopic (POST)
-	{Int studentId, String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId}
+	{Int studentId, String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId} (Wenn studentID übergeben wird, muss geprüft werden, ob der sender ein admin ist. weil nur admins können topics von anderen editieren)
 	->{}
 
-#Arbeit hochladen
+6 Arbeit hochladen
 /api/facharbeit/uploadDocument (POST)
-	{Int studentId, Blob document}
+	{Blob document}
 	->{string deliveryTime}
 
-#alle Facharbeiten anzeigen lassen
+3 alle Facharbeiten anzeigen lassen
 /api/facharbeit/getAll (GET)
 	{}
-	->{ArrayOfObjects facharbeiten[Int studentId, String topic, String deliveryTime]}
+	->{ArrayOfObjects facharbeiten[{Int studentId, String topic, String deliveryTime}]}
 
-#Facharbeiten runterladen
+7 Facharbeiten runterladen
 /api/facharbeit/downloadAll (GET)
 	{}
-	->{ArrayOfObjects facharbeiten[Int studentId, String topic, String deliveryTime, Blob document]}	
+	->{ArrayOfObjects facharbeiten[{Int studentId, String studentName, String topic, String deliveryTime, Blob document}]}	
 
 
 
 #Wahlpflichtfächer
 
-#schüler wählt wpf
-/api/wahlpflichtfach/choose (POST)
-	{Int studentId, Int firstSubjectId, Int secondSubjectId} (Alternativ auch mit Array, wo zukünftig beliebig viele wpf. eingetragen werden können
-	->{}
+1 hole alle wpf
+/api/wahlpflichtfach/getAllWpf (GET)
+	{}
+	-> {Array of objects[{Int subjectId, String subjectName}]}
 
-#Admin bearbeiter wpf von Schüler (Alternativ kann man die schnittstelle /api/wahlpflichtfach/choose und /api/wahlpflichtfach/edi auch zusammen legen, und von der rolle abhängig machen, ob es erlaubt ist die Daten zu ändern
+2 schüler wählt wpf
+/api/wahlpflichtfach/choose (POST)
+	{Array of int[subjectIds]}
+	->{}
+	
+3 Admin bearbeitet wpf von Schüler
 /api/wahlpflichtfach/edit (POST)
 	{Int studentId, Int firstSubjectId, Int secondSubjectId}
 	-> {}
@@ -120,32 +125,37 @@ api/ag/delete/{agId} (POST) (oder GET?)
 
 #Abiturprüfungen
 
-#Schüler beantragen Thema
+1 Formulardaten abfragen
+/api/abitur/getFormData (GET)
+	{}
+	-> {Array of Objects [{possiblePartnerStudentsId, possiblePartnerStudentsname}], Array of Objects [{referenzFachIds, referenzfachName}], Array of Objects [{bezugsfachId, bezugsfachName}], Array of Objects [{teacherId, teacherName}]}
+
+2 Schüler beantragen Thema
 /api/abitur/applyForTopic (POST)
-	{Int studentId, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
+	{Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
 	->{Int examId}
 
-#admin ändert Daten (ähnlich wie bei  wahlfplichtfach, man kann die beiden Schnittstellen auch zusammenlegen und von der Rolle abhängig machen
+7 admin ändert Daten
 /api/abitur/editData/{Int studentId} (POST)
 	{Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
 	->{}
 
-#admin bekommt alle Schüler mit Abiprüfungen
+6 admin bekommt alle Schüler mit Abiprüfungen
 /api/abitur/getAllExams (GET)
 	{}
-	->{ArrayOfObjects allExams[{Int examId, Int studentId, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}]}
+	->{ArrayOfObjects allExams[{Int examId, Int studentId, string studentName, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}]}
 
-#Schüler sieht date zu seiner Prüfung ein
-/api/abitur/getExamData/{Int studentId} GET
+3 Schüler sieht daten zu seiner Prüfung ein
+/api/abitur/getExamData GET
 	{}
-	-> {Int studentId, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic, Bool approved, String(optional) rejectionReason}
+	-> {Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic, Bool approved, String(optional) rejectionReason}
 
-#hole alle Schüler (nötig um zu prüfen, ob alle Schüler abgegeben haben
-/api/getAllStudents (GET)
+4 hole alle Schüler (nötig um zu prüfen, ob alle Schüler abgegeben haben)
+/api/abitur/getAllStudentsOfAbiturClass (GET)
 	{}
-	->{ArrayOfInt studentIds[Int studentId]}
+	->{ArrayOfInt studentIds[{Int studentId, String studentName, Bool applicationSubmitted}]}
 
-#Admin setzt Genehmigungsstatus
+5 Admin setzt Genehmigungsstatus
 /api/abitur/setApprovalState (POST)
 	{Int examId, Bool approved, string(optional) reason}
 

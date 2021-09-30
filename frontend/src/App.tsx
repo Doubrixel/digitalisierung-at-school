@@ -7,14 +7,19 @@ import Toolbar from './components/Toolbar/Toolbar';
 import Footer from './components/Footer/Footer';
 
 // Pages Import
-import HomePage from './pages/HomePage';
-import AGEntryPage from './pages/AGEntryPage';
-import AGSinglePage from './pages/AGSinglePage';
-import FacharbeitsEntryPage from './pages/Facharbeit/FacharbeitEntryPage';
-import WahlpflichtEntryPage from './pages/WahlpflichtEntryPage';
-import PruefungskomponenteEntryPage from './pages/PruefungskomponenteEntryPage';
-import FacharbeitStudentListPage from './pages/Facharbeit/FacharbeitStudentListPage';
-import FacharbeitApplicationForm from './pages/Facharbeit/FacharbeitApplicationForm';
+import HomePage from './pages/student/HomePage';
+import AGEntryPage from './pages/student/AGEntryPage';
+import AGSinglePage from './pages/student/AGSinglePage';
+import FacharbeitsEntryPage from './pages/student/Facharbeit/FacharbeitEntryPage';
+import WahlpflichtEntryPage from './pages/student/WahlpflichtEntryPage';
+import PruefungskomponenteEntryPage from './pages/student/PruefungskomponenteEntryPage';
+import FacharbeitApplicationForm from './pages/student/Facharbeit/FacharbeitApplicationForm';
+import FacharbeitStudentListPage from './pages/student/Facharbeit/FacharbeitStudentListPage';
+import SettingsPage from './pages/admin/SettingsPage';
+import AdminFacharbeitPage from './pages/admin/AdminFacharbeitPage';
+import AdminAGPage from './pages/admin/AdminAGPage';
+import AdminWahlpflichtPage from './pages/admin/AdminWahlpflichtPage';
+import AdminPruefungskomponentePage from './pages/admin/AdminPruefungskomponentePage';
 
 function App() {
   return (
@@ -22,14 +27,21 @@ function App() {
       <Toolbar />
       <div id="applicationRootDiv">
         <Switch>
+          {/* Schüler-Seiten */}
           <Route exact path="/"><HomePage /></Route>
-          <Route exact path="/ag"><AGEntryPage /></Route>
-          <Route exact path="/ag/agbuchung"><AGSinglePage /></Route>
-          <Route exact path="/facharbeit"><FacharbeitsEntryPage /></Route>
-          <Route exact path="/wahlpflicht"><WahlpflichtEntryPage /></Route>
-          <Route exact path="/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
-          <Route exact path="/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
-          <Route exact path="/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
+          <Route exact path="/student/ag"><AGEntryPage /></Route>
+          <Route exact path="/ag/student/agbuchung"><AGSinglePage /></Route>
+          <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
+          <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
+          <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
+          <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
+          <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
+          {/* Admin-Seiten */}
+          <Route exact path="/settings"><SettingsPage /></Route>
+          <Route exact path="/admin/ag"><AdminAGPage /></Route>
+          <Route exact path="/admin/facharbeit"><AdminFacharbeitPage /></Route>
+          <Route exact path="/admin/wahlpflicht"><AdminWahlpflichtPage /></Route>
+          <Route exact path="/admin/pruefungskomponente"><AdminPruefungskomponentePage /></Route>
         </Switch>
       </div>
       <Footer />

@@ -15,22 +15,27 @@ const links = [
   {
     id: 1,
     name: 'AG-Buchung',
-    path: '/ag',
+    path: '/student/ag',
   },
   {
     id: 2,
     name: 'Facharbeit',
-    path: '/facharbeit',
+    path: '/student/facharbeit',
   },
   {
     id: 3,
     name: 'Wahlpflicht',
-    path: '/wahlpflicht',
+    path: '/student/wahlpflicht',
   },
   {
     id: 4,
-    name: 'Prüfungkomponente',
-    path: '/pruefungskomponente',
+    name: '5. PK',
+    path: '/student/pruefungskomponente',
+  },
+  {
+    id: 5,
+    name: 'Einstellungen',
+    path: '/settings',
   },
 ];
 
