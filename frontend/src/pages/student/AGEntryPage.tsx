@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import AGCollection from '../components/AGCollection/AGCollection';
+import AGCollection from '../../components/AGCollection/AGCollection';
 
 function AGEntryPage() {
   return (

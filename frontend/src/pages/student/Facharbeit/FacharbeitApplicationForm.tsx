@@ -6,8 +6,8 @@ import React, { useState } from 'react';
 import {
   Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField,
 } from '@material-ui/core';
-import CreatePDFButton from '../../components/Buttons/CreatePDFButton';
-import UploadedFileInformationPanel from '../../components/FileInformationPanel/UploadedFileInformationPanel';
+import CreatePDFButton from '../../../components/Buttons/CreatePDFButton';
+import UploadedFileInformationPanel from '../../../components/FileInformationPanel/UploadedFileInformationPanel';
 
 const lehrkraefteMock = [{ id: 1, name: 'Miss X' }, { id: 2, name: 'Mister A' }, { id: 3, name: 'Lady Y' }];
 const subjectMock = [{ id: 1, name: 'Mathe' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'English' }];
