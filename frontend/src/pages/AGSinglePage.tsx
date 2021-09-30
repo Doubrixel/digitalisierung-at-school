@@ -12,7 +12,7 @@ function AGEntryPage() {
   return (
     <div className="GridLayoutAG">
       <div id="ContainerSubmitAG">
-        <Link to="/ag"><Button variant="contained" color="secondary" id="HeadlineAG">AG-Buchung</Button></Link>
+        <Link to="/student/ag"><Button variant="contained" color="secondary" id="HeadlineAG">AG-Buchung</Button></Link>
       </div>
       <p id="HeadlineAGBuchung">Basketball</p>
       <p id="HeadlineWhenAG">Wann?</p>

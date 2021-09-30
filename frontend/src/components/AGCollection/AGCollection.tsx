@@ -18,7 +18,7 @@ function AGCollection() {
             <AGComponent
               image={image}
               buttontext={buttontext}
-              path="/ag/agbuchung"
+              path="/student/ag/agbuchung"
             />
           </div>
         ))
