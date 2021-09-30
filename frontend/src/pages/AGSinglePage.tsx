@@ -6,8 +6,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './AGSinglePage.css';
 import { Button } from '@material-ui/core';
-// import { ArrowBackIcon } from '@mui/icons-material';
-// startIcon={<ArrowBackIcon />}
 import Ballbild from '../images/Basketball.png';
 
 function AGEntryPage() {
