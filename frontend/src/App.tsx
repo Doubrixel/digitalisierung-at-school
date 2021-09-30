@@ -12,8 +12,9 @@ import AGEntryPage from './pages/AGEntryPage';
 import FacharbeitsEntryPage from './pages/Facharbeit/FacharbeitEntryPage';
 import WahlpflichtEntryPage from './pages/WahlpflichtEntryPage';
 import PruefungskomponenteEntryPage from './pages/PruefungskomponenteEntryPage';
-import FacharbeitStudentListPage from './pages/Facharbeit/FacharbeitStudentListPage';
 import FacharbeitApplicationForm from './pages/Facharbeit/FacharbeitApplicationForm';
+import FacharbeitStudentListPage from './pages/Facharbeit/FacharbeitStudentListPage';
+import SettingsPage from './pages/SettingsPage';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route exact path="/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
           <Route exact path="/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
           <Route exact path="/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
+          <Route exact path="/settings"><SettingsPage /></Route>
         </Switch>
       </div>
       <Footer />

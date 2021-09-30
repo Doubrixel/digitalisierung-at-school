@@ -1,0 +1,48 @@
+.moduleContainer {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 250px;
+  justify-content: center;
+  margin: 1vw 2vw;
+}
+
+.settingsModuleHeader {
+  background-color: var(--blue);
+  color: white;
+  border-style: solid;
+  border-radius: 20px;
+  text-align: center;
+}
+
+.settingsImageContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.settingsModuleImage {
+  width: 100px;
+  height: 100px;
+  margin: 1vw;
+}
+
+.settingsButtonContainer {
+  display: flex;
+}
+
+@media screen and (min-width: 3000px) {
+  .settingsModuleHeader {
+    font-size: 18pt;
+  }
+  .moduleContainer {
+    width: 600px;
+    height: 500px;
+  }
+  .settingsModuleImage {
+    width: 200px;
+    height: 200px;
+  }
+  .settingsButtonContainer {
+    height: 100px;
+  }
+}

@@ -29,8 +29,13 @@ const links = [
   },
   {
     id: 4,
-    name: 'Prüfungkomponente',
+    name: '5. PK',
     path: '/pruefungskomponente',
+  },
+  {
+    id: 5,
+    name: 'Einstellungen',
+    path: '/settings',
   },
 ];
 
