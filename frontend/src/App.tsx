@@ -30,7 +30,7 @@ function App() {
           {/* Schüler-Seiten */}
           <Route exact path="/"><HomePage /></Route>
           <Route exact path="/student/ag"><AGEntryPage /></Route>
-          <Route exact path="/ag/student/agbuchung"><AGSinglePage /></Route>
+          <Route exact path="/student/ag/agbuchung"><AGSinglePage /></Route>
           <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
           <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
           <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>

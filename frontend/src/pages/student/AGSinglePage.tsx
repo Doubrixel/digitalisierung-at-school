@@ -6,9 +6,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './AGSinglePage.css';
 import { Button } from '@material-ui/core';
-import Ballbild from '../images/Basketball.png';
+import Ballbild from '../../images/Basketball.png';
 
-function AGEntryPage() {
+function AGSinglePage() {
   return (
     <div className="GridLayoutAG">
       <div id="ContainerSubmitAG">
@@ -32,4 +32,4 @@ function AGEntryPage() {
   );
 }
 
-export default AGEntryPage;
+export default AGSinglePage;
