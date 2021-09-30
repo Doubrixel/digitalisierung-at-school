@@ -11,8 +11,8 @@ import Radio from '@material-ui/core/Radio';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Paper, Typography } from '@material-ui/core';
-import CreatePDFButton from '../components/Buttons/CreatePDFButton';
-import ComponentToggleButton from '../components/Buttons/ComponentToggleButton';
+import CreatePDFButton from '../../components/Buttons/CreatePDFButton';
+import ComponentToggleButton from '../../components/Buttons/ComponentToggleButton';
 
 function WahlpflichtEntryPage() {
   const [wahlpflichtfach1, setWahlpflichtfach1] = React.useState('');

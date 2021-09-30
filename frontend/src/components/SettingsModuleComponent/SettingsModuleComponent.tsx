@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import './SettingsModuleComponent.css';
-import { Button, ButtonGroup, Tooltip } from '@material-ui/core';
+import { Button, ButtonGroup } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import { Edit, Clear, Check } from '@mui/icons-material';
 
-function SettingsModuleComponent({ title, image }:{ title:string, image:string }) {
+// eslint-disable-next-line max-len
+function SettingsModuleComponent({ title, image, path }:{ title:string, image:string, path:string }) {
+  const history = useHistory();
+
   const [isActivated, setIsActivated] = useState(false);
 
   const onActivationClick = () => {
@@ -27,9 +31,9 @@ function SettingsModuleComponent({ title, image }:{ title:string, image:string }
           >
             {isActivated ? 'deaktivieren' : 'aktivieren'}
           </Button>
-          <Tooltip title="Funktion noch nicht verfügbar">
-            <Button color="primary" startIcon={<Edit />}>bearbeiten</Button>
-          </Tooltip>
+          <Button color="primary" startIcon={<Edit />} onClick={() => history.push(path)}>
+            bearbeiten
+          </Button>
         </ButtonGroup>
       </div>
     </div>

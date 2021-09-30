@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import ModulCollection from '../components/HomeSelcetion/ModulCollection';
+import ModulCollection from '../../components/HomeSelcetion/ModulCollection';
 import './HomePage.css';
 
 function HomePage() {

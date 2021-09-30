@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import FifthExamFormComponent from '../components/FifthExamComponent/FifthExamFormComponent';
+import FifthExamFormComponent from '../../components/FifthExamComponent/FifthExamFormComponent';
 
 function PruefungskomponenteEntryPage() {
   return (
