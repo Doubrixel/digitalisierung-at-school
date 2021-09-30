@@ -9,6 +9,7 @@ import Footer from './components/Footer/Footer';
 // Pages Import
 import HomePage from './pages/HomePage';
 import AGEntryPage from './pages/AGEntryPage';
+import AGSinglePage from './pages/AGSinglePage';
 import FacharbeitsEntryPage from './pages/Facharbeit/FacharbeitEntryPage';
 import WahlpflichtEntryPage from './pages/WahlpflichtEntryPage';
 import PruefungskomponenteEntryPage from './pages/PruefungskomponenteEntryPage';
@@ -23,6 +24,7 @@ function App() {
         <Switch>
           <Route exact path="/"><HomePage /></Route>
           <Route exact path="/ag"><AGEntryPage /></Route>
+          <Route exact path="/ag/agbuchung"><AGSinglePage /></Route>
           <Route exact path="/facharbeit"><FacharbeitsEntryPage /></Route>
           <Route exact path="/wahlpflicht"><WahlpflichtEntryPage /></Route>
           <Route exact path="/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
