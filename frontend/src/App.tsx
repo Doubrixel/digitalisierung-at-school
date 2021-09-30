@@ -9,6 +9,7 @@ import Footer from './components/Footer/Footer';
 // Pages Import
 import HomePage from './pages/student/HomePage';
 import AGEntryPage from './pages/student/AGEntryPage';
+import AGSinglePage from './pages/student/AGSinglePage';
 import FacharbeitsEntryPage from './pages/student/Facharbeit/FacharbeitEntryPage';
 import WahlpflichtEntryPage from './pages/student/WahlpflichtEntryPage';
 import PruefungskomponenteEntryPage from './pages/student/PruefungskomponenteEntryPage';
@@ -29,6 +30,7 @@ function App() {
           {/* Schüler-Seiten */}
           <Route exact path="/"><HomePage /></Route>
           <Route exact path="/student/ag"><AGEntryPage /></Route>
+          <Route exact path="/ag/student/agbuchung"><AGSinglePage /></Route>
           <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
           <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
           <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>

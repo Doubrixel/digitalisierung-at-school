@@ -1,0 +1,444 @@
+.GridLayoutAG{
+    display: grid;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    grid-template-columns: 7% 14% 7% 7% 7% 14% 7% 7% 14% 7% ;
+    width: 100%;
+}
+
+#HeadlineAG{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    margin-left: 2vw;
+    background-color: #3062A4;
+    width: 300px;
+    height: 50px;
+    margin-top: 2vh;
+    font-size: 20px;
+}
+#HeadlineAGBuchung{
+    grid-column-start: 5;
+    grid-column-end: 7;
+    grid-row-start: 1;
+    width: 20vw;
+    height: 5vh;
+    color: black;
+    font-weight: bold;
+    font-size: 40px;
+    text-align: center;
+    margin-top: 5vh;
+}
+
+#HeadlineWhenAG{
+    grid-column-start: 2;
+    grid-row-start: 3;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 20vw;
+}
+#TextWhenAG{
+    grid-column-start: 3;
+    grid-column-end: 6;
+    grid-row-start: 3;
+    font-size: 25px;
+}
+
+#HeadlineWhoAG{
+    grid-column-start: 2;
+    grid-row-start: 4;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 20vw;
+}
+#TextWhoAG{
+    grid-column-start: 3;
+    grid-column-end: 6;
+    grid-row-start: 4;
+    font-size: 25px;
+}
+
+#HeadlineWhereAG{
+    grid-column-start: 2;
+    grid-row-start: 5;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 20vw;
+}
+#TextWhereAG{
+    grid-column-start: 3;
+    grid-column-end: 6;
+    grid-row-start: 5;
+    font-size: 25px;
+}
+
+#HeadlineAGManagement{
+    grid-column-start: 2;
+    grid-column-end: 4;
+    grid-row-start: 6;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 20vw;
+}
+#TextAGManagement{
+    grid-column-start: 3;
+    grid-column-end: 8;
+    grid-row-start: 6;
+    font-size: 25px;
+}
+
+#SubmitButtonAG{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 8;
+    grid-row-end: 10;
+    background-color: #3062A4;
+    color: white;
+    font-size: 20px;
+    width: 300px;
+    height: 50px;
+}
+
+#ImageAGBuchung{
+    grid-column-start: 9;
+    grid-row-start: 2;
+    grid-row-end: 8;
+    height: 296px;
+    width: 296px;
+}
+
+#ContainerVerfügbarAG{
+    grid-column-start: 9;
+    grid-row-start: 7;
+}
+#TextVerfügbarAG{
+    width: 280px;
+    height: 45px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: underline;
+    border-radius: 20px;
+}
+
+@media screen and (min-width: 2500px){
+    .GridLayoutAG{
+        display: grid;
+        grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+        grid-template-columns: 7% 14% 7% 7% 7% 14% 7% 7% 14% 7% ;
+        padding: var(--defaultFormPaperPadding);
+    }
+
+    #HeadlineAG{
+        grid-column-start: 1;
+        grid-column-end: 3;
+        grid-row-start: 1;
+        margin-left: 2vw;
+        background-color: #3062A4;
+        width: 20vw;
+        height: 5vh;
+        margin-top: 2vh;
+        font-size: 40px;
+    }
+    
+    #HeadlineAGBuchung{
+        grid-column-start: 5;
+        grid-column-end: 7;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        font-size: 150px;
+    }
+
+    #HeadlineWhenAG{
+        grid-column-start: 2;
+        grid-row-start: 3;
+        font-size: 70px;
+        margin-left: 5vw;
+    }
+    #TextWhenAG{
+        grid-column-start: 4;
+        grid-column-end: 7;
+        grid-row-start: 3;
+        font-size: 70px;
+    }
+
+    #HeadlineWhoAG{
+        grid-column-start: 2;
+        grid-row-start: 4;
+        font-size: 70px;
+        margin-left: 5vw;
+    }
+    #TextWhoAG{
+        grid-column-start: 4;
+        grid-column-end: 7;
+        grid-row-start: 4;
+        font-size: 70px;
+    }
+
+    #HeadlineWhereAG{
+        grid-column-start: 2;
+        grid-row-start: 5;
+        font-size: 70px;
+        margin-left: 5vw;
+        margin-top: 4vh;
+    }
+    #TextWhereAG{
+        grid-column-start: 4;
+        grid-column-end: 7;
+        grid-row-start: 5;
+        font-size: 70px;
+        margin-top: 4vh;
+    }
+
+    #HeadlineAGManagement{
+        grid-column-start: 2;
+        grid-column-end: 4;
+        grid-row-start: 6;
+        font-size: 70px;
+        margin-left: 5vw;
+        margin-top: 5vh;
+    }
+    #TextAGManagement{
+        grid-column-start: 4;
+        grid-column-end: 7;
+        grid-row-start: 6;
+        font-size: 70px;
+        margin-top: 5vh;
+    }
+
+    #SubmitButtonAG{
+        grid-column-start: 4;
+        grid-column-end: 7;
+        grid-row-start: 8;
+        grid-row-end: 9;
+        width: 20vw;
+        height: 5vh;
+        background-color: #3062A4;
+        font-size: 40px;
+    }
+
+    #ImageAGBuchung{
+        grid-column-start: 8;
+        grid-column-end: 10;
+        grid-row-start: 3;
+        grid-row-end: 8;
+        width: 25vw;
+        height: 25vh;
+        margin-top: 4vh;
+    }
+    #ContainerVerfügbarAG{
+        grid-column-start: 8;
+        grid-column-end: 10;
+        grid-row-start: 7;
+        width: 25vw;
+        height: 10vh;
+        margin-left: 2vw;
+    }
+    #TextVerfügbarAG{
+        width: 20vw;
+        height: 5vh;
+        font-size: 40px;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 1200px){
+    .GridLayoutAG{
+        display: grid;
+        grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+        grid-template-columns: 50% 50% ;
+    }
+
+    #HeadlineAG{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+    }
+    #HeadlineAGBuchung{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 2;
+        width: 400px;
+        height: 50px;
+        font-weight: bold;
+        color: black;
+        font-size: 40px;
+        text-align: center;
+        margin-left: 30vw;
+        
+    }
+
+    #ImageAGBuchung{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 3;
+        grid-row-end: 4;
+        height: 200px;
+        width: 200px;
+        margin-left: 20vw;
+        margin-top: 6vh;
+    }
+
+    #HeadlineWhenAG{
+        grid-column-start: 1;
+        grid-row-start: 6;
+        margin-right: 200px;
+    }
+    #TextWhenAG{
+        grid-column-start: 2;
+        grid-row-start: 6;
+    }
+
+    #HeadlineWhoAG{
+        grid-column-start: 1;
+        grid-row-start: 7;
+        margin-right: 220px;
+    }
+    #TextWhoAG{
+        grid-column-start: 2;
+        grid-row-start: 7;
+    }
+
+    #HeadlineWhereAG{
+        grid-column-start: 1;
+        grid-row-start: 8;
+        margin-right: 230px;
+    }
+    #TextWhereAG{
+        grid-column-start: 2;
+        grid-row-start: 8;
+    }
+
+    #HeadlineAGManagement{
+        grid-column-start: 1;
+        grid-column-end: 1;
+        grid-row-start: 9;
+        margin-right: 135px;
+    }
+    #TextAGManagement{
+        grid-column-start: 2;
+        grid-row-start: 9;
+    }
+
+    #ContainerVerfügbarAG{
+        grid-column-start: 2;
+        grid-column-end: 3;
+        grid-row-start: 4;
+    }
+    #TextVerfügbarAG{
+        margin-left: 5vw;
+        margin-top: 5vh;
+    }
+
+    #SubmitButtonAG{
+        grid-column-start: 1;
+        grid-row-start: 10;
+        margin-left: 35vw;
+    }
+}
+
+@media screen and (max-width: 600px){
+    .GridLayoutAG{
+        display: grid;
+        grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+        grid-template-columns: 50% 50% ;
+    }
+
+    #ContainerSubmitAG{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 1;
+    }
+
+    #HeadlineAGBuchung{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 2;
+        width: 400px;
+        height: 50px;
+        color: black;
+        font-size: 40px;
+        text-align: center;
+        margin-left: 2vw;
+        
+    }
+
+    #ImageAGBuchung{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 3;
+        grid-row-end: 4;
+        height: 200px;
+        width: 200px;
+        margin-left: 25vw;
+    }
+
+    #HeadlineWhenAG{
+        grid-column-start: 1;
+        grid-row-start: 6;
+        margin-right: 130px;
+    }
+    #TextWhenAG{
+        grid-column-start: 2;
+        grid-row-start: 6;
+        margin-right: 15vw;
+    }
+
+    #HeadlineWhoAG{
+        grid-column-start: 1;
+        grid-row-start: 7;
+        margin-right: 150px;
+    }
+    #TextWhoAG{
+        grid-column-start: 2;
+        grid-row-start: 7;
+        margin-right: 15vw;
+    }
+
+    #HeadlineWhereAG{
+        grid-column-start: 1;
+        grid-row-start: 8;
+        margin-right: 160px;
+        margin-top: 4vh;
+    }
+    #TextWhereAG{
+        grid-column-start: 2;
+        grid-row-start: 8;
+        margin-right: 15vw;
+        margin-top: 4vh;
+    }
+
+    #HeadlineAGManagement{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 9;
+        margin-right: 160px;
+    }
+    #TextAGManagement{
+        grid-column-start: 2;
+        grid-row-start: 9;
+        margin-right: 15vw;
+    }
+
+    #ContainerVerfügbarAG{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 5;
+        margin-top: 3vh;
+    }
+    #TextVerfügbarAG{
+        width: 280px;
+        margin-left: 17vw;
+    }
+
+    #SubmitButtonAG{
+        grid-column-start: 1;
+        grid-column-end: 2;
+        grid-row-start: 10;
+        margin-left: 10vw;
+        margin-top: 5vh;
+    }
+}
