@@ -16,7 +16,7 @@ function ModulCollection() {
           image={AG_Image}
           title="Hier die passende AG auswählen und buchen"
           buttontext="AG buchen"
-          path="/ag"
+          path="/student/ag"
         />
       </div>
       <div className="flexModulItem">
@@ -24,7 +24,7 @@ function ModulCollection() {
           image={Facharbeit_Image}
           title="Facharbeit für die SuS der Klasse 9 einreichen"
           buttontext="Facharbeit"
-          path="/facharbeit"
+          path="/student/facharbeit"
         />
       </div>
       <div className="flexModulItem">
@@ -32,7 +32,7 @@ function ModulCollection() {
           image={Wahlpflicht_Image}
           title="Wahlpflichtfächer bestimmen"
           buttontext="Wählfächer"
-          path="/wahlpflicht"
+          path="/student/wahlpflicht"
         />
       </div>
       <div className="flexModulItem">
@@ -40,7 +40,7 @@ function ModulCollection() {
           image={PK_Image}
           title="Abitur-Prüfungsabgabe für die Klasse 11 bzw. 12"
           buttontext="5. PK"
-          path="/pruefungskomponente"
+          path="/student/pruefungskomponente"
         />
       </div>
       <div className="flexModulItem">
