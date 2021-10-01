@@ -39,6 +39,9 @@ jobs:
 
   deploy:
 
+    # deploy only after the build is finished
+    needs: [ build ]
+
     runs-on: ubuntu-latest
 
     env:
