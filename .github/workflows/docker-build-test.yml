@@ -48,6 +48,9 @@ jobs:
 
     steps:
 
+      - name: Check Out Repo
+        uses: actions/checkout@v2
+
       - name: Create SSH key
         shell: bash
         run: |
