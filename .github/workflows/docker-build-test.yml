@@ -60,4 +60,6 @@ jobs:
         shell: bash
         env:
           DEPLOY_VM: ${{ secrets.DEPLOY_VM }}
-        run: ssh -i $SSH_KEY_PATH root@$DEPLOY_VM "echo success > test.txt"
+        run: |
+          scp -i $SSH_KEY_PATH docker-compose-test.yml root@$DEPLOY_VM:~/docker-compose-test.yml
+          ssh -i $SSH_KEY_PATH root@$DEPLOY_VM "docker-compose -f docker-compose-test.yml pull && docker-compose -f docker-compose-test.yml up -d"
