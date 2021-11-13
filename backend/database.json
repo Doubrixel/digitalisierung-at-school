@@ -1,0 +1,10 @@
+{
+  "dev": {
+    "driver": "sqlite3",
+    "filename": "../db/digitalisierung-at-school.db"
+  },
+  "prod": {
+    "driver": "sqlite3",
+    "filename": "../db/digitalisierung-at-school.db"
+  }
+}

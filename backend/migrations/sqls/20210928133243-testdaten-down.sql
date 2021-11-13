@@ -1,0 +1,9 @@
+DELETE FROM abiturpuefungen WHERE id IN (1,2);
+DELETE FROM ag2Nutzer WHERE id IN (1,2);
+DELETE FROM ags WHERE id IN (1,2);
+DELETE FROM bezugsfach WHERE id IN (1,2);
+DELETE FROM facharbeiten WHERE id IN (1,2);
+DELETE FROM komponenten WHERE id IN (1,2);
+DELETE FROM nutzer WHERE id IN (1,2);
+DELETE FROM wahlpflichtfaecher WHERE id IN (1,2);
+DELETE FROM wahlpflichtfaecher2nutzer WHERE id IN (1,2);
