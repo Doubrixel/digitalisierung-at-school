@@ -39,9 +39,7 @@ const getAllResults = (sql: string, params: Array<number | string>, callback: (a
 
 const testDBConnection = ():void => {
     console.log("Testing DB-connection. If no error is prompted between this line and 'Close the database connection.' the test was succesfull.");
-    // in der nächsten Zeile no-unused-vars disabled, weil ein Zugriff auf das DB Objekt nicht notwendig ist um die verbindung zu testen
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    accessDB((db)=>undefined, true);
+    accessDB(()=>undefined, true);
 };
 
 export { getAllResults, testDBConnection };

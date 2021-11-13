@@ -1,9 +1,9 @@
 version: "3.1"
-#TODO: db-migrate up ausführen & testdaten dabei nicht ausführen
+#TODO: db-migrate up ausführen & testdaten dabei nicht ausführen (https://trello.com/c/Ys2GEvwF/37-db-migrate-up-in-docker-compose-ausf%C3%BChren)
 services:
   digitalisierungatschool:
     image: digitalisierungatschool/prod
     ports:
       - "6000:5000"
     volumes:
-      - /digitalisierung-at-school-db-prod:/usr/share/html/db
+      - ~/digitalisierung-at-school-data-prod:/usr/share/html/data
