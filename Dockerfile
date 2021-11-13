@@ -1,6 +1,6 @@
 FROM node:16.3-alpine
 
-RUN apt-get update || : && apt-get install python -y
+RUN apk update || : && apk add python3
 
 WORKDIR /usr/share/html
 
