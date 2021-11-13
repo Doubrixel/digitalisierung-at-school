@@ -2,7 +2,7 @@ import express, { Express } from 'express';
 import { join } from 'path';
 import pathExists from './util/filesystem/path-exists';
 import setupRouting from './routing/setup';
-const dbAccessor = require('./db/dbAccessor');
+import { testDBConnection } from './db/dbAccessor';
 
 const main = async (port: number) =>
 {
@@ -18,8 +18,7 @@ const main = async (port: number) =>
         console.log(`Server running on port ${port}`);
     });
 
-    console.log('Testing db connection: ')
-    dbAccessor.accessDB(() => {}, true);
+    testDBConnection();
 };
 
 main(5000);
