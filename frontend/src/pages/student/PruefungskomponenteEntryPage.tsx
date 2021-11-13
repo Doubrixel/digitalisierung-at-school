@@ -3,10 +3,13 @@
  */
 
 import React from 'react';
+import FifthExamFormComponent from '../../components/FifthExamComponent/FifthExamFormComponent';
 
 function PruefungskomponenteEntryPage() {
   return (
-    <h1>Pruefungskomponente</h1>
+    <div style={{ width: '100%' }}>
+      <FifthExamFormComponent />
+    </div>
   );
 }
 

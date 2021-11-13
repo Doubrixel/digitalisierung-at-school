@@ -13,19 +13,13 @@
 
 }
 
-.pageRoot {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-}
 .facharbeitRootPaperWrapper {
     width: 94vw;
 }
 
 .facharbeitRootPaper {
     display: flex;
-    width: 90vw;
-    padding: 2vw;
+    padding: var(--defaultFormPaperPadding);
 }
 
 .tableWrapper {

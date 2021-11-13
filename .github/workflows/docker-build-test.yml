@@ -36,3 +36,36 @@ jobs:
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
 
+
+  deploy:
+
+    # deploy only after the build is finished
+    needs: [ build ]
+
+    runs-on: ubuntu-latest
+
+    env:
+      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+      SSH_KEY_PATH: ${{ github.workspace }}/../private.key
+
+    steps:
+
+      - name: Check Out Repo
+        uses: actions/checkout@v2
+
+      - name: Create SSH key
+        shell: bash
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > $SSH_KEY_PATH
+          sudo chmod 600 $SSH_KEY_PATH
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+      - name: Deploy to VM
+        shell: bash
+        env:
+          DEPLOY_VM: ${{ secrets.DEPLOY_VM }}
+        run: |
+          scp -i $SSH_KEY_PATH docker-compose-test.yml root@$DEPLOY_VM:~/docker-compose-test.yml
+          ssh -i $SSH_KEY_PATH root@$DEPLOY_VM "docker-compose -f docker-compose-test.yml pull && docker-compose -f docker-compose-test.yml up -d"

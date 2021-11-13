@@ -15,22 +15,27 @@ const links = [
   {
     id: 1,
     name: 'AG-Buchung',
-    path: '/ag',
+    path: '/student/ag',
   },
   {
     id: 2,
     name: 'Facharbeit',
-    path: '/facharbeit',
+    path: '/student/facharbeit',
   },
   {
     id: 3,
     name: 'Wahlpflicht',
-    path: '/wahlpflicht',
+    path: '/student/wahlpflicht',
   },
   {
     id: 4,
-    name: 'Prüfungkomponente',
-    path: '/pruefungskomponente',
+    name: '5. PK',
+    path: '/student/pruefungskomponente',
+  },
+  {
+    id: 5,
+    name: 'Einstellungen',
+    path: '/settings',
   },
 ];
 
@@ -38,6 +43,14 @@ function Toolbar() {
   const windowDimensions = useWindowDimensions();
 
   const [isToggleActivated, setIsToggleActicated] = useState(false);
+
+  const HomeLink = (
+    <div key="0" className="nav-link">
+      <Link to="/" style={{ textDecoration: 'none' }}>
+        <h4>Home</h4>
+      </Link>
+    </div>
+  );
 
   return (
     <div className="toolbar">
@@ -63,6 +76,7 @@ function Toolbar() {
           */
         windowDimensions.width > 1000 || isToggleActivated ? (
           <div className="links-container">
+            {windowDimensions.width < 1000 && HomeLink}
             {
               links.map((link) => (
                 <div key={link.id} className="nav-link">

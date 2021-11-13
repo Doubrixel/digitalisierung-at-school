@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import { join } from 'path';
 import pathExists from './util/filesystem/path-exists';
 import setupRouting from './routing/setup';
+import { testDBConnection } from './db/dbAccessor';
 import * as auth from './auth';
 import * as dotenv from 'dotenv';
 
@@ -21,6 +22,8 @@ const main = async (port: number) =>
     app.listen(port, () => {
         console.log(`Server running on port ${port}`);
     });
+
+    testDBConnection();
 };
 
 main(5000);

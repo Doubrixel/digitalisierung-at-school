@@ -1,0 +1,55 @@
+.AGModul {
+  position: relative;
+  width: 12vw;
+  height: 29vh;
+  margin: 2vh;
+  border-style: solid;
+  border-color: var(--blue);
+  border-radius: 2.2vh;
+}
+
+.AGImage {
+  width: 90%;
+  object-fit: cover;
+  height: 20vh; 
+  margin: 1.2vh;
+}
+
+.AGButton {
+  width: 12vw;
+  height: 6.5vh;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border-bottom-left-radius: 1.7vh;
+  border-bottom-right-radius: 1.7vh;
+  border: 0;
+  font-size: 3vh;
+  font-weight: bold;
+  color: var(--textGrey);
+  background-color: var(--buttongrey);
+}
+
+@media screen and (max-width: 1700px) {
+  .AGModul {
+    width: 200px;
+    height: 250px;
+    margin: 20px;
+    border-radius: 20px;
+}
+
+  .AGImage {
+    height: 170px; 
+    margin: 10px;
+  }
+
+  .AGButton {
+    width: 200px;
+    height: 55px;
+    border-bottom-left-radius: 17px;
+    border-bottom-right-radius: 17px;
+    font-size: 25px;
+    
+  }
+}

@@ -3,10 +3,10 @@
  */
 
 import React from 'react';
-import TableListComponent from '../../components/ReusableComponents/TableListComponent';
-import ComponentToggleButton from '../../components/Buttons/ComponentToggleButton';
+import TableListComponent from '../../../components/ReusableComponents/TableListComponent';
+import ComponentToggleButton from '../../../components/Buttons/ComponentToggleButton';
 import './FacharbeitenPageStyles.css';
-import CreatePDFButton from '../../components/Buttons/CreatePDFButton';
+import CreatePDFButton from '../../../components/Buttons/CreatePDFButton';
 
 function handleActivateComponentButton() {
   alert('komponente aktiviert');
