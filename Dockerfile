@@ -1,5 +1,7 @@
 FROM node:16.3-alpine
 
+RUN apt-get update || : && apt-get install python -y
+
 WORKDIR /usr/share/html
 
 # Nur das frontend, backend und die build.sh werden benötigt
