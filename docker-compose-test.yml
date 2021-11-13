@@ -5,3 +5,5 @@ services:
     image: digitalisierungatschool/test
     ports:
       - "5000:5000"
+    volumes:
+      - ~/digitalisierung-at-school-data-prod:/usr/share/html/data

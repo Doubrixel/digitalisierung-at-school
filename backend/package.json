@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "openid-client": "^4.8.0"
+    "openid-client": "^4.8.0",
+    "dotenv": "^10.0.0"
   }
 }
