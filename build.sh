@@ -2,7 +2,7 @@
 # sh statt bash, weil wir im docker image kein bash haben
 
 echo Building digitalisierung at school project
-
+npm install -g npm || exit 1
 cd frontend || exit 1
 
 echo Installing frontend...
