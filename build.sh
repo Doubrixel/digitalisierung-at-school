@@ -3,6 +3,7 @@
 
 echo Building digitalisierung at school project
 npm install -g npm || exit 1
+npm cache clean sqlite3
 cd frontend || exit 1
 
 echo Installing frontend...
