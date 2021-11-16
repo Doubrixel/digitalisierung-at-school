@@ -1,6 +1,6 @@
 FROM node:16.3-alpine
 
-RUN apk update || : && apk add python3
+RUN apk update || : && apk add python3 make
 
 WORKDIR /usr/share/html
 
