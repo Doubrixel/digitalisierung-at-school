@@ -1,6 +1,6 @@
 FROM node:16.3-alpine
 
-RUN apk update || : && apk add python2 make python3
+RUN apk update || : && apk add python2 build-base python3
 
 WORKDIR /usr/share/html
 
