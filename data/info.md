@@ -1,0 +1,1 @@
+Dies ist der data Ordner. Er wird nicht ins test oder produktiv system übernommen. Der data Ordner entspricht dem docker volume. D.h. wenn wir auf etwas im Code referenzieren wollen, das im docker volume liegt (also persistent ist) dann muss es während der Entwicklung im data Ordner liegen (und entsprechend auf diesen im code gezeigt werden).
