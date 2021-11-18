@@ -4,7 +4,6 @@ import '../FormInput/ForminputElementSubmitButton.css';
 import './ComponentToggleButton.css';
 import PropTypes from 'prop-types';
 import { Button } from '@material-ui/core';
-import { sendAPIRequest } from '../../APIRequestFunction';
 
 function ComponentToggleButton(
   {
@@ -15,7 +14,6 @@ function ComponentToggleButton(
   const handleButtonClick = () => {
     setButtonIsOn(!buttonIsOn);
     buttonHandleClickFunction();
-    sendAPIRequest('/api/fa/test', 'POST', { data: 123 });
   };
   return (
     <div className="componentToggleButtonWrapper labelTextDiv">
