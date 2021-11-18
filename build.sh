@@ -32,5 +32,7 @@ mkdir build/ || exit 1
 cp -r frontend/build build/client/ || exit 1
 cp -r backend/build build/src/ || exit 1
 cp -r backend/node_modules/ build/node_modules/ || exit 1
+cp -r backend/migrations/ build/migrations/ || exit 1
+cp backend/database.json build/database.json || exit 1
 echo Build complete
 
