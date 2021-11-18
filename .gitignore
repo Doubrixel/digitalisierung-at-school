@@ -24,5 +24,7 @@ yarn-debug.log*
 yarn-error.log*
 .idea
 
+.env
+
 #db
 db/digitalisierung-at-school.db
