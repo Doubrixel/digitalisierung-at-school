@@ -38,7 +38,7 @@
 }
 
 .links-container {
-  padding: 10px 5px
+  padding: 10px 5px;
 }
 
 @media screen and (min-width: 1000px) {
@@ -59,6 +59,10 @@
 }
 
 @media screen and (min-width: 3000px) {
+  .links-container {
+    width: 2000px;
+  }
+  
   .nav-link h4 {
     font-size: 3rem;
   }
