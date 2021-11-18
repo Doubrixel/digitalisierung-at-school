@@ -1,5 +1,4 @@
 version: '3.1'
-#TODO: db-migrate up ausführen (https://trello.com/c/Ys2GEvwF/37-db-migrate-up-in-docker-compose-ausf%C3%BChren)
 services:
   digitalisierungatschool:
     image: digitalisierungatschool/test
@@ -7,3 +6,4 @@ services:
       - "5000:5000"
     volumes:
       - ~/digitalisierung-at-school-data-test:/usr/share/html/data
+    command: [sh, -c, "cd build/; node_modules/db-migrate/bin/db-migrate up; node src/index.js"]

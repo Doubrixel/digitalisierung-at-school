@@ -5,7 +5,7 @@ import sqlite3Import from 'sqlite3';
 const sqlite3 = sqlite3Import.verbose();
 
 const accessDB = (functionToExecute: (db: Database) => undefined, verbose = false) => {
-    const db = new sqlite3.Database(path.join(__dirname, '../../../db/digitalisierung-at-school.db'), (err: Error | null) => {
+    const db = new sqlite3.Database(path.join(__dirname, '../../../data/digitalisierung-at-school.db'), (err: Error | null) => {
         if (err) {
             return console.error(err.message);
         }

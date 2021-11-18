@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { login, logout } from '../../../actions/authActions';
 import { RootState } from '../../../reducer';
@@ -21,9 +22,13 @@ export const LoginLogoutButton = () => {
     <div id="loginButtonContainer">
       {
         isLoggedIn ? (
-          <Button variant="contained" color="secondary" size="large" onClick={onClickLogout}><div id="authBtnText">Logout</div></Button>
+          <Link to="/auth/logout">
+            <Button variant="contained" color="secondary" size="large" onClick={onClickLogout}><div id="authBtnText">Logout</div></Button>
+          </Link>
         ) : (
-          <Button variant="contained" color="primary" size="large" onClick={onClickLogin}><div id="authBtnText">Login</div></Button>
+          <Link to="/auth/login">
+            <Button variant="contained" color="primary" size="large" onClick={onClickLogin}><div id="authBtnText">Login</div></Button>
+          </Link>
         )
       }
     </div>
