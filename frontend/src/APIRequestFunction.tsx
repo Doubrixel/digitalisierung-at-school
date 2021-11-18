@@ -1,19 +1,19 @@
-/* eslint-disable */
-
-import { connect } from 'react-redux';
+import store from './store';
 
 export const SERVER = window.location.hostname === 'localhost' ? 'http://localhost:3000' : '';
 
 export function sendAPIRequest(path, requestMethod, requestBody) {
-  const authToken = { authToken: 'token123' };
-  const requestBodyWithAuthToken = { requestBody, ...authToken };
+  const { authToken } = store.getState().authReducer;
   let returnJson;
+  const requestHeaders = new Headers();
+  requestHeaders.append('Content-Type', 'application/json');
+  requestHeaders.append('Authorization', authToken);
   fetch(SERVER + path,
     {
       method: requestMethod,
-      headers: { 'Content-Type': 'application/json' },
+      headers: requestHeaders,
       // @ts-ignore
-      body: requestBodyWithAuthToken,
+      body: requestBody,
     })
     .then((response) => response.json())
     .then((data) => {
@@ -21,6 +21,3 @@ export function sendAPIRequest(path, requestMethod, requestBody) {
     });
   return returnJson;
 }
-
-// @ts-ignore
-//export default connect((state) => ({ authToken: state.authReducer.authToken }))(sendAPIRequest);
