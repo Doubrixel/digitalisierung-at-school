@@ -26,5 +26,5 @@ yarn-error.log*
 
 .env
 
-#db
-db/digitalisierung-at-school.db
+#data kommt nicht ins repo, in prod und test ist es das volume
+data/*
