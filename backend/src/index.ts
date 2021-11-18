@@ -5,8 +5,9 @@ import setupRouting from './routing/setup';
 import { testDBConnection } from './db/dbAccessor';
 import * as auth from './auth';
 import * as dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
-dotenv.config({ path: join(__dirname, '../../../data/.env') });
+dotenv.config({ path: join(__dirname, '../../data/.env') });
 
 const main = async (port: number) =>
 {
@@ -16,7 +17,11 @@ const main = async (port: number) =>
     if (!clientExists) console.warn('No client available. Serving only API.');
 
     const app: Express = express();
+
+    app.use(cookieParser());
+
     app.use(auth.initialize);
+    app.use(auth.session);
     setupRouting(app);
 
     app.listen(port, () => {
