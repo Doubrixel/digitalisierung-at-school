@@ -6,4 +6,4 @@ services:
       - "5000:5000"
     volumes:
       - ~/digitalisierung-at-school-data-test:/usr/share/html/data
-    command: [sh, -c, "cd build/ && node src/index.js && node_modules/db-migrate/bin/db-migrate up"]
+    command: [sh, -c, "cd build/; node_modules/db-migrate/bin/db-migrate up; node src/index.js"]
