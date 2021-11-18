@@ -14,12 +14,8 @@ const theme = createTheme({
     secondary: {
       main: '#ff3d00',
     },
-    // default
-    error: {},
-    warning: {},
-    info: {},
-    success: {},
   },
+  /* weitere Farben: error: warning, info, success */
   // modify Schriftart
   typography: {
     fontFamily: [
