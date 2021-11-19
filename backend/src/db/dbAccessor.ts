@@ -37,9 +37,19 @@ const getAllResults = (sql: string, params: Array<number | string>, callback: (a
     });
 };
 
+const insertData = (sql: string, values: Array<number | string>, callback: (id: number, err: Error|null) => void): void => {
+    accessDB((db) => {
+        db.run(sql, values, function(err){
+            if (err) callback(-1, err);
+            else callback(this.lastID, err);
+        });
+        return undefined;
+    });
+};
+
 const testDBConnection = ():void => {
     console.log("Testing DB-connection. If no error is prompted between this line and 'Close the database connection.' the test was succesfull.");
     accessDB(()=>undefined, true);
 };
 
-export { getAllResults, testDBConnection };
+export { getAllResults, insertData, testDBConnection };
