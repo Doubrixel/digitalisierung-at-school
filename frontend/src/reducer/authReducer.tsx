@@ -8,7 +8,7 @@ const authReducer = (state = initialState, action) => {
     case 'LOGIN':
       return { ...state, isLoggedIn: true, authToken: 'authTokenMock' };
     case 'LOGOUT':
-      return { ...state, isLoggedIn: false };
+      return { ...state, isLoggedIn: false, authToken: null };
     default:
       return state;
   }
