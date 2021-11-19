@@ -1,19 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import { createStore } from 'redux';
 import { Provider } from 'react-redux';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { composeWithDevTools } from 'redux-devtools-extension';
 import { ThemeProvider } from '@material-ui/core';
-
 import App from './App';
-import rootReducer from './reducer';
-import theme from './Theming';
+import store from './store';
 
-const store = createStore(
-  rootReducer, composeWithDevTools(),
-);
+import theme from './Theming';
 
 ReactDOM.render(
   <React.StrictMode>
