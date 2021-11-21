@@ -18,5 +18,11 @@ jobs:
       - name: npm install
         run: npm install
 
+      - name: npm install frontend
+        run: npm install --prefix frontend
+        
+      - name: npm install backend
+        run: npm install --prefix backend
+
       - name: npm test
         run: npm test
