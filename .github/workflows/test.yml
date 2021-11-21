@@ -18,7 +18,7 @@ jobs:
       - name: npm install frontend
         run: npm install --prefix frontend
 
-      - name: npm test frontend
+      - name: npm test --passWithNoTests frontend
         run: npm test --prefix frontend
 
       - name: npm install backend
