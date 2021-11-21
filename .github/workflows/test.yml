@@ -15,14 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: npm install frontend
-        run: npm install --prefix frontend
+      - name: npm install
+        run: npm install
 
-      - name: npm test frontend
-        run: npm test --prefix frontend
-
-      - name: npm install backend
-        run: npm install --prefix backend
-
-      - name: npm test backend
-        run: npm test --prefix backend
+      - name: npm test
+        run: npm test
