@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "test": "jest --passWithNoTests"
+  },
+  "devDependencies": {
+    "jest": "^27.2.1"
+  },
+  "dependencies": {
+    "axios": "^0.21.4"
+  }
+}
