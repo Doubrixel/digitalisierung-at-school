@@ -57,7 +57,7 @@ export default class Auth {
 
             console.log(tokenSet);
 
-            const user = await client!.userinfo(tokenSet);
+            const user = await client!.userinfo(tokenSet.access_token!);
 
             console.log(user);
 
