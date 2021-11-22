@@ -8,6 +8,7 @@ import './LoginLogoutButton.css';
 
 export const LoginLogoutButton = () => {
   const dispatch = useDispatch();
+  // @ts-ignore
   const isLoggedIn = useSelector((state: RootState) => state.authReducer.isLoggedIn);
 
   const onClickLogin = () => {

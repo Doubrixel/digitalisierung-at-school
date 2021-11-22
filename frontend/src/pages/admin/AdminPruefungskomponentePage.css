@@ -1,0 +1,10 @@
+#firstLine{
+    display: flex;
+    margin-top: 10px;
+}
+
+.fifthExamPaper {
+    display: flex;
+    flex-direction: column;
+    padding: var(--defaultFormPaperPadding)
+}
