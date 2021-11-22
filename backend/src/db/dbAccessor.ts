@@ -1,6 +1,7 @@
 import {Database} from 'sqlite3';
 import path from 'path';
 import sqlite3Import from 'sqlite3';
+import {Response} from 'express';
 
 const sqlite3 = sqlite3Import.verbose();
 
@@ -47,9 +48,34 @@ const insertData = (sql: string, values: Array<number | string>, callback: (id: 
     });
 };
 
+const defaultInsertCallback = (res: Response) => (
+    (id: number, err: Error|null): void => {
+        if (err) res.status(500).json(err.name);
+        else res.status(200).json({id});
+    }
+);
+
+const updateData = (sql: string, values: Array<number | string>, callback: (changedRowCount: number, err: Error|null) => void): void => {
+    accessDB((db) => {
+        db.run(sql, values, function(err){
+            if (err) callback(-1, err);
+            else callback(this.changes, err);
+        });
+        return undefined;
+    });
+};
+
+const defaultUpdateCallback = (res: Response) => (
+    (changedRowCount: number, err: Error|null): void => {
+        if (err) res.status(500).json(err.name);
+        if (changedRowCount === 0) res.status(409).json('Kein Datensatz geändert.');
+        else res.status(200).json();
+    }
+);
+
 const testDBConnection = ():void => {
     console.log("Testing DB-connection. If no error is prompted between this line and 'Close the database connection.' the test was succesfull.");
     accessDB(()=>undefined, true);
 };
 
-export { getAllResults, insertData, testDBConnection };
+export { getAllResults, insertData, defaultInsertCallback, testDBConnection, updateData, defaultUpdateCallback };
