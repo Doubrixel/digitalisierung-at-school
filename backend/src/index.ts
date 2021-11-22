@@ -19,7 +19,7 @@ const main = async (port: number) =>
     const app: Express = express();
 
     app.use(cookieParser());
-
+    app.use(express.json());
     app.use(auth.initialize);
     app.use(auth.session);
     setupRouting(app);

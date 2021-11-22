@@ -32,6 +32,7 @@
     "db-migrate-sqlite3": "^0.4.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-validator": "^6.13.0",
     "node": "^16.4.0",
     "openid-client": "^4.8.0",
     "sqlite3": "^5.0.2"
