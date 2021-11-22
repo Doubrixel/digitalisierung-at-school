@@ -2,7 +2,7 @@ import {Issuer} from 'openid-client';
 import {NextFunction, Request, Response} from 'express';
 import {deserialize, serialize} from './session';
 import {clearSessionCookie, getSessionCookie, setSessionCookie,} from './cookie';
-import {iservConnectionError, iservLink, redirectLink} from './staticAuthStrings';
+import {iservConnectionError, iservLink} from './staticAuthStrings';
 
 
 /*
@@ -25,7 +25,7 @@ export async function initialize(
          const client = new issuer.Client({
              client_id: process.env.OAUTH_CLIENT_ID!,
              client_secret: process.env.OAUTH_CLIENT_SECRET!,
-             redirect_uris: [redirectLink],
+             redirect_uris: [process.env.REDIRECT_LINK!],
              response_types: ['code'],
          });
 

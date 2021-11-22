@@ -1,7 +1,6 @@
 import {NextFunction, Request, Response} from 'express';
 import {
     iservConnectToLoginError,
-    redirectLink,
     iservRevokeTokenError,
     iservRetrieveUserDataError
 } from '../../auth/staticAuthStrings';
@@ -14,7 +13,6 @@ export default class Auth {
     static async GETlogin(req: Request, res: Response, next: NextFunction): Promise<void> {
         {
             try {
-                console.log('login');
                 const backToPath = req.query.backTo as string;
                 const state = serializeAuthState({ backToPath });
                 const authUrl = req.app.authClient?.authorizationUrl({
@@ -29,9 +27,10 @@ export default class Auth {
                 }
             } catch (e) {
                 console.error(iservConnectToLoginError, e);
+                res.redirect('/');
             }
 
-            next();
+
         }
     }
 
@@ -47,7 +46,7 @@ export default class Auth {
             const params = client!.callbackParams(req);
 
             const tokenSet = await client!.callback(
-                redirectLink,
+                process.env.REDIRECT_LINK,
                 params,
                 { state }
             );
