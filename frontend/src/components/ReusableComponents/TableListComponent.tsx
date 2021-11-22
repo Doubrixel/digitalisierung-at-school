@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Übersichtsseite für die Facharbeit.
  */
@@ -11,17 +12,22 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import './TableListStyles.css';
-import { Checkbox, TextareaAutosize } from '@material-ui/core';
+// import { Checkbox, TextareaAutosize } from '@material-ui/core';
 
-const columnContentMock = ['cb1', 'cb2', 'cb3', 'aa123'];
+const columnContentMock = [{ name: 'Schüler1', thema: 'Thema2', lehrer1name: 'Lehrer1', lehrer2name: 'Lehrer3'},
+                           { name: 'Schüler2', thema: 'Thema2', lehrer1name: 'Lehrer2', lehrer2name: 'Lehrer1'},
+                           { name: 'Schüler3', thema: 'Thema3', lehrer1name: 'Lehrer3', lehrer2name: 'Lehrer2'},
+                           { name: 'Schüler4', thema: 'Thema4', lehrer1name: 'Lehrer4', lehrer2name: 'Lehrer5'}];
 const createColumnContentMock = columnContentMock.map((content) => ([
-  <div style={{ fontSize: 'x-large' }}>{`${content}divcontent`}</div>,
-  content,
-  <Checkbox title={content} onClick={() => alert('Checkbox clicked')} />,
-  <TextareaAutosize />,
+  <div style={{ fontSize: 'x-large' }}>{content.name}</div>,
+  <div style={{ fontSize: 'x-large' }}>{content.thema}</div>,
+  <div style={{ fontSize: 'x-large' }}>{content.lehrer1name}</div>,
+  <div style={{ fontSize: 'x-large' }}>{content.lehrer2name}</div>,
+  //<Checkbox title={content} onClick={() => alert('Checkbox clicked')} />,
+  //<TextareaAutosize />,
 ]));
 
-const tablePropsMock = { columnHeaderMock: ['column 1', 'column 2', 'column 3', 'textarea column'], dataRowsMock: createColumnContentMock };
+const tablePropsMock = { columnHeaderMock: ['Schüler:in', 'Thema', '1. Lehrkraft', '2. Lehrkraft'], dataRowsMock: createColumnContentMock };
 
 /*
 The TableListComponent has three props:
