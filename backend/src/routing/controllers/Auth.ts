@@ -43,7 +43,11 @@ export default class Auth {
 
             const client = req.app.authClient;
 
+            console.log('vor callbackparams');
+
             const params = client!.callbackParams(req);
+
+            console.log(params);
 
             const tokenSet = await client!.callback(
                 process.env.REDIRECT_LINK,
@@ -51,7 +55,11 @@ export default class Auth {
                 { state }
             );
 
+            console.log(tokenSet);
+
             const user = await client!.userinfo(tokenSet);
+
+            console.log(user);
 
             const sessionCookie = serialize({ tokenSet, user });
             setSessionCookie(res, sessionCookie);
