@@ -28,11 +28,10 @@ const accessDB = (functionToExecute: (db: Database) => undefined, verbose = fals
 // getAllResults('SELECT * FROM abiturpuefungen WHERE genehmigt = ?', [true], (res: object[]) => {
 //    console.log(res);
 // });
-const getAllResults = (sql: string, params: Array<number | string>, callback: (a: unknown[]) => void): void => {
+const getAllResults = (sql: string, params: Array<number | string>, callback: (a: unknown[], err: Error|null) => void): void => {
     accessDB((db: Database) => {
         db.all(sql, params, (err, rows) => {
-            if (err) throw err;
-            callback(rows);
+            callback(rows, err);
         });
         return undefined;
     });
@@ -73,9 +72,16 @@ const defaultUpdateCallback = (res: Response) => (
     }
 );
 
+const defaultGetAllCallback = (res: Response) => (
+    (a: unknown[], err: Error|null): void => {
+        if (err) res.status(500).json(err.message);
+        else res.status(200).json(a);
+    }
+);
+
 const testDBConnection = ():void => {
     console.log("Testing DB-connection. If no error is prompted between this line and 'Close the database connection.' the test was succesfull.");
     accessDB(()=>undefined, true);
 };
 
-export { getAllResults, insertData, defaultInsertCallback, testDBConnection, updateData, defaultUpdateCallback };
+export { getAllResults, insertData, defaultInsertCallback, testDBConnection, updateData, defaultUpdateCallback, defaultGetAllCallback };

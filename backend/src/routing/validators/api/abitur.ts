@@ -16,4 +16,5 @@ export default class AbiturValidators {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         body('reason').if((value: any, {req}: any) => !req.body.approved).isString(),
     ];
+    static GETgetAllExams = [];
 }
