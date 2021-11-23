@@ -1,6 +1,8 @@
 export interface AuthState {
   isLoggedIn: boolean,
-  authToken: string
+  authToken: string,
+  role: string,
+  accessibleComponents: string[],
 }
 
 const initialState: AuthState = {
