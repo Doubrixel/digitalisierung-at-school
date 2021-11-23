@@ -11,13 +11,14 @@ But note, that the sendAPIRequest-function returns a promise, which isn't immedi
 import path from 'path';
 import store from './store';
 
-export const SERVER = window.location.origin === 'http://localhost:3000' ? 'localhost:5000' : '';
+export const SERVER = window.location.origin === 'http://localhost:3000' ? '//localhost:5000' : '';
+const protocoll = window.location.protocol;
 export default function sendAPIRequest(reqPath: string, reqMethod: string, reqBody?: any) {
   const { authToken } = store.getState().authReducer;
   const reqHeaders = new Headers();
   reqHeaders.append('Content-Type', 'application/json');
   reqHeaders.append('Authorization', authToken);
-  const finalreqpath = `http://${path.join(SERVER, reqPath)}`;
+  const finalreqpath = `${protocoll}//${path.join(SERVER, reqPath)}`;
   return fetch((finalreqpath),
     {
       method: reqMethod,

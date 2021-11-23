@@ -3,7 +3,9 @@
  * @author jhuebner
  * @date 06.09.2021
  */
+
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import Logo from '../../images/kant.png';
@@ -11,35 +13,40 @@ import useWindowDimensions from '../../hooks/useWindowDimensions';
 import './Toolbar.css';
 import { LoginLogoutButton } from './LoginLogoutButton/LoginLogoutButton';
 
-const links = [
-  {
-    id: 1,
-    name: 'AG-Buchung',
-    path: '/student/ag',
-  },
-  {
-    id: 2,
-    name: 'Facharbeit',
-    path: '/student/facharbeit',
-  },
-  {
-    id: 3,
-    name: 'Wahlpflicht',
-    path: '/student/wahlpflicht',
-  },
-  {
-    id: 4,
-    name: '5. PK',
-    path: '/student/pruefungskomponente',
-  },
-  {
-    id: 5,
-    name: 'Einstellungen',
-    path: '/settings',
-  },
-];
-
-function Toolbar() {
+function Toolbar(props) {
+  const { isLoggedIn, role, accessibleComponents } = props;
+  let approprateRolePath = '';
+  if (role === 'student') {
+    approprateRolePath = 'student';
+  } else if (role === 'admin') {
+    approprateRolePath = 'admin';
+  }
+  const links = [
+    {
+      id: 1,
+      name: 'AG-Buchung',
+      path: `/${approprateRolePath}/ag`,
+      disabled: (!(accessibleComponents.includes('ag')) && role === 'admin') || !isLoggedIn,
+    },
+    {
+      id: 2,
+      name: 'Facharbeit',
+      path: `/${approprateRolePath}/facharbeit`,
+      disabled: (!(accessibleComponents.includes('fa')) && role === 'admin') || !isLoggedIn,
+    },
+    {
+      id: 3,
+      name: 'Wahlpflicht',
+      path: `/${approprateRolePath}/wahlpflicht`,
+      disabled: (!(accessibleComponents.includes('wpf')) && role === 'admin') || !isLoggedIn,
+    },
+    {
+      id: 4,
+      name: '5. PK',
+      path: `/${approprateRolePath}/pruefungskomponente`,
+      disabled: (!(accessibleComponents.includes('5pk')) && role === 'admin') || !isLoggedIn,
+    },
+  ];
   const windowDimensions = useWindowDimensions();
 
   const [isToggleActivated, setIsToggleActicated] = useState(false);
@@ -78,22 +85,31 @@ function Toolbar() {
           <div className="links-container">
             {windowDimensions.width < 1000 && HomeLink}
             {
-              links.map((link) => (
-                <div key={link.id} className="nav-link">
-                  <Link to={link.path} style={{ textDecoration: 'none' }}>
-                    <h4>{link.name}</h4>
-                  </Link>
-                </div>
-              ))
+              links.map((link) => {
+                const pointerEvents = link.disabled ? 'none' : 'all';
+                return (
+                  <div key={link.id} className="nav-link">
+                    <Link to={link.path} style={{ textDecoration: 'none', pointerEvents }}>
+                      <h4 style={link.disabled ? { color: 'grey' } : {}}>{link.name}</h4>
+                    </Link>
+                  </div>
+                );
+              })
             }
             <LoginLogoutButton />
           </div>
-        ) : (
-          undefined
-        )
+        ) : undefined
       }
     </div>
   );
 }
 
-export default Toolbar;
+function mapStateToProps(state) {
+  return {
+    isLoggedIn: state.authReducer.isLoggedIn,
+    role: state.authReducer.role,
+    accessibleComponents: state.authReducer.accessibleComponents,
+  };
+}
+
+export default connect(mapStateToProps, null)(Toolbar);
