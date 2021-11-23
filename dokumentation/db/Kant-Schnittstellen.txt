@@ -132,11 +132,11 @@ api/ag/delete/{agId} (POST) (oder GET?)
 
 2 Schüler beantragen Thema
 /api/abitur/applyForTopic (POST)
-	{Int partnerStudentId, String art (one of ['PP', 'BLL']), Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
+	{Int studentId, Int partnerStudentId, String art (one of ['PP', 'BLL']), Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
 	->{Int id}
 
 7 admin ändert Daten
-/api/abitur/editData/{Int studentId} (POST)
+/api/abitur/editData/{Int examId} (POST)
 	{Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
 	->{}
 
@@ -146,7 +146,7 @@ api/ag/delete/{agId} (POST) (oder GET?)
 	->{ArrayOfObjects allExams[{Int examId, Int studentId, string studentName, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}]}
 
 3 Schüler sieht daten zu seiner Prüfung ein
-/api/abitur/getExamData GET
+/api/abitur/getExamData/{examId} GET
 	{}
 	-> {Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic, Bool approved, String(optional) rejectionReason}
 
