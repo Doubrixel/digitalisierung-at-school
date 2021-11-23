@@ -131,8 +131,8 @@ api/ag/delete/{agId} (POST) (oder GET?)
 	-> {Array of Objects [{possiblePartnerStudentsId, possiblePartnerStudentsname}], Array of Objects [{referenzFachIds, referenzfachName}], Array of Objects [{bezugsfachId, bezugsfachName}], Array of Objects [{teacherId, teacherName}]}
 
 2 Schüler beantragen Thema
-/api/abitur/applyForTopic (POST)
-	{Int studentId, Int partnerStudentId, String art (one of ['PP', 'BLL']), Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
+/api/abitur/applyForTopic (POST) (Nur für Schüler)
+	{String partnerStudentName, String art (one of ['PP', 'BLL']), Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
 	->{Int id}
 
 7 admin ändert Daten
@@ -146,14 +146,9 @@ api/ag/delete/{agId} (POST) (oder GET?)
 	->{ArrayOfObjects allExams[{Int examId, Int studentId, string studentName, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}]}
 
 3 Schüler sieht daten zu seiner Prüfung ein
-/api/abitur/getExamData/{examId} GET
+/api/abitur/getExamData GET (Nur für Schüler)
 	{}
-	-> {Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic, Bool approved, String(optional) rejectionReason}
-
-4 hole alle Schüler (nötig um zu prüfen, ob alle Schüler abgegeben haben)
-/api/abitur/getAllStudentsOfAbiturClass (GET)
-	{}
-	->{ArrayOfInt studentIds[{Int studentId, String studentName, Bool applicationSubmitted}]}
+	-> {String examType, String studentName, String partnerStudentName, String referenzfach, String bezugsfach, String responsibleTeacher, String topic, Bool 		approved, String(optional) rejectionReason}
 
 5 Admin setzt Genehmigungsstatus
 /api/abitur/setApprovalState (POST)
