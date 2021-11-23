@@ -1,4 +1,9 @@
-const initialState = {
+export interface AuthState {
+  isLoggedIn: boolean,
+  authToken: string
+}
+
+const initialState: AuthState = {
   isLoggedIn: false,
   authToken: '',
 };
