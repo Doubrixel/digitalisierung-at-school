@@ -9,16 +9,16 @@ import { Paper } from '@material-ui/core';
 import ComponentToggleButton from '../../components/Buttons/ComponentToggleButton';
 
 import './AdminPruefungskomponentePage.css';
-import CreatePDFButton from '../../components/Buttons/CreatePDFButton';
+import CreateCSVButton from '../../components/Buttons/CreateCSVButton';
 import FifthExamAdminTable from '../../components/FifthExamAdminTable/FifthExamAdminTable';
 
 function AdminPruefungskomponentePage() {
   const verticalComponentDistance = '2vh';
 
-  const handleGeneratePDF = () => {
-    alert('pdf generiert...');
-    const pdf = {};
-    console.log(pdf.toString());
+  const handleGenerateCSV = () => {
+    alert('csv generiert...');
+    const csv = {};
+    console.log(csv.toString());
   };
 
   const handleComponentActivation = () => {};
@@ -33,7 +33,7 @@ function AdminPruefungskomponentePage() {
       </div>
       <Paper className="fifthExamPaper">
         <FifthExamAdminTable />
-        <CreatePDFButton style={{ marginTop: verticalComponentDistance, width: '18vw', minWidth: '188px' }} onClick={handleGeneratePDF} />
+        <CreateCSVButton style={{ marginTop: verticalComponentDistance, width: '18vw', minWidth: '188px' }} onClick={handleGenerateCSV} />
       </Paper>
     </div>
   );

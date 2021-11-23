@@ -24,7 +24,7 @@ import { visuallyHidden } from '@mui/utils';
 
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
-import ChangeCircleIcon from '@mui/icons-material/ChangeCircle';
+import CreateIcon from '@mui/icons-material/Create';
 
 interface Data {
   partner: string;
@@ -34,6 +34,7 @@ interface Data {
   name: string;
   PPOrBLL: string;
   topic: string;
+  genehmigt: string;
 }
 
 function createData(
@@ -44,6 +45,7 @@ function createData(
   bezugsfach: string,
   pruefer: string,
   topic: string,
+  genehmigt:string,
 ): Data {
   return {
     name,
@@ -53,23 +55,24 @@ function createData(
     bezugsfach,
     pruefer,
     topic,
+    genehmigt,
   };
 }
 
 const rows = [
-  createData('Alex Schmidt', 'Cupcake', 'BLL', 'Deutsch', 'Englisch', 'Mr. Jonson', 'Delfine'),
-  createData('Hans Fischer', 'Donut', 'BLL', 'Mathe', 'Mathe', 'Mrs. Heathrow', 'Wasser'),
-  createData('Peter Becker', 'Eclair', 'PP', 'Physik', 'Physik', 'Miss Daisy', 'Feuer'),
-  createData('Maria Koch', 'Frozen yoghurt', 'BLL', '6.0', '24', '4.0', 'a'),
-  createData('Monika Meyer', 'Partner1', 'PP', '16.0', '49', '3.9', 'b'),
-  createData('Ursula Schneider', 'Honeycomb', '408', '3.2', '87', '6.5', 'c'),
-  createData('Brigitte Schmitz', 'Ice cream sandwich', '237', '9.0', '37', '4.3', 'd'),
-  createData('Renate Müller', 'Jelly Bean', '375', '0.0', '94', '0.0', 'a'),
-  createData('Heinz Hoffmann', 'KitKat', '518', '26.0', '65', '7.0', 'Wasser'),
-  createData('Gisela Peters', 'Lollipop', '392', '0.2', '98', '0.0', 'Geist'),
-  createData('Karl Klein', 'Marshmallow', '318', '0', '81', '2.0', 'h'),
-  createData('Hildegard Jansen', 'Nougat', '360', '19.0', '9', '37.0', 'k'),
-  createData('Renate Köhler', 'Oreo', '437', '18.0', '63', '4.0', 'g'),
+  createData('Alex Schmidt', 'Cupcake', 'BLL', 'Deutsch', 'Englisch', 'Mr. Jonson', 'Delfine','Nein'),
+  createData('Hans Fischer', 'Donut', 'BLL', 'Mathe', 'Mathe', 'Mrs. Heathrow', 'Wasser', 'Ja'),
+  createData('Peter Becker', 'Eclair', 'PP', 'Physik', 'Physik', 'Miss Daisy', 'Feuer', 'Ja'),
+  createData('Maria Koch', 'Frozen yoghurt', 'BLL', '6.0', '24', '4.0', 'a', 'Ja'),
+  createData('Monika Meyer', 'Partner1', 'PP', '16.0', '49', '3.9', 'b', 'Nein'),
+  createData('Ursula Schneider', 'Honeycomb', '408', '3.2', '87', '6.5', 'c', 'Nein'),
+  createData('Brigitte Schmitz', 'Ice cream sandwich', '237', '9.0', '37', '4.3', 'd', 'Nein'),
+  createData('Renate Müller', 'Jelly Bean', '375', '0.0', '94', '0.0', 'a', 'Ja'),
+  createData('Heinz Hoffmann', 'KitKat', '518', '26.0', '65', '7.0', 'Wasser', 'Nein'),
+  createData('Gisela Peters', 'Lollipop', '392', '0.2', '98', '0.0', 'Geist', 'Nein'),
+  createData('Karl Klein', 'Marshmallow', '318', '0', '81', '2.0', 'h', 'Nein'),
+  createData('Hildegard Jansen', 'Nougat', '360', '19.0', '9', '37.0', 'k', 'Nein'),
+  createData('Renate Köhler', 'Oreo', '437', '18.0', '63', '4.0', 'g', 'Nein'),
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -160,6 +163,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'Themenbereich',
   },
+  {
+    id: 'genehmigt',
+    numeric: true,
+    disablePadding: false,
+    label: 'Genehmigt',
+  },
 ];
 
 interface EnhancedTableProps {
@@ -179,7 +188,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
       onRequestSort(event, property);
     };
 
-  // @ts-ignore
   return (
     <TableHead>
       <TableRow>
@@ -261,13 +269,13 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
       {numSelected == 1 ? (
         <Tooltip title="inspizieren/ändern">
           <IconButton>
-            <ChangeCircleIcon sx={{ color: 'orange' }} />
+            <CreateIcon sx={{ color: 'orange' }} />
           </IconButton>
         </Tooltip>
       ) : (
         <Tooltip title="select only one">
           <IconButton>
-            <ChangeCircleIcon color="disabled" />
+            <CreateIcon color="disabled" />
           </IconButton>
         </Tooltip>
       )}
@@ -405,7 +413,6 @@ export default function FifthExamAdminTable() {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.name);
                   const labelId = `enhanced-table-checkbox-${index}`;
-
                   return (
                     <TableRow
                       hover
@@ -439,6 +446,7 @@ export default function FifthExamAdminTable() {
                       <TableCell align="right">{row.pruefer}</TableCell>
                       <TableCell align="right">{row.PPOrBLL}</TableCell>
                       <TableCell align="right">{row.topic}</TableCell>
+                      <TableCell align="right">{row.genehmigt}</TableCell>
                     </TableRow>
                   );
                 })}
