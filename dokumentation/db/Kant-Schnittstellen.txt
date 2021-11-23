@@ -8,7 +8,7 @@ legende:
 1 status abfragen
 api/components/getStatusOfAll (GET)
 	{}
-	->{Int componentId, Int componentStatusId}
+	->[{Int componentId, Int componentStatusId}]
 
 1 status ändern, 0 - entsperrt, 1 - gesperrt, 2 - dokumentupload möglich
 api/components/{componentId}/setStatus/{newStatusId} (PUT)
