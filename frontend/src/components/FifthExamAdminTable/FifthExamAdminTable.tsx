@@ -26,6 +26,14 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import CreateIcon from '@mui/icons-material/Create';
 
+import Button from '@material-ui/core/Button';
+import DescriptionIcon from '@mui/icons-material/Description';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogActions from '@material-ui/core/DialogActions';
+
 interface Data {
   partner: string;
   referenzfach: string;
@@ -63,7 +71,7 @@ const rows = [
   createData('Alex Schmidt', 'Cupcake', 'BLL', 'Deutsch', 'Englisch', 'Mr. Jonson', 'Delfine','Nein'),
   createData('Hans Fischer', 'Donut', 'BLL', 'Mathe', 'Mathe', 'Mrs. Heathrow', 'Wasser', 'Ja'),
   createData('Peter Becker', 'Eclair', 'PP', 'Physik', 'Physik', 'Miss Daisy', 'Feuer', 'Ja'),
-  createData('Maria Koch', 'Frozen yoghurt', 'BLL', '6.0', '24', '4.0', 'a', 'Ja'),
+  createData('Maria Koch', 'Frozen yoghurt', 'BLL', '6.0', '24', '4.0', 'jssghdhgsdvjhcbsdjsdhcvjsdsdghvjssdhg sgfgfkysg f kysgf kkcgksdgckd c drkjcfg dzfg', 'Ja'),
   createData('Monika Meyer', 'Partner1', 'PP', '16.0', '49', '3.9', 'b', 'Nein'),
   createData('Ursula Schneider', 'Honeycomb', '408', '3.2', '87', '6.5', 'c', 'Nein'),
   createData('Brigitte Schmitz', 'Ice cream sandwich', '237', '9.0', '37', '4.3', 'd', 'Nein'),
@@ -216,7 +224,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             >
               {headCell.label}
               {orderBy === headCell.id ? (
-                <Box component="span" /* sx={visuallyHidden} */>
+                <Box component="span"/* sx={visuallyHidden} */>
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
               ) : null}
@@ -324,12 +332,23 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 export default function FifthExamAdminTable() {
+  const [open, setOpen] = React.useState(false);
+  const [currentAnnotation, setCurrentAnnotation] = React.useState('');
+
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('partner');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const showFullTopic = (annotation) => {
+    setOpen(true);
+    setCurrentAnnotation(annotation);
+  };
+  const hideFullTopic = () => {
+    setOpen(false);
+  };
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -445,7 +464,11 @@ export default function FifthExamAdminTable() {
                       <TableCell align="right">{row.bezugsfach}</TableCell>
                       <TableCell align="right">{row.pruefer}</TableCell>
                       <TableCell align="right">{row.PPOrBLL}</TableCell>
-                      <TableCell align="right">{row.topic}</TableCell>
+                      <TableCell align="right">
+                        <Button title="Thema ansehen" onClick={() => showFullTopic(row.topic)}>
+                          <DescriptionIcon />
+                        </Button>
+                      </TableCell>
                       <TableCell align="right">{row.genehmigt}</TableCell>
                     </TableRow>
                   );
@@ -476,6 +499,24 @@ export default function FifthExamAdminTable() {
         control={<Switch checked={dense} onChange={handleChangeDense} />}
         label="Dense padding"
       />
+
+      <Dialog
+        open={open}
+        onClose={hideFullTopic}
+      >
+        <DialogTitle id="submit_evaluations_dialog_title">{'Thema: '}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="submit_evaluations__dialog_content">
+            {currentAnnotation}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={hideFullTopic} color="primary">
+            Schließen
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </Box>
   );
 }
