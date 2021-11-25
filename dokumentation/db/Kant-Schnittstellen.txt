@@ -125,25 +125,42 @@ api/ag/delete/{agId} (POST) (oder GET?)
 
 #Abiturprüfungen
 
-2 Schüler beantragen Thema
+2 Schüler beantragen Thema 
+(Alle Parameter sollten optional sein, da die Schnittstelle auch für Änderungen genutzt wird, und bei Änderungen möglicherweise nur ein Parameter (der neue) übergeben wird)
 /api/abitur/applyForTopic (POST) (Nur für Schüler)
-	{String partnerStudentName, String art (one of ['PP', 'BLL']), Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
+	{String examType (one of ['PP', 'BLL']), updatedExamTypeString (one of ['PP', 'BLL']), partnerStudentName, String updatePartnerStudentName,
+	String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner, String updatedExaminer,
+	String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, String updatedPresentationForm
+	}
 	->{Int id}
 
 7 admin ändert Daten
+(Alle Parameter sollten optional sein, die Schnittstelle für Änderungen genutzt wird, und bei Änderungen möglicherweise nur ein Parameter (der neue) übergeben wird)
 /api/abitur/editData/{Int examId} (POST)
-	{Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
+	{String examType (one of ['PP', 'BLL']), partnerStudentName, String referenzfach, String bezugsfach, String examiner,
+	String topicArea, String problemQuestion, String presentationForm
+	}
 	->{}
 
 6 admin bekommt alle Schüler mit Abiprüfungen
 /api/abitur/getAllExams (GET)
 	{}
-	->{ArrayOfObjects allExams[{Int examId, Int studentId, string studentName, Int partnerStudentId, Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}]}
+	->{ArrayOfObjects allExams[
+		{Int examId, String examType (one of ['PP', 'BLL']), updatedExamTypeString (one of ['PP', 'BLL']), partnerStudentName, 
+		StringupdatePartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner,
+		String updatedExaminer, String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, 
+		String updatedPresentationForm, Boolean approved}
+	]}
 
 3 Schüler sieht daten zu seiner Prüfung ein
 /api/abitur/getExamData GET (Nur für Schüler)
 	{}
-	-> {String examType, String studentName, String partnerStudentName, String referenzfach, String bezugsfach, String responsibleTeacher, String topic, Bool 		approved, String(optional) rejectionReason}
+	-> {
+	String examType (one of ['PP', 'BLL']), updatedExamTypeString (one of ['PP', 'BLL']), partnerStudentName, 
+	StringupdatePartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner,
+	String updatedExaminer, String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, 
+	String updatedPresentationForm, Bool approved, String rejectionReason
+	}
 
 5 Admin setzt Genehmigungsstatus
 /api/abitur/setApprovalState (POST)
