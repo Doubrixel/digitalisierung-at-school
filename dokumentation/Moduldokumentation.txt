@@ -1,0 +1,8 @@
+Es gibt insgesamt 2 Module, denen jeweils eine ID zugewiesen sind um sie als Komponente identifizieren zu können:
+Facharbeiten (ID: 1)
+5. PK (ID: 2)
+
+Diese Module können in verschiedenen Status sein, abhängig was die Admins als Komponentenstatus festgelegt haben.
+Abhängig vom Status, können Schüler verschiedene Sachen in den Modulen eintragen/beantragen
+
+Information zum
