@@ -19,12 +19,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
-
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArticleIcon from '@mui/icons-material/Article';
 
 interface Data {
   schueler: string;
@@ -216,19 +211,19 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           id="tableTitle"
           component="div"
         >
-          Nutrition
+          Übersicht
         </Typography>
       )}
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        <Tooltip title="Übersicht Schüler">
           <IconButton>
-            <DeleteIcon />
+            <ArticleIcon />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Filter list">
+        <Tooltip title="Schüler auswählen">
           <IconButton>
-            <FilterListIcon />
+            <ArticleIcon />
           </IconButton>
         </Tooltip>
       )}
