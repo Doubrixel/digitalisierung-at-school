@@ -20,6 +20,7 @@ import AdminFacharbeitPage from './pages/admin/AdminFacharbeitPage';
 import AdminAGPage from './pages/admin/AdminAGPage';
 import AdminWahlpflichtPage from './pages/admin/AdminWahlpflichtPage';
 import AdminPruefungskomponentePage from './pages/admin/AdminPruefungskomponentePage';
+import AdminFacharbeitEinzelnerSchueler from './pages/admin/AdminFacharbeitEinzelnerSchueler';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
           <Route exact path="/admin/facharbeit"><AdminFacharbeitPage /></Route>
           <Route exact path="/admin/wahlpflicht"><AdminWahlpflichtPage /></Route>
           <Route exact path="/admin/pruefungskomponente"><AdminPruefungskomponentePage /></Route>
+          <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
         </Switch>
       </div>
       <Footer />
