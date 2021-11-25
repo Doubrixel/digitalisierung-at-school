@@ -125,11 +125,6 @@ api/ag/delete/{agId} (POST) (oder GET?)
 
 #Abiturprüfungen
 
-1 Formulardaten abfragen
-/api/abitur/getFormData (GET)
-	{}
-	-> {Array of Objects [{possiblePartnerStudentsId, possiblePartnerStudentsname}], Array of Objects [{referenzFachIds, referenzfachName}], Array of Objects [{bezugsfachId, bezugsfachName}], Array of Objects [{teacherId, teacherName}]}
-
 2 Schüler beantragen Thema
 /api/abitur/applyForTopic (POST) (Nur für Schüler)
 	{String partnerStudentName, String art (one of ['PP', 'BLL']), Int referenzfachId, Int bezugsfachId, Int responsibleTeacherId, String topic}
