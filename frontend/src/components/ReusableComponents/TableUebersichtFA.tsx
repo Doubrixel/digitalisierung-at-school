@@ -20,6 +20,7 @@ import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import ArticleIcon from '@mui/icons-material/Article';
+import { Link } from 'react-router-dom';
 
 interface Data {
   schueler: string;
@@ -46,11 +47,12 @@ function createData(
 }
 
 const rows = [
-  createData('Max Mustermann', 'Biologie', 'Lehrkraft1', 'Lehrkraft2'),
-  createData('Cupcake', 'Test', 'Lehrkraft1', 'Lehrkraft2'),
-  createData('Cupcake', 'Test', 'Lehrkraft1', 'Lehrkraft2'),
-  createData('Cupcake', 'Test', 'Lehrkraft1', 'Lehrkraft2'),
-  createData('Cupcake', 'Test', 'Lehrkraft1', 'Lehrkraft2'),
+  createData('Max Mustermann', 'Biologie', 'Lehrkraft1', '1Lehrkraft'),
+  createData('Cupcake1', 'Test1', 'Lehrkraft2', '2Lehrkraft2'),
+  createData('Cupcake2', 'Test2', 'Lehrkraft3', '3Lehrkraft2'),
+  createData('Cupcake3', 'Test3', 'Lehrkraft4', '4Lehrkraft2'),
+  createData('Cupcake4', 'Test4', 'Lehrkraft5', '5Lehrkraft2'),
+  createData('Max Mustermann', 'Biologie', 'Lehrkraft1', '1Lehrkraft'),
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -76,6 +78,9 @@ function getComparator<Key extends keyof any>(
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
+
+
+
 
 // This method is created for cross-browser compatibility, if you don't
 // need to support IE11, you can use Array.prototype.sort() directly
@@ -214,10 +219,12 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           Übersicht
         </Typography>
       )}
-      {numSelected > 0 ? (
+      {numSelected == 1 ? (
         <Tooltip title="Übersicht Schüler">
-          <IconButton>
-            <ArticleIcon />
+          <IconButton
+              component={Link}
+              to="/admin/facharbeit/einzelnerSchueler">
+            <ArticleIcon  sx={{ color: 'orange'}}/>
           </IconButton>
         </Tooltip>
       ) : (
@@ -296,6 +303,8 @@ export default function EnhancedTable() {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  let rowIDs = 0;
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -330,7 +339,7 @@ export default function EnhancedTable() {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.schueler}
+                      key={rowIDs++}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -353,6 +362,7 @@ export default function EnhancedTable() {
                       <TableCell align="right">{row.thema}</TableCell>
                       <TableCell align="right">{row.lehrer1}</TableCell>
                       <TableCell align="right">{row.lehrer2}</TableCell>
+                      <TableCell>{rowIDs}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -380,7 +390,7 @@ export default function EnhancedTable() {
       </Paper>
       <FormControlLabel
         control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Dense padding"
+        label="verkleinern"
       />
     </Box>
   );
