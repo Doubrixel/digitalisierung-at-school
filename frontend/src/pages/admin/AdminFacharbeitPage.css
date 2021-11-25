@@ -137,7 +137,6 @@
     height: 5vh;
     color: black;
     font-weight: bold;
-    font-size: 30px;
     text-align: left;
   }
 
@@ -213,7 +212,7 @@
     grid-column-start: 1;
     grid-column-end: 3;
     grid-row-start: 1;
-    width: 400px;
+    width: 70vw;
     height: 5vh;
   }
 

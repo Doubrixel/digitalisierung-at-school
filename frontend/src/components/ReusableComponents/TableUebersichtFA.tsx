@@ -362,7 +362,6 @@ export default function EnhancedTable() {
                       <TableCell align="right">{row.thema}</TableCell>
                       <TableCell align="right">{row.lehrer1}</TableCell>
                       <TableCell align="right">{row.lehrer2}</TableCell>
-                      <TableCell>{rowIDs}</TableCell>
                     </TableRow>
                   );
                 })}
