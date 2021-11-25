@@ -6,12 +6,9 @@ import {
   FormControlLabel, Radio,
 } from '@material-ui/core';
 import CreatePDFButton from '../Buttons/CreatePDFButton';
-import { useSelector } from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { RootState } from '../../reducer';
 
-const referenzfachMock = [{ id: 1, name: 'Mathe' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'English' }];
-const examinerMock = [{ id: 1, name: 'Mr. Jonson' }, { id: 2, name: 'Mrs. Heathrow' }, { id: 3, name: 'Miss Daisy' }];
-const bezugsfachMock = [{ id: 1, name: 'Geschichte' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'Geografie' }];
 
 function FifthExamFormComponent() {
   const verticalComponentDistance = '2vh';
@@ -19,56 +16,34 @@ function FifthExamFormComponent() {
   const dueDate = `${aDate.getDate()}.${aDate.getMonth() + 1}.${aDate.getFullYear()}`;
 
   const formState = useSelector((state: RootState) => state.studentDataReducer.fifthPkFormData); // in formState ist das Objekt gespeichert 
-
-  console.log(formState);
-  /*
-  const [examType, setExamType] = useState('');
-  const [studentName, setStudentName] = useState('');
-  const [studentPartner, setStudentPartner] = useState('');
-  const [chosenTopicArea, setChosenTopicArea] = useState('');
-  const [referenzfach, setReferenzfach] = useState('');
-  const [examiner, setExaminer] = useState('');
-  const [bezugsfach, setBezugsfach] = useState('');
-  */
-
-  const referenzfachList = referenzfachMock;
-  const examinerList = examinerMock;
-  const bezugsfachList = bezugsfachMock;
+  const dispatch = useDispatch();
 
   const handleExamTypeInputChange = (event) => {
-    //setExamType(event.target.value);
+    dispatch({type:"CHANGE_EXAMTYPE", payload: event.target.value})
   };
   const handleStudentNameInputChange = (event) => {
-    //setStudentName(event.target.value);
+    dispatch({type:"CHANGE_STUDENTNAME", payload: event.target.value})
   };
   const handleStudentPartnerInputChange = (event) => {
-    //setStudentPartner(event.target.value);
+    dispatch({type:"CHANGE_STUDENTPARTNER", payload: event.target.value})
   };
   const handleChosenTopicAreaInputChange = (event) => {
-    //setChosenTopicArea(event.target.value);
+    dispatch({type:"CHANGE_TOPIC", payload: event.target.value})
   };
   const handleReferenzfachInputChange = (event) => {
-    //setReferenzfach(event.target.value);
+    dispatch({type:"CHANGE_REFERENZFACH", payload: event.target.value})
   };
   const handleExaminerInputChange = (event) => {
-    //setExaminer(event.target.value);
+    dispatch({type:"CHANGE_EXAMINER", payload: event.target.value})
   };
   const handleBezugsfachInputChange = (event) => {
-    //setBezugsfach(event.target.value);
+    dispatch({type:"CHANGE_BEZUGSFACH", payload: event.target.value})
   };
 
   const handleGeneratePDF = () => {
     alert('pdf generiert...');
     const pdf = {
-      /*
-      examType,
-      studentName,
-      studentPartner,
-      chosenTopicArea,
-      referenzfach,
-      examiner,
-      bezugsfach,
-      */
+      ...formState
     };
     console.log(pdf.toString());
   };
@@ -91,14 +66,20 @@ function FifthExamFormComponent() {
             aria-label="Präsentationsprüfung"
             name="radio-buttons-group"
             row
+            defaultValue={formState.examType}
           >
             <FormControlLabel
-              value="Präsentationsprüfung"
+              value="Praesentation"
               control={<Radio />}
               label="Präsentationsprüfung"
               onChange={handleExamTypeInputChange}
             />
-            <FormControlLabel value="Besondere Lernleistung" control={<Radio />} label="Besondere Lernleistung" />
+            <FormControlLabel
+              value="BLL"
+              control={<Radio />}
+              label="Besondere Lernleistung"
+              onChange={handleExamTypeInputChange}
+            />
           </RadioGroup>
         </FormControl>
 
@@ -120,21 +101,21 @@ function FifthExamFormComponent() {
           label="Referenzfach" 
           variant="outlined" 
           style={{ marginTop: verticalComponentDistance }} 
-          onChange={handleStudentPartnerInputChange}
+          onChange={handleReferenzfachInputChange}
           value={formState.referenzfach} />
 
         <TextField 
           label="Prüfer:in" 
           variant="outlined" 
           style={{ marginTop: verticalComponentDistance }} 
-          onChange={handleStudentPartnerInputChange}
+          onChange={handleExaminerInputChange}
           value={formState.responsibleTeacher} />
 
         <TextField 
           label="Bezugsfach" 
           variant="outlined" 
           style={{ marginTop: verticalComponentDistance }} 
-          onChange={handleStudentPartnerInputChange}
+          onChange={handleBezugsfachInputChange}
           value={formState.bezugsfach} />
 
 
