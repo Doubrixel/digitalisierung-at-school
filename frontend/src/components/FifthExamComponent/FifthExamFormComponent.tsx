@@ -5,7 +5,6 @@ import {
   FormControlLabel, Radio,
 } from '@material-ui/core';
 import CreatePDFButton from '../Buttons/CreatePDFButton';
-import ComponentToggleButton from '../Buttons/ComponentToggleButton';
 
 const referenzfachMock = [{ id: 1, name: 'Mathe' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'English' }];
 const examinerMock = [{ id: 1, name: 'Mr. Jonson' }, { id: 2, name: 'Mrs. Heathrow' }, { id: 3, name: 'Miss Daisy' }];
@@ -64,8 +63,6 @@ function FifthExamFormComponent() {
     console.log(pdf.toString());
   };
 
-  const handleComponentActivation = () => {};
-
   const handleSubmitFifthExamForm = () => {};
 
   return (
@@ -75,9 +72,7 @@ function FifthExamFormComponent() {
         <span style={{
           marginRight: '0', marginLeft: 'auto', width: '50vw', maxWidth: '320px',
         }}
-        >
-          <ComponentToggleButton buttonHandleClickFunction={handleComponentActivation} componentLabel="Komponente deaktivieren" />
-        </span>
+        />
       </div>
       <Paper className="fifthExamPaper">
         <FormControl component="fieldset">

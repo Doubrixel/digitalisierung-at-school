@@ -6,7 +6,9 @@ export default (): Router => {
     const router = Router();
 
     router.get('/test', Abitur.GETtest);
-    router.post('/applyForTopic', AbiturValidators.POSTApplyForTopic, Abitur.POSTapplyForTopic);
+    router.get('/getAllExams', Abitur.GETgetAllExams);
+    router.post('/applyForTopic', AbiturValidators.POSTapplyForTopic, Abitur.POSTapplyForTopic);
+    router.post('/setApprovalState', AbiturValidators.POSTsetApprovalState, Abitur.POSTsetApprovalState);
 
     return router;
 };
