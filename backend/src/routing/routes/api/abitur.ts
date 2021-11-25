@@ -7,6 +7,7 @@ export default (): Router => {
 
     router.get('/test', Abitur.GETtest);
     router.post('/applyForTopic', AbiturValidators.POSTApplyForTopic, Abitur.POSTapplyForTopic);
+    router.post('/editData/:studentId', AbiturValidators.POSTeditData, Abitur.POSTeditData);
 
     return router;
 };

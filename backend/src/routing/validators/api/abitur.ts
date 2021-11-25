@@ -9,4 +9,12 @@ export default class AbiturValidators {
         body('referenzfachId').isInt(),
         body('topic').isString().trim(),
     ]
+    static POSTeditData = [
+        body('partnerStudentId').isInt(),
+        body('referenzfachId').isInt(),
+        body('bezugsfachId').isInt(),
+        body('responsibleTeacherId').isInt(),
+        body('topic').isString().trim()
+    ]
+
 }

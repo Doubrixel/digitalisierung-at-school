@@ -20,4 +20,27 @@ export default class Abitur {
             else res.status(200).json({examId: id});
         });
     }
+
+    static POSTeditData(req: Request, res: Response): void {
+
+        if (!validationResult(req).isEmpty()) {
+            res.status(400).json(validationResult(req).mapped());
+            return;
+        }
+
+        const examId = req.params.examId;
+        const {partnerStudentId, referenzfachId, bezugsfachId, responsibleTeacherId, topic} = req.body;
+        const sql =
+            'UPDATE abiturpruefungen ' +
+            'SET    partnerStudentId = ?,' +
+            '       referenzfachID = ?,' +
+            '       bezugsfachID = ?,' +
+            '       betreuendeLehrkraftID = ?,' +
+            '       thema = ? ' +
+            'WHERE  id = ?';
+        insertData(sql, [partnerStudentId, referenzfachId, bezugsfachId, responsibleTeacherId, topic, examId], (id,err) => {
+            if (err) res.status(500).json(err.name);
+            else res.status(200).json();
+        });
+    }
 }
