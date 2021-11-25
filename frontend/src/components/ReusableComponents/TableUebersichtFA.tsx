@@ -52,7 +52,6 @@ const rows = [
   createData('Cupcake2', 'Test2', 'Lehrkraft3', '3Lehrkraft2'),
   createData('Cupcake3', 'Test3', 'Lehrkraft4', '4Lehrkraft2'),
   createData('Cupcake4', 'Test4', 'Lehrkraft5', '5Lehrkraft2'),
-  createData('Max Mustermann', 'Biologie', 'Lehrkraft1', '1Lehrkraft'),
 ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {

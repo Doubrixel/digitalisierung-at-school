@@ -34,8 +34,8 @@
 }
 
 #ButtonUebersichtFA{
-  grid-column-start: 9;
-  grid-column-end: 11;
+  grid-column-start: 8;
+  grid-column-end: 10;
   grid-row-start: 10;
   margin-left: 40px;
 }
@@ -109,8 +109,8 @@
   }
 
   #ButtonUebersichtFA{
-    grid-column-start: 8;
-    grid-column-end: 10;
+    grid-column-start: 7;
+    grid-column-end: 9;
     grid-row-start: 9;
     margin-top: 4vh;
   }
@@ -157,7 +157,7 @@
     grid-column-start: 4;
     grid-column-end: 8;
     grid-row-start: 8;
-    margin-top: 4vh;
+    margin-top: 5vh;
     margin-left: 10vw;
   }
 }
@@ -195,7 +195,7 @@
     grid-column-start: 3;
     grid-column-end: 5;
     grid-row-start: 9;
-    margin-top: 6vh;
+    margin-top: 7vh;
   }
 
 }

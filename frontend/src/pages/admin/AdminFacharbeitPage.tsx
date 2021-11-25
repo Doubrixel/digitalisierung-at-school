@@ -6,11 +6,15 @@ import React from 'react';
 import './AdminFacharbeitPage.css';
 import ComponentToggleButton from '../../components/Buttons/ComponentToggleButton';
 import TableUebersichtFA from '../../components/ReusableComponents/TableUebersichtFA';
-import CreatePDFButton from '../../components/Buttons/CreatePDFButton';
+import CreateCSVButton from '../../components/Buttons/CreateCSVButton';
 
 function AdminFacharbeitPage() {
-  const handleGeneratePDF = () => {
+  const verticalComponentDistance = '1vh';
 
+  const handleGenerateCSV = () => {
+    alert('csv generiert...');
+    const csv = {};
+    console.log(csv.toString());
   };
   const handleComponentActivation = () => {
 
@@ -30,7 +34,7 @@ function AdminFacharbeitPage() {
         <TableUebersichtFA />
       </div>
       <div id="ButtonUebersichtFA">
-        <CreatePDFButton style={{ marginTop: '2vh' }} onClick={handleGeneratePDF} />
+        <CreateCSVButton style={{ marginTop: verticalComponentDistance, width: '18vw', minWidth: '188px' }} onClick={handleGenerateCSV} />
       </div>
     </div>
   );
