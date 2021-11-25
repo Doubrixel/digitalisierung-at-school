@@ -8,13 +8,13 @@ export interface AuthState {
 const initialState: AuthState = {
   isLoggedIn: false,
   authToken: '',
-  role: '',
+  role: 'student',
   accessibleComponents: [],
 };
 
 // funktionen erstmal nur gemockt
 function getRoleOfUser() {
-  return 'admin';
+  return 'student';
 }
 
 // funktionen erstmal nur gemockt

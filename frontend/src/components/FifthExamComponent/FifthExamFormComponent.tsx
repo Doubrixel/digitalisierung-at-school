@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import './FifthExamFormComponent.css';
 import {
@@ -5,6 +6,8 @@ import {
   FormControlLabel, Radio,
 } from '@material-ui/core';
 import CreatePDFButton from '../Buttons/CreatePDFButton';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../reducer';
 
 const referenzfachMock = [{ id: 1, name: 'Mathe' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'English' }];
 const examinerMock = [{ id: 1, name: 'Mr. Jonson' }, { id: 2, name: 'Mrs. Heathrow' }, { id: 3, name: 'Miss Daisy' }];
@@ -15,6 +18,10 @@ function FifthExamFormComponent() {
   const aDate = new Date();
   const dueDate = `${aDate.getDate()}.${aDate.getMonth() + 1}.${aDate.getFullYear()}`;
 
+  const formState = useSelector((state: RootState) => state.studentDataReducer.fifthPkFormData); // in formState ist das Objekt gespeichert 
+
+  console.log(formState);
+  /*
   const [examType, setExamType] = useState('');
   const [studentName, setStudentName] = useState('');
   const [studentPartner, setStudentPartner] = useState('');
@@ -22,36 +29,38 @@ function FifthExamFormComponent() {
   const [referenzfach, setReferenzfach] = useState('');
   const [examiner, setExaminer] = useState('');
   const [bezugsfach, setBezugsfach] = useState('');
+  */
 
   const referenzfachList = referenzfachMock;
   const examinerList = examinerMock;
   const bezugsfachList = bezugsfachMock;
 
   const handleExamTypeInputChange = (event) => {
-    setExamType(event.target.value);
+    //setExamType(event.target.value);
   };
   const handleStudentNameInputChange = (event) => {
-    setStudentName(event.target.value);
+    //setStudentName(event.target.value);
   };
   const handleStudentPartnerInputChange = (event) => {
-    setStudentPartner(event.target.value);
+    //setStudentPartner(event.target.value);
   };
   const handleChosenTopicAreaInputChange = (event) => {
-    setChosenTopicArea(event.target.value);
+    //setChosenTopicArea(event.target.value);
   };
   const handleReferenzfachInputChange = (event) => {
-    setReferenzfach(event.target.value);
+    //setReferenzfach(event.target.value);
   };
   const handleExaminerInputChange = (event) => {
-    setExaminer(event.target.value);
+    //setExaminer(event.target.value);
   };
   const handleBezugsfachInputChange = (event) => {
-    setBezugsfach(event.target.value);
+    //setBezugsfach(event.target.value);
   };
 
   const handleGeneratePDF = () => {
     alert('pdf generiert...');
     const pdf = {
+      /*
       examType,
       studentName,
       studentPartner,
@@ -59,6 +68,7 @@ function FifthExamFormComponent() {
       referenzfach,
       examiner,
       bezugsfach,
+      */
     };
     console.log(pdf.toString());
   };
@@ -92,43 +102,41 @@ function FifthExamFormComponent() {
           </RadioGroup>
         </FormControl>
 
-        <TextField label="Prüfling" variant="outlined" style={{ marginTop: verticalComponentDistance }} onChange={handleStudentNameInputChange} />
+        <TextField 
+          label="Prüfling" 
+          variant="outlined" 
+          style={{ marginTop: verticalComponentDistance }} 
+          onChange={handleStudentNameInputChange} 
+          value={formState.studentName}/>
 
-        <TextField label="ggf. Partner:in" variant="outlined" style={{ marginTop: verticalComponentDistance }} onChange={handleStudentPartnerInputChange} />
+        <TextField 
+          label="ggf. Partner:in" 
+          variant="outlined" 
+          style={{ marginTop: verticalComponentDistance }} 
+          onChange={handleStudentPartnerInputChange}
+          value={formState.partnerStudentName}/>
+        
+        <TextField 
+          label="Referenzfach" 
+          variant="outlined" 
+          style={{ marginTop: verticalComponentDistance }} 
+          onChange={handleStudentPartnerInputChange}
+          value={formState.referenzfach} />
 
-        <FormControl style={{ width: '100%', marginTop: verticalComponentDistance }} variant="outlined">
-          <InputLabel>Referenzfach</InputLabel>
-          <Select
-            label="Referenzfach"
-            onChange={handleReferenzfachInputChange}
-          >
-            {referenzfachList.map((subject) => (
-              <MenuItem value={subject.id}>{subject.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl style={{ width: '100%', marginTop: verticalComponentDistance }} variant="outlined">
-          <InputLabel>Prüfer:in</InputLabel>
-          <Select
-            label="Prüfer:in"
-            onChange={handleExaminerInputChange}
-          >
-            {examinerList.map((subject) => (
-              <MenuItem value={subject.id}>{subject.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl style={{ width: '100%', marginTop: verticalComponentDistance }} variant="outlined">
-          <InputLabel>Bezugsfach</InputLabel>
-          <Select
-            label="Bezugsfach"
-            onChange={handleBezugsfachInputChange}
-          >
-            {bezugsfachList.map((subject) => (
-              <MenuItem value={subject.id}>{subject.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <TextField 
+          label="Prüfer:in" 
+          variant="outlined" 
+          style={{ marginTop: verticalComponentDistance }} 
+          onChange={handleStudentPartnerInputChange}
+          value={formState.responsibleTeacher} />
+
+        <TextField 
+          label="Bezugsfach" 
+          variant="outlined" 
+          style={{ marginTop: verticalComponentDistance }} 
+          onChange={handleStudentPartnerInputChange}
+          value={formState.bezugsfach} />
+
 
         <TextField
           label="gewählter Themenbereich"
@@ -137,6 +145,7 @@ function FifthExamFormComponent() {
           onChange={handleChosenTopicAreaInputChange}
           multiline
           rows={3}
+          value={formState.topic}
         />
         <p style={{ color: 'red', fontWeight: 'bold', marginTop: verticalComponentDistance }}>
           Abgabe Termin:
