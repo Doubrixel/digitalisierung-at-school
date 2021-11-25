@@ -14,7 +14,7 @@
     height: 5vh;
     color: black;
     font-weight: bold;
-    font-size: 30px;
+    font-size: 2vw;
     text-align: left;
 }
 
@@ -54,7 +54,7 @@
     grid-column-start: 1;
     grid-column-end: 5;
     grid-row-start: 1;
-    font-size: 100px;
+    font-size: 2vw;
     width: 30vw;
     height: 5vh;
   }
@@ -112,7 +112,7 @@
     grid-column-start: 8;
     grid-column-end: 10;
     grid-row-start: 9;
-    margin-top: 3vh;
+    margin-top: 4vh;
   }
 
   #SubmitButtonUebersichtFA{
@@ -157,7 +157,7 @@
     grid-column-start: 4;
     grid-column-end: 8;
     grid-row-start: 8;
-    margin-top: 3vh;
+    margin-top: 4vh;
     margin-left: 10vw;
   }
 }
@@ -195,7 +195,7 @@
     grid-column-start: 3;
     grid-column-end: 5;
     grid-row-start: 9;
-    margin-top: 5vh;
+    margin-top: 6vh;
   }
 
 }
@@ -234,6 +234,6 @@
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 9;
-    margin-top: 5vh;
+    margin-top: 7vh;
   }
 }

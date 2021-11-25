@@ -30,7 +30,7 @@ function AdminFacharbeitPage() {
         <TableUebersichtFA />
       </div>
       <div id="ButtonUebersichtFA">
-        <CreatePDFButton style={{ marginTop: '4vh' }} onClick={handleGeneratePDF} />
+        <CreatePDFButton style={{ marginTop: '2vh' }} onClick={handleGeneratePDF} />
       </div>
     </div>
   );
