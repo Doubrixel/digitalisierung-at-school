@@ -91,8 +91,9 @@
     grid-column-start: 1;
     grid-column-end: 4;
     grid-row-start: 1;
-    width: 30vw;
-    height: 5vh;
+    font-size: 32px;
+    width: auto;
+    height: auto;
   }
 
   #ToogleButtonFA{
@@ -133,8 +134,9 @@
     grid-column-start: 1;
     grid-column-end: 4;
     grid-row-start: 1;
-    width: 40vw;
-    height: 5vh;
+    font-size: 25px;
+    width: auto;
+    height: auto;
     color: black;
     font-weight: bold;
     text-align: left;
@@ -174,8 +176,9 @@
     grid-column-start: 1;
     grid-column-end: 4;
     grid-row-start: 1;
-    width: 60vw;
-    height: 5vh;
+    font-size: 25px;
+    width: auto;
+    height: auto;
   }
 
   #ToogleButtonFA{
@@ -212,8 +215,9 @@
     grid-column-start: 1;
     grid-column-end: 3;
     grid-row-start: 1;
-    width: 70vw;
-    height: 5vh;
+    font-size: 25px;
+    width: auto;
+    height: auto;
   }
 
   #ToogleButtonFA{
