@@ -128,7 +128,7 @@ api/ag/delete/{agId} (POST) (oder GET?)
 2 Schüler beantragen Thema 
 (Alle Parameter sollten optional sein, da die Schnittstelle auch für Änderungen genutzt wird, und bei Änderungen möglicherweise nur ein Parameter (der neue) übergeben wird)
 /api/abitur/applyForTopic (POST) (Nur für Schüler)
-	{String examType (one of ['PP', 'BLL']), partnerStudentName, String updatePartnerStudentName,
+	{String examType (one of ['PP', 'BLL']), partnerStudentName, String updatedPartnerStudentName,
 	String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner, String updatedExaminer,
 	String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, String updatedPresentationForm
 	}
@@ -147,7 +147,7 @@ api/ag/delete/{agId} (POST) (oder GET?)
 	{}
 	->{ArrayOfObjects allExams[
 		{Int examId, String examType (one of ['PP', 'BLL']), partnerStudentName, 
-		StringupdatePartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner,
+		String updatedPartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner,
 		String updatedExaminer, String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, 
 		String updatedPresentationForm, Boolean approved}
 	]}
@@ -157,7 +157,7 @@ api/ag/delete/{agId} (POST) (oder GET?)
 	{}
 	-> {
 	String examType (one of ['PP', 'BLL']), partnerStudentName, 
-	StringupdatePartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner,
+	String updatedPartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner,
 	String updatedExaminer, String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, 
 	String updatedPresentationForm, Bool approved, String rejectionReason
 	}
