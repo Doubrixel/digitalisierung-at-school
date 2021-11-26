@@ -63,7 +63,19 @@ function FifthExamFormComponent() {
     console.log(pdf.toString());
   };
 
-  const handleSubmitFifthExamForm = () => {};
+  const handleSubmitFifthExamForm = (e) => {
+    e.preventDefault();
+    const examData = {
+      examType, studentName, studentPartner, chosenTopicArea, referenzfach, examiner, bezugsfach,
+    };
+    fetch('http://localhost:3000/admin/pruefungskomponente', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(examData),
+    }).then(() => {
+      console.log('neue Prüfung eingereicht');
+    });
+  };
 
   return (
     <div>
