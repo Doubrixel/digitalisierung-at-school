@@ -1,0 +1,28 @@
+.pageTitleAndComponentButton {
+    display: flex;
+    justify-content: space-between;
+    width: 95vw;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+}
+
+@media screen and (max-width: 640px){
+    .pageTitleAndComponentButton {
+        flex-direction: column;
+    }
+
+}
+
+.facharbeitRootPaperWrapper {
+    width: 94vw;
+}
+
+.facharbeitRootPaper {
+    display: flex;
+    padding: var(--defaultFormPaperPadding);
+}
+
+.tableWrapper {
+    display: flex;
+    justify-content: center;
+}
