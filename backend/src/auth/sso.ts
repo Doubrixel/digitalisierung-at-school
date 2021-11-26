@@ -2,8 +2,18 @@ import {Issuer} from 'openid-client';
 import {NextFunction, Request, Response} from 'express';
 import {deserialize, serialize} from './session';
 import {clearSessionCookie, getSessionCookie, setSessionCookie,} from './cookie';
-import {iservConnectionError, iservLink} from './staticAuthStrings';
+import {iservConnectionError, iservLink, unauthenticated} from './staticAuthStrings';
 
+export interface User {
+    uuid : string;
+    roles : Role[];
+}
+
+export interface Role {
+    uuid : string;
+    id : string;
+    displayName : string;
+}
 
 /*
 Initialize two main things: the OpenId issuer and client,
@@ -77,6 +87,81 @@ export async function session(
     }
 
     req.session = session;
+
+    next();
+}
+
+export async function requireAdmin(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const session = req.session;
+    if (!session) {
+        return next(new Error(unauthenticated));
+    } else {
+        let isAdmin = false;
+        const userString = JSON.stringify(session.user);
+        const user: User = JSON.parse(userString);
+        user.roles.forEach(role => {
+            if (role.id == 'ROLE_ADMIN') {
+                isAdmin = true;
+            }
+        });
+        if (!isAdmin) {
+            return next(new Error('Admin required'));
+        }
+    }
+
+    next();
+}
+
+export async function requireStudent(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const session = req.session;
+    if (!session) {
+        return next(new Error(unauthenticated));
+    } else {
+        let isStudent = false;
+        const userString = JSON.stringify(session.user);
+        const user: User = JSON.parse(userString);
+        user.roles.forEach(role => {
+            if (role.id == 'ROLE_PORTALSCHUELER') {
+                isStudent = true;
+            }
+        });
+        if (!isStudent) {
+            return next(new Error('Student required'));
+        }
+    }
+
+    next();
+}
+
+export async function require5PKAdmin(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const session = req.session;
+    if (!session) {
+        return next(new Error(unauthenticated));
+    } else {
+        let is5PKAdmin = false;
+        const userString = JSON.stringify(session.user);
+        const user: User = JSON.parse(userString);
+        user.roles.forEach(role => {
+            if (role.id == 'ROLE_5PKADMIN') {
+                is5PKAdmin = true;
+            }
+        });
+        if (!is5PKAdmin) {
+            return next(new Error('5PK-Admin required'));
+        }
+    }
 
     next();
 }
