@@ -28,7 +28,7 @@ const modules = [
   {
     title: '5. Prüfungskomponente',
     image: PruefungskompoenenteImage,
-    path: '/admin/wahlpflicht',
+    path: '/admin/pruefungskomponente',
   },
 ];
 

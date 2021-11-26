@@ -1,0 +1,243 @@
+.GridAdminUebersichtFA{
+    display: grid;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    width: 100%;
+    height: 100%;
+}
+
+#HeadlineFA{
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    width: 30vw;
+    height: 5vh;
+    color: black;
+    font-weight: bold;
+    font-size: 2vw;
+    text-align: left;
+}
+
+#ToogleButtonFA{
+    grid-column-start: 9;
+    grid-column-end: 10;
+    grid-row-start: 1;
+    margin-top: 4vh;
+    margin-right: 20px;
+}
+
+#TableUebersichtFA{
+    grid-column-start: 2;
+    grid-column-end: 10;
+    grid-row-start: 3;
+    grid-row-end: 10;
+}
+
+#ButtonUebersichtFA{
+  grid-column-start: 8;
+  grid-column-end: 10;
+  grid-row-start: 10;
+  margin-left: 40px;
+}
+
+@media screen and (min-width: 2000px){
+  .GridAdminUebersichtFA{
+    display: grid;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    grid-template-columns: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    width: 100%;
+    height: 100%;
+    padding: var(--defaultFormPaperPadding);
+  }
+
+  #HeadlineFA{
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    font-size: 2vw;
+    width: 30vw;
+    height: 5vh;
+  }
+
+  #ToogleButtonFA{
+    grid-column-start: 9;
+    grid-column-end: 10;
+    grid-row-start: 1;
+  }
+
+  #TableUebersichtFA{
+    grid-column-start: 1;
+    grid-column-end: 10;
+    grid-row-start: 5;
+    grid-row-end: 8;
+  }
+
+  #ButtonUebersichtFA{
+    grid-column-start: 9;
+    grid-column-end: 11;
+    grid-row-start: 10;
+  }
+}
+
+@media screen and (max-width: 1600px){
+  .GridAdminUebersichtFA{
+    display: grid;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    grid-template-columns: 20% 10% 10% 10% 10% 10% 10% 10% 10%;
+    width: 100%;
+  }
+
+  #HeadlineFA{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    font-size: 32px;
+    width: auto;
+    height: auto;
+  }
+
+  #ToogleButtonFA{
+    grid-column-start: 7;
+    grid-column-end: 8;
+    grid-row-start: 1;
+  }
+
+  #TableUebersichtFA{
+    grid-column-start: 1;
+    grid-column-end: 10;
+    grid-row-start: 3;
+    grid-row-end: 8;
+  }
+
+  #ButtonUebersichtFA{
+    grid-column-start: 7;
+    grid-column-end: 9;
+    grid-row-start: 9;
+    margin-top: 4vh;
+  }
+
+  #SubmitButtonUebersichtFA{
+    width: 20vw;
+    height: 5vh;
+  }
+}
+
+@media screen and (max-width: 1000px){
+  .GridAdminUebersichtFA{
+    display: grid;
+    grid-template-rows: 20% 10% 10% 10% 10% 10% 10% 10% 10%;
+    grid-template-columns: 20% 20% 20% 20% 20%;
+    width: 100%;
+  }
+
+  #HeadlineFA{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    font-size: 25px;
+    width: auto;
+    height: auto;
+    color: black;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  #ToogleButtonFA{
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+  }
+
+  #TableUebersichtFA{
+    grid-column-start: 1;
+    grid-column-end: 6;
+    grid-row-start: 2;
+    grid-row-end: 6;
+  }
+
+  #ButtonUebersichtFA{
+    grid-column-start: 4;
+    grid-column-end: 8;
+    grid-row-start: 8;
+    margin-top: 5vh;
+    margin-left: 10vw;
+  }
+}
+
+@media screen and (max-width: 800px){
+  .GridAdminUebersichtFA{
+    display: grid;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    grid-template-columns: 25% 25% 25% 25%;
+    width: 100%;
+  }
+
+  #HeadlineFA{
+    grid-column-start: 1;
+    grid-column-end: 4;
+    grid-row-start: 1;
+    font-size: 25px;
+    width: auto;
+    height: auto;
+  }
+
+  #ToogleButtonFA{
+    grid-column-start: 3;
+    grid-column-end: 4;
+    grid-row-start: 2;
+  }
+
+  #TableUebersichtFA{
+    grid-column-start: 1;
+    grid-column-end: 5;
+    grid-row-start: 4;
+    grid-row-end: 9;
+  }
+
+  #ButtonUebersichtFA{
+    grid-column-start: 3;
+    grid-column-end: 5;
+    grid-row-start: 9;
+    margin-top: 7vh;
+  }
+
+}
+
+@media screen and (max-width: 502px){
+  .GridAdminUebersichtFA{
+    display: grid;
+    grid-template-rows: 10% 10% 10% 10% 10% 10% 10% 10% 10% 10%;
+    grid-template-columns: 50% 50%;
+    width: 100%;
+  }
+
+  #HeadlineFA{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    font-size: 25px;
+    width: auto;
+    height: auto;
+  }
+
+  #ToogleButtonFA{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    margin-top: 3vh;
+  }
+
+  #TableUebersichtFA{
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 4;
+    grid-row-end: 7;
+  }
+
+  #ButtonUebersichtFA{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 9;
+    margin-top: 7vh;
+  }
+}
