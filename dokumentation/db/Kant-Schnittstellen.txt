@@ -149,7 +149,7 @@ api/ag/delete/{agId} (POST) (oder GET?)
 		{Int examId, String examType (one of ['PP', 'BLL']), partnerStudentName, 
 		String updatedPartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner,
 		String updatedExaminer, String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, 
-		String updatedPresentationForm, Boolean approved}
+		String updatedPresentationForm, Boolean approved, String studentName, Int studentId}
 	]}
 
 3 Schüler sieht daten zu seiner Prüfung ein
