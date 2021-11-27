@@ -1,5 +1,14 @@
 import { Request, Response } from 'express';
-import { updateData, insertData, defaultInsertCallback, defaultUpdateCallback, getAllResults, defaultGetAllCallback} from '../../../db/dbAccessor';
+import {
+    updateData,
+    insertData,
+    defaultInsertCallback,
+    defaultUpdateCallback,
+    getAllResults,
+    defaultGetAllCallback,
+    getFirstResult,
+    defaultGetFirstResultCallback
+} from '../../../db/dbAccessor';
 import rejectWhenValidationsFail from '../../validators/rejectWhenValidationsFail';
 import {getStudentId} from '../../../auth/getRequestCookieData';
 
@@ -13,24 +22,23 @@ export default class Abitur {
         if (rejectWhenValidationsFail(req, res)) return;
 
         let sql = 'SELECT id FROM abiturpruefungen WHERE studentID = ?';
-        getAllResults(sql, [getStudentId()], (a, err) => {
+        getFirstResult(sql, [getStudentId()], (obj, err) => {
             if (err) {
                 res.status(500).json(err.name);
             } else {
-                if (a.length > 0) {
+                if (obj) {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    updateUpdateColumns(a[0].id);
+                    updateUpdateColumns(obj.id);
                 } else {
                     insertFirstSubmission();
                 }
             }
         });
 
-        const updateUpdateColumns = (id: number) => {
+        const buildSetString = (args: (string|number)[]):string => {
             const {updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedTopicArea, problemQuestion, updatedProblemQuestion, presentationForm, updatedPresentationForm} = req.body;
             let setString = '';
-            const args = [];
             setString += ' updatedExaminer = ?'; args.push(updatedExaminer ? updatedExaminer : null);
             setString += ', updatedBezugsfach = ?'; args.push(updatedBezugsfach ? updatedBezugsfach : null);
             setString += ', updatedPartnerStudentName = ?'; args.push(updatedPartnerStudentName ? updatedPartnerStudentName : null);
@@ -40,6 +48,12 @@ export default class Abitur {
             setString += ', updatedPresentationForm = ?'; args.push(updatedPresentationForm ? updatedPresentationForm : null);
             if (problemQuestion) { setString += ', problemQuestion = ?'; args.push(problemQuestion); }
             if (presentationForm) { setString += ', presentationForm = ?'; args.push(presentationForm); }
+            return setString;
+        };
+
+        const updateUpdateColumns = (id: number) => {
+            const args: (string | number)[] = [];
+            const setString = buildSetString(args);
             sql = 'UPDATE abiturpruefungen SET' + setString +' WHERE id = ?';
             args.push(id);
             updateData(sql, args, defaultUpdateCallback(res));
@@ -112,9 +126,6 @@ export default class Abitur {
             FROM abiturpruefungen, nutzer
             WHERE studentID IS nutzer.id AND studentID = ?;
             `;
-        getAllResults(sql, [getStudentId()], (a: unknown[], err: Error|null): void => {
-            if (err) res.status(500).json(err.message);
-            else res.status(200).json(a[0]);
-        });
+        getFirstResult(sql, [getStudentId()], defaultGetFirstResultCallback(res));
     }
 }
