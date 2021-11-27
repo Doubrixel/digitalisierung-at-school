@@ -33,9 +33,12 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import {RootState} from "../../reducer";
 import { ExamInterface } from "../../reducer/5PKAdminReducer";
+import { useEffect } from 'react';
+
+import sendApiRequest from "../../APIRequestFunction"
 
 /*
 function createData(
@@ -327,6 +330,8 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 export default function FifthExamAdminTable() {
+  const dispatch = useDispatch();
+
   const [open, setOpen] = React.useState(false);
   const [currentAnnotation, setCurrentAnnotation] = React.useState('');
 
@@ -402,6 +407,14 @@ export default function FifthExamAdminTable() {
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+
+  useEffect(() => {
+    sendApiRequest('/api/abitur/getAllExams', 'GET')
+      .then((response) => {
+        dispatch({ type: 'LOAD_ALL_EXAMS', payload: response });
+    });
+  }, [])
 
   // @ts-ignore
   // @ts-ignore

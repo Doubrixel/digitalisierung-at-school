@@ -24,32 +24,13 @@ export interface ExamInterface {
 }
 
 const initialState: FifthExamState = {
-  allExams: [
-    {
-      examId: 1,
-      examType: 'BBL',
-      studentName: 'Test',
-      partnerStudentName: 'test1',
-      updatedPartnerStudentName: '',
-      referenzfach: 'deutsch',
-      updatedReferenzfach: '',
-      bezugsfach: 'geschichte',
-      updatedBezugsfach: '',
-      examiner: 'Test3',
-      updatedExaminer: '',
-      topicArea: 'Kein Plan',
-      updatedTopicArea: '',
-      problemQuestion: 'ebenfalls kein plan',
-      updatedProblemQuestion: '',
-      presentationForm: 'BS',
-      updatedPresentationForm: '',
-      approved: true,
-    },
-  ],
+  allExams: [],
 };
 
 const fithExamAdminReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'LOAD_ALL_EXAMS':
+      return { ...state, allExams: action.payload };
     default:
       return state;
   }
