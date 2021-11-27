@@ -28,8 +28,6 @@ DROP TABLE abiturpruefungen;
 
 ALTER TABLE abitur_temp RENAME TO abiturpruefungen;
 
-UPDATE nutzer SET name = 'Peter' WHERE id = 1;
-
 DROP TABLE ags;
 DROP TABLE bezugsfach;
 DROP TABLE wahlpflichtfaecher2nutzer;
