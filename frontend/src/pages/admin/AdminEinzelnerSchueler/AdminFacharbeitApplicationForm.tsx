@@ -69,7 +69,7 @@ function AdminFacharbeitApplicationForm() {
   return (
     <div>
       <div>
-        <h1>Facharbeit beantragen</h1>
+        <h1 id="HeadlineFAAdmin">Facharbeit Übersicht</h1>
       </div>
       <Paper className="facharbeitRootPaper">
         <div

@@ -20,7 +20,7 @@ function AdminFacharbeitStudentListPage() {
   return (
     <div className="pageRoot">
       <div className="pageTitleAndComponentButton">
-        <h1>Facharbeit Übersicht</h1>
+        <h1 id="HeadlineFAAdmin">Facharbeit anpassen</h1>
         <ComponentToggleButton componentLabel="Facharbeiten aktivieren" buttonHandleClickFunction={() => handleActivateComponentButton()} />
       </div>
       <TableListComponent columnHeaders={['Schüler:in', 'Thema', '1. Lehrkraft', '2. Lehrkraft']} tableStyleObject={{ width: '95vw' }} />
