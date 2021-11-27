@@ -22,7 +22,7 @@ api/components/getStatusOfAll (GET)
 
 2 Thema festlegen
 /api/facharbeit/chooseTopic (POST)
-	{String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId}
+	{String topic, String subject, String choosenTeacher, String subjectTeacher}
 	->{}
 
 
