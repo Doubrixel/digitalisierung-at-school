@@ -1,0 +1,1 @@
+UPDATE nutzer SET name = 'Peter' WHERE id = 1;

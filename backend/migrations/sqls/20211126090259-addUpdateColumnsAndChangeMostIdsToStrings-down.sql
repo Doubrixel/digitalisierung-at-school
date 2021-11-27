@@ -17,8 +17,6 @@ FROM abiturpruefungen;
 DROP TABLE abiturpruefungen;
 ALTER TABLE abiturpruefungen_backup RENAME TO abiturpruefungen;
 
-UPDATE nutzer SET name = null WHERE id = 1;
-
 CREATE TABLE ags (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name VARCHAR,
