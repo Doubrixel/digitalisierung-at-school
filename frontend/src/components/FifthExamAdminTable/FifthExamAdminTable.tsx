@@ -34,6 +34,11 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 
+import sendApiRequest from "../../APIRequestFunction"
+
+// @ts-ignore
+var handleOnClickApprove;
+
 interface Data {
   partner: string;
   referenzfach: string;
@@ -289,7 +294,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
       )}
       {numSelected > 0 ? (
         <Tooltip title="Genehmigen">
-          <IconButton>
+          <IconButton onClick={handleOnClickApprove}>
             <CheckIcon color="success" />
           </IconButton>
         </Tooltip>
@@ -349,6 +354,16 @@ export default function FifthExamAdminTable() {
   const hideFullTopic = () => {
     setOpen(false);
   };
+  handleOnClickApprove= (event: React.MouseEvent<unknown>) => {
+    console.log("genehmigen!!!");
+    console.log(selected);
+    /*sendApiRequest('/api/abitur/setApprovalState', 'POST', {})
+      .then((response) => {
+        dispatch({ type: 'LOAD_ALL_EXAMS', payload: response });
+      });*/
+  }
+  //{Int examId, Bool approved, string(optional) reason}
+  //dispatch({type:"CHANGE_REFERENZFACH", payload: event.target.value})
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
