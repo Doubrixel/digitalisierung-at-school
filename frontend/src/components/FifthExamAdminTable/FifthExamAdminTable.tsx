@@ -33,7 +33,6 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
-import {useEffect} from "react";
 
 interface Data {
   partner: string;
@@ -374,19 +373,22 @@ export default function FifthExamAdminTable() {
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       // @ts-ignore
-      const newSelecteds = rowsWithIds.map((n) => n.name);
+      const newSelecteds = rowsWithIds.map((row) => {
+        // @ts-ignore
+        return row.id;
+      });
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: any) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event: React.MouseEvent<unknown>, rowId: any) => {
+    const selectedIndex = selected.indexOf(rowId);
     let newSelected: readonly string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, rowId);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -414,12 +416,11 @@ export default function FifthExamAdminTable() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name: any) => selected.indexOf(String(name)) !== -1;
+  const isSelected = (name: any) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rowsWithIds.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowsWithIds.length) : 0;
 
-  let rowId = 0;
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -446,7 +447,6 @@ export default function FifthExamAdminTable() {
                 .map((row, index) => {
                   const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
-                  rowId++;
 
                   return (
                     <TableRow
@@ -480,7 +480,6 @@ export default function FifthExamAdminTable() {
                       <TableCell align="right">{row.bezugsfach}</TableCell>
                       <TableCell align="right">{row.pruefer}</TableCell>
                       <TableCell align="right">{row.PPOrBLL}</TableCell>
-                      <TableCell align="right">{rowId}</TableCell>
                       <TableCell align="right">
                         <Button title="Thema ansehen" onClick={() => showFullTopic(row.topic)}>
                           <DescriptionIcon />
