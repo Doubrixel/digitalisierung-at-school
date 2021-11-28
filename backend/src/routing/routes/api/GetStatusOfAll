@@ -1,0 +1,10 @@
+import {router} from 'express';
+import GetStatusOfAll from '../../controllers/api/GetStatusOfAll';
+import GetstatusOfAllValidator from '../../validators/api/GetStatusOfAll';
+
+export default (): Router => {
+    const router = Router();
+
+
+    return router;
+};
