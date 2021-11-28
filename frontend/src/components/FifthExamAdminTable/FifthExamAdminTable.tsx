@@ -33,23 +33,17 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
+import {useSelector, useDispatch} from "react-redux";
+import {RootState} from "../../reducer";
+import { ExamInterface } from "../../reducer/5PKAdminReducer";
+import { useEffect } from 'react';
 
 import sendApiRequest from "../../APIRequestFunction"
 
 // @ts-ignore
 var handleOnClickApprove;
 
-interface Data {
-  partner: string;
-  referenzfach: string;
-  pruefer: string;
-  bezugsfach: string;
-  name: string;
-  PPOrBLL: string;
-  topic: string;
-  genehmigt: string;
-}
-
+/*
 function createData(
   name: string,
   partner: string,
@@ -87,6 +81,8 @@ const rows = [
   createData('Hildegard Jansen', 'Nougat', '360', '19.0', '9', '37.0', 'k', 'Nein'),
   createData('Renate Köhler', 'Oreo', '437', '18.0', '63', '4.0', 'g', 'Nein'),
 ];
+*/
+
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -128,26 +124,26 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Data;
+  id: keyof ExamInterface;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-    id: 'name',
+    id: 'studentName',
     numeric: false,
     disablePadding: true,
     label: 'Schüler:in',
   },
   {
-    id: 'partner',
+    id: 'partnerStudentName',
     numeric: false,
     disablePadding: true,
     label: 'Partner:in',
   },
   {
-    id: 'PPOrBLL',
+    id: 'examType',
     numeric: true,
     disablePadding: false,
     label: 'Art',
@@ -165,19 +161,19 @@ const headCells: readonly HeadCell[] = [
     label: 'Bezugsfach',
   },
   {
-    id: 'pruefer',
+    id: 'examiner',
     numeric: true,
     disablePadding: false,
     label: 'Prüfer:in',
   },
   {
-    id: 'topic',
+    id: 'topicArea',
     numeric: true,
     disablePadding: false,
     label: 'Themenbereich',
   },
   {
-    id: 'genehmigt',
+    id: 'approved',
     numeric: true,
     disablePadding: false,
     label: 'Genehmigt',
@@ -186,7 +182,7 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof ExamInterface) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
@@ -197,7 +193,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof ExamInterface) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -337,15 +333,19 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 export default function FifthExamAdminTable() {
+  const dispatch = useDispatch();
+
   const [open, setOpen] = React.useState(false);
   const [currentAnnotation, setCurrentAnnotation] = React.useState('');
 
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('partner');
+  const [orderBy, setOrderBy] = React.useState<keyof ExamInterface>('partnerStudentName');
   const [selected, setSelected] = React.useState<readonly string[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+
+  const rows : ExamInterface[] = useSelector((state: RootState) => state.fithExamAdminReducer.allExams )
 
   const showFullTopic = (annotation) => {
     setOpen(true);
@@ -367,7 +367,7 @@ export default function FifthExamAdminTable() {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data,
+    property: keyof ExamInterface,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -376,7 +376,7 @@ export default function FifthExamAdminTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      const newSelecteds = rows.map((n) => n.studentName);
       setSelected(newSelecteds);
       return;
     }
@@ -388,7 +388,7 @@ export default function FifthExamAdminTable() {
     let newSelected: readonly string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected,name);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -416,11 +416,22 @@ export default function FifthExamAdminTable() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const isSelected = (name: string ) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+
+  useEffect(() => {
+    sendApiRequest('/api/abitur/getAllExams', 'GET')
+      .then((response) => {
+        dispatch({ type: 'LOAD_ALL_EXAMS', payload: response });
+    });
+  }, [])
+
+  // @ts-ignore
+  // @ts-ignore
+  // @ts-ignore
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -442,19 +453,24 @@ export default function FifthExamAdminTable() {
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rows.slice().sort(getComparator(order, orderBy)) */}
+              {/* @ts-ignore */}
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  // @ts-ignore
+                  const isItemSelected = isSelected(row.studentName);
                   const labelId = `enhanced-table-checkbox-${index}`;
+                  // @ts-ignore
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
+                      /*
+                      // @ts-ignore */
+                      onClick={(event) => handleClick(event, row.studentName)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.examId}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -472,19 +488,19 @@ export default function FifthExamAdminTable() {
                         scope="row"
                         padding="none"
                       >
-                        {row.name}
+                        {row.studentName}
                       </TableCell>
-                      <TableCell align="right">{row.partner}</TableCell>
-                      <TableCell align="right">{row.referenzfach}</TableCell>
-                      <TableCell align="right">{row.bezugsfach}</TableCell>
-                      <TableCell align="right">{row.pruefer}</TableCell>
-                      <TableCell align="right">{row.PPOrBLL}</TableCell>
+                      <TableCell align="right">{row.updatedPartnerStudentName === '' ? row.partnerStudentName: row.updatedPartnerStudentName}</TableCell>
+                      <TableCell align="right">{row.examType}</TableCell>
+                      <TableCell align="right">{row.updatedReferenzfach === '' ? row.referenzfach: row.updatedReferenzfach}</TableCell>
+                      <TableCell align="right">{row.updatedBezugsfach === '' ? row.bezugsfach: row.updatedBezugsfach}</TableCell>
+                      <TableCell align="right">{row.updatedExaminer === '' ? row.examiner: row.updatedExaminer}</TableCell>
                       <TableCell align="right">
-                        <Button title="Thema ansehen" onClick={() => showFullTopic(row.topic)}>
+                        <Button title="Thema ansehen" onClick={() => showFullTopic(row.updatedTopicArea === ''? row.topicArea: row.updatedTopicArea)}>
                           <DescriptionIcon />
                         </Button>
                       </TableCell>
-                      <TableCell align="right">{row.genehmigt}</TableCell>
+                      <TableCell align="right">{row.approved ? "Ja" : "Nein"}</TableCell>
                     </TableRow>
                   );
                 })}
