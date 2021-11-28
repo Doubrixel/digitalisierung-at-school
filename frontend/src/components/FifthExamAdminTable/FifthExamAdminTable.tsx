@@ -43,8 +43,9 @@ interface Data {
   PPOrBLL: string;
   topic: string;
   genehmigt: string;
+  id: any;
 }
-
+let rowID=0;
 function createData(
   name: string,
   partner: string,
@@ -55,6 +56,8 @@ function createData(
   topic: string,
   genehmigt:string,
 ): Data {
+  let id=rowID;
+  rowID++;
   return {
     name,
     partner,
@@ -64,12 +67,13 @@ function createData(
     pruefer,
     topic,
     genehmigt,
+    id,
   };
 }
 
-const rows = [
+const rowsMock = [
   createData('Alex Schmidt', 'Cupcake', 'BLL', 'Deutsch', 'Englisch', 'Mr. Jonson', 'Delfine','Nein'),
-  createData('Hans Fischer', 'Donut', 'BLL', 'Mathe', 'Mathe', 'Mrs. Heathrow', 'Wasser', 'Ja'),
+  createData('Alex Schmidt', 'Donut', 'BLL', 'Mathe', 'Mathe', 'Mrs. Heathrow', 'Wasser', 'Ja'),
   createData('Peter Becker', 'Eclair', 'PP', 'Physik', 'Physik', 'Miss Daisy', 'Feuer', 'Ja'),
   createData('Maria Koch', 'Frozen yoghurt', 'BLL', '6.0', '24', '4.0', 'jssghdhgsdvjhcbsdjsdhcvjsdsdghvjssdhg sgfgfkysg f kysgf kkcgksdgckd c drkjcfg dzfg', 'Ja'),
   createData('Monika Meyer', 'Partner1', 'PP', '16.0', '49', '3.9', 'b', 'Nein'),
@@ -82,6 +86,18 @@ const rows = [
   createData('Hildegard Jansen', 'Nougat', '360', '19.0', '9', '37.0', 'k', 'Nein'),
   createData('Renate Köhler', 'Oreo', '437', '18.0', '63', '4.0', 'g', 'Nein'),
 ];
+
+const addIdsToRows = (rows: any)=>{
+  let currentId = 0;
+  rows.forEach((row)=>{
+    row.id = currentId;
+    currentId++;
+  })
+  return rows;
+}
+let rowsWithIds=[];
+rowsWithIds = addIdsToRows(rowsMock);
+
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -223,11 +239,6 @@ function EnhancedTableHead(props: EnhancedTableProps) {
               onClick={createSortHandler(headCell.id)}
             >
               {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component="span"/* sx={visuallyHidden} */>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
             </TableSortLabel>
           </TableCell>
         ))}
@@ -361,19 +372,23 @@ export default function FifthExamAdminTable() {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelecteds = rows.map((n) => n.name);
+      // @ts-ignore
+      const newSelecteds = rowsWithIds.map((row) => {
+        // @ts-ignore
+        return row.id;
+      });
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event: React.MouseEvent<unknown>, name: string) => {
-    const selectedIndex = selected.indexOf(name);
+  const handleClick = (event: React.MouseEvent<unknown>, rowId: any) => {
+    const selectedIndex = selected.indexOf(rowId);
     let newSelected: readonly string[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
+      newSelected = newSelected.concat(selected, rowId);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -401,10 +416,10 @@ export default function FifthExamAdminTable() {
     setDense(event.target.checked);
   };
 
-  const isSelected = (name: string) => selected.indexOf(name) !== -1;
+  const isSelected = (name: any) => selected.indexOf(name) !== -1;
 
-  // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+  // Avoid a layout jump when reaching the last page with empty rowsWithIds.
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowsWithIds.length) : 0;
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -422,24 +437,25 @@ export default function FifthExamAdminTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rows.length}
+              rowCount={rowsWithIds.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rows, getComparator(order, orderBy))
+              rowsWithIds.slice().sort(getComparator(order, orderBy)) */}
+              {stableSort(rowsWithIds, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.name);
+                  const isItemSelected = isSelected(row.id);
                   const labelId = `enhanced-table-checkbox-${index}`;
+
                   return (
                     <TableRow
                       hover
-                      onClick={(event) => handleClick(event, row.name)}
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.name}
+                      key={row.id}
+                      onClick={(event) => handleClick(event, row.id)}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -488,7 +504,7 @@ export default function FifthExamAdminTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rows.length}
+          count={rowsWithIds.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
