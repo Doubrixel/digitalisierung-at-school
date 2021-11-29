@@ -7,7 +7,7 @@ export default (): Router => {
 
     router.get('/test', Facharbeit.GETtest);
     router.get('/getAll', Facharbeit.GETgetAll);
-    router.post('/chooseTopic', FacharbeitValidators.POSTsetApprovalState, Facharbeit.POSTchooseTopic);
+    router.post('/chooseTopic', FacharbeitValidators.POSTchooseTopic, Facharbeit.POSTchooseTopic);
 
     return router;
 };

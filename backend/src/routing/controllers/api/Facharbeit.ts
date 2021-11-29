@@ -22,7 +22,7 @@ export default class Facharbeit {
     static POSTchooseTopic(req: Request, res: Response): void {
         if (rejectWhenValidationsFail(req, res)) return;
 
-        let sql = 'SELECT id FROM facharbeiten WHERE studentID = ?';
+        const sql = 'SELECT id FROM facharbeiten WHERE studentID = ?';
         const studentId = getStudentId();
         getFirstResult(sql, [studentId], (obj, err) => {
             if (err) {
@@ -44,30 +44,19 @@ export default class Facharbeit {
         const buildSetString = (): string => {
             let setString = '';
             let first = true;
-            if (topic) {
+            const add = (arg: {value: string, name: string}): void => {
+                if (!arg.value) return;
                 if (first) first = false;
                 else setString += ', ';
-                setString += 'thema = ?';
-                args.push(topic);
-            }
-            if (subject) {
-                if (first) first = false;
-                else setString += ', ';
-                setString += 'fach = ?';
-                args.push(subject);
-            }
-            if (choosenTeacher) {
-                if (first) first = false;
-                else setString += ', ';
-                setString += 'gewaehlterLehrer = ?';
-                args.push(choosenTeacher);
-            }
-            if (subjectTeacher) {
-                if (first) first = false;
-                else setString += ', ';
-                setString += 'unterrichtenderLehrer = ?';
-                args.push(subjectTeacher);
-            }
+                setString += arg.name + ' = ?';
+                args.push(arg.value);
+            };
+            for (const arg of [
+                {value: topic, name: 'thema'},
+                {value: subject, name: 'fach'},
+                {value: choosenTeacher, name: 'gewaehlterLehrer '},
+                {value: subjectTeacher, name: 'unterrichtenderLehrer '},
+            ]) add(arg);
 
             return setString;
         };
