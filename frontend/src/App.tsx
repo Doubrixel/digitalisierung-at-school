@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import './App.css';
 import {
   BrowserRouter, Switch, Route,
@@ -15,14 +16,13 @@ import WahlpflichtEntryPage from './pages/student/WahlpflichtEntryPage';
 import PruefungskomponenteEntryPage from './pages/student/PruefungskomponenteEntryPage';
 import FacharbeitApplicationForm from './pages/student/Facharbeit/FacharbeitApplicationForm';
 import FacharbeitStudentListPage from './pages/student/Facharbeit/FacharbeitStudentListPage';
-import SettingsPage from './pages/admin/SettingsPage';
 import AdminFacharbeitPage from './pages/admin/AdminFacharbeitPage';
-import AdminAGPage from './pages/admin/AdminAGPage';
-import AdminWahlpflichtPage from './pages/admin/AdminWahlpflichtPage';
 import AdminPruefungskomponentePage from './pages/admin/AdminPruefungskomponentePage';
 import AdminFacharbeitEinzelnerSchueler from './pages/admin/AdminFacharbeitEinzelnerSchueler';
+import NoAccessPage from './pages/NoAccessPage';
 
-function App() {
+function App(props) {
+  const { role } = props;
   return (
     <BrowserRouter>
       <Toolbar />
@@ -38,12 +38,15 @@ function App() {
           <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
           <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
           {/* Admin-Seiten */}
-          <Route exact path="/settings"><SettingsPage /></Route>
-          <Route exact path="/admin/ag"><AdminAGPage /></Route>
-          <Route exact path="/admin/facharbeit"><AdminFacharbeitPage /></Route>
-          <Route exact path="/admin/wahlpflicht"><AdminWahlpflichtPage /></Route>
-          <Route exact path="/admin/pruefungskomponente"><AdminPruefungskomponentePage /></Route>
-          <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
+          <Route exact path="/admin/facharbeit">
+            { role === 'admin' ? <AdminFacharbeitPage /> : <NoAccessPage /> }
+          </Route>
+          <Route exact path="/admin/pruefungskomponente">
+            { role === 'admin' ? <AdminPruefungskomponentePage /> : <NoAccessPage /> }
+          </Route>
+          <Route exact path="/admin/facharbeit/einzelnerSchueler">
+            { role === 'admin' ? <AdminFacharbeitEinzelnerSchueler /> : <NoAccessPage /> }
+          </Route>
         </Switch>
       </div>
       <Footer />
@@ -51,4 +54,10 @@ function App() {
   );
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    role: state.authReducer.role,
+  };
+}
+
+export default connect(mapStateToProps, null)(App);
