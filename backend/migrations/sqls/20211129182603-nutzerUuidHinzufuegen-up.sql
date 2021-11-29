@@ -1,0 +1,1 @@
+ALTER TABLE nutzer ADD COLUMN iServUuid VARCHAR;
