@@ -5,4 +5,5 @@ Facharbeiten (ID: 1)
 Diese Module können in verschiedenen Status sein, abhängig was die Admins als Komponentenstatus festgelegt haben.
 Abhängig vom Status, können Schüler verschiedene Sachen in den Modulen eintragen/beantragen
 
-Information zum
+Informationen über die verschiedenen Status der 5. PK Formular Komponente findet sich in der
+entsprechenden Klasse (FifthExamFormComponent)
