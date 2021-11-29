@@ -5,10 +5,15 @@
 import React from 'react';
 import FifthExamFormComponent from '../../components/FifthExamComponent/FifthExamFormComponent';
 
-function PruefungskomponenteEntryPage() {
+function PruefungskomponenteEntryPage(props) {
+  const { isGettingEditedByAdmin } = props;
   return (
     <div style={{ width: '100%' }}>
-      <FifthExamFormComponent />
+      <FifthExamFormComponent
+        // @ts-ignore
+        isGettingEditedByAdmin={isGettingEditedByAdmin}
+        preFilledDataIn5PKFormEditedByAdmin={{}}
+      />
     </div>
   );
 }
