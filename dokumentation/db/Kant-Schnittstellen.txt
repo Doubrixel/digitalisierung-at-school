@@ -12,9 +12,9 @@ api/components/getStatusOfAll (GET)
 
 2 setze status übergangszeitdatum
 /api/components/{componentName}/setTransitionDates (PUT)
-	{[
+	[
 	 {String statusName, String whenToTransitionToStatusDate}   <--Anmerkung: Das ist ein array of objects
-	 ]}
+	 ]
 	->{}
 
 
