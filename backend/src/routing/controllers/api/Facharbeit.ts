@@ -54,8 +54,8 @@ export default class Facharbeit {
             for (const arg of [
                 {value: topic, name: 'thema'},
                 {value: subject, name: 'fach'},
-                {value: choosenTeacher, name: 'gewaehlterLehrer '},
-                {value: subjectTeacher, name: 'unterrichtenderLehrer '},
+                {value: choosenTeacher, name: 'gewaehlterLehrer'},
+                {value: subjectTeacher, name: 'unterrichtenderLehrer'},
             ]) add(arg);
 
             return setString;
