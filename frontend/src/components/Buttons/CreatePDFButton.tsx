@@ -1,14 +1,18 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
 
-function CreatePDFButton(
-  {
-    onClick, style,
-  }: { onClick: any, style: object },
-) {
+interface CreatePDFButtonInterface {
+  onClick: any;
+  style: object;
+  // Default props sind gesetzt? kein Plan warum eslint trotzdem meckert...
+  // eslint-disable-next-line react/require-default-props
+  label?: string;
+}
+
+function CreatePDFButton({ onClick, style, label = 'PDF erstellen' } : CreatePDFButtonInterface) {
   return (
     <Button style={style} variant="contained" color="primary" onClick={onClick}>
-      PDF erstellen
+      {label}
     </Button>
   );
 }
