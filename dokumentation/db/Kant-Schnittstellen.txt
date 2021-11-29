@@ -6,9 +6,11 @@ legende:
 #components
 
 1 status abfragen
-api/components/getStatusOfAll (GET)
+api/components/getTransitionDatesOfAll (GET)
 	{}
-	->[{String componentName, Int componentStatusId}]
+	->[
+	    {String componentName, [{String transitionToWhichStatus, String whenToTransition]}
+	  ]
 
 2 setze status übergangszeitdatum
 /api/components/{componentName}/setTransitionDates (PUT)
