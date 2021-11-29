@@ -18,11 +18,13 @@ export default class Abitur {
         res.send('abi-test');
     }
 
-    static POSTapplyForTopic(req: Request, res: Response): void {
+    static async POSTapplyForTopic(req: Request, res: Response): Promise<void> {
         if (rejectWhenValidationsFail(req, res)) return;
 
+        const studentId = await getStudentId(req, res);
+
         let sql = 'SELECT id FROM abiturpruefungen WHERE studentID = ?';
-        getFirstResult(sql, [getStudentId()], (obj, err) => {
+        getFirstResult(sql, [studentId], (obj, err) => {
             if (err) {
                 res.status(500).json(err.name);
             } else {
@@ -62,7 +64,7 @@ export default class Abitur {
         const insertFirstSubmission = () => {
             const {examiner, examType, bezugsfach, partnerStudentName, referenzfach, topicArea} = req.body;
             sql = 'INSERT INTO abiturpruefungen (examiner, art, bezugsfach, partnerStudentName, referenzfach, thema, studentID) VALUES (?,?,?,?,?,?,?)';
-            insertData(sql, [examiner, examType, bezugsfach, partnerStudentName, referenzfach, topicArea, getStudentId()], defaultInsertCallback(res));
+            insertData(sql, [examiner, examType, bezugsfach, partnerStudentName, referenzfach, topicArea, studentId], defaultInsertCallback(res));
         };
     }
 
@@ -103,7 +105,8 @@ export default class Abitur {
         getAllResults(sql, [], defaultGetAllCallback(res));
     }
 
-    static GETgetExamData(req: Request, res: Response): void {
+    static async GETgetExamData(req: Request, res: Response): Promise<void> {
+        const studentId = await getStudentId(req, res);
         const sql = `
             SELECT
                 art AS examType,
@@ -126,6 +129,6 @@ export default class Abitur {
             FROM abiturpruefungen, nutzer
             WHERE studentID IS nutzer.id AND studentID = ?;
             `;
-        getFirstResult(sql, [getStudentId()], defaultGetFirstResultCallback(res));
+        getFirstResult(sql, [studentId], defaultGetFirstResultCallback(res));
     }
 }

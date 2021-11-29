@@ -17,6 +17,8 @@ export interface Role {
     displayName : string;
 }
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export async function createUser(pUser: UserinfoResponse<TUserInfo, TAddress>): Promise<User> {
     const userString = JSON.stringify(pUser);
     return JSON.parse(userString);
