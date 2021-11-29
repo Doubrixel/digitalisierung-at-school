@@ -6,7 +6,7 @@ import {
 } from '../../auth/staticAuthStrings';
 import {clearSessionCookie, setSessionCookie} from '../../auth/cookie';
 import {deserializeAuthState, getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
-import { serialize } from '../../auth';
+import {serialize, User} from '../../auth';
 
 export default class Auth {
 
@@ -16,7 +16,7 @@ export default class Auth {
                 const backToPath = req.query.backTo as string;
                 const state = serializeAuthState({ backToPath });
                 const authUrl = req.app.authClient?.authorizationUrl({
-                    scope: 'openid roles uuid',
+                    scope: 'openid roles uuid profile',
                     state,
                 });
 
@@ -43,19 +43,13 @@ export default class Auth {
 
             const client = req.app.authClient;
 
-            console.log('vor callbackparams');
-
             const params = client!.callbackParams(req);
-
-            console.log(params);
 
             const tokenSet = await client!.callback(
                 process.env.REDIRECT_LINK,
                 params,
                 { state }
             );
-
-            console.log(tokenSet);
 
             const user = await client!.userinfo(tokenSet.access_token!);
 
@@ -83,5 +77,20 @@ export default class Auth {
         clearSessionCookie(res);
 
         res.redirect('/');
+    }
+
+    static async GETuserData(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const session = req.session;
+        if (!session) {
+            return next(new Error('unauthenticated'));
+        } else {
+            const userString = JSON.stringify(session.user);
+            const user: User = JSON.parse(userString);
+            res.json(user);
+        }
+    }
+
+    static GETstudentTest(req: Request, res: Response, next: NextFunction): void {
+        res.send('Student angemeldet');
     }
 }
