@@ -6,7 +6,7 @@ import {
 } from '../../auth/staticAuthStrings';
 import {clearSessionCookie, setSessionCookie} from '../../auth/cookie';
 import {deserializeAuthState, getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
-import {serialize, User} from '../../auth';
+import {createUser, serialize, User} from '../../auth';
 
 export default class Auth {
 
@@ -84,13 +84,16 @@ export default class Auth {
         if (!session) {
             return next(new Error('unauthenticated'));
         } else {
-            const userString = JSON.stringify(session.user);
-            const user: User = JSON.parse(userString);
+            const user: User = await createUser(session.user);
             res.json(user);
         }
     }
 
     static GETstudentTest(req: Request, res: Response, next: NextFunction): void {
         res.send('Student angemeldet');
+    }
+
+    static GETadminTest(req: Request, res: Response, next: NextFunction): void {
+        res.send('Admin angemeldet');
     }
 }

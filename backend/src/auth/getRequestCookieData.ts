@@ -1,3 +1,9 @@
-const getStudentId = ():number => 1; // temporärer mock bis das in echt gemacht werden kann
+import {createUser} from './sso';
+import {Request} from 'express';
+
+const getStudentId = function (req : Request): string {
+    const user = await createUser(req.session?.user);
+    return user.uuid;
+};
 
 export {getStudentId};

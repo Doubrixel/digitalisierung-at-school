@@ -1,4 +1,4 @@
-import {Issuer} from 'openid-client';
+import {Issuer, UserinfoResponse} from 'openid-client';
 import {NextFunction, Request, Response} from 'express';
 import {deserialize, serialize} from './session';
 import {clearSessionCookie, getSessionCookie, setSessionCookie,} from './cookie';
@@ -7,12 +7,19 @@ import {iservConnectionError, iservLink, unauthenticated} from './staticAuthStri
 export interface User {
     uuid : string;
     roles : Role[];
+    given_name : string;
+    family_name : string;
 }
 
 export interface Role {
     uuid : string;
     id : string;
     displayName : string;
+}
+
+export async function createUser(pUser: UserinfoResponse<TUserInfo, TAddress>): Promise<User> {
+    const userString = JSON.stringify(pUser);
+    return JSON.parse(userString);
 }
 
 /*
@@ -51,7 +58,7 @@ export async function initialize(
 /*
   This middleware deals with sessions, which involves
   - turning the auth cookie into a valid session object
-  - storing that session object in req.auth.session for other parts of the app to use
+  - storing that session object in req.session for other parts of the app to use
   - refreshing the access_token if necessary
  */
 export async function session(
@@ -101,8 +108,7 @@ export async function requireAdmin(
         return next(new Error(unauthenticated));
     } else {
         let isAdmin = false;
-        const userString = JSON.stringify(session.user);
-        const user: User = JSON.parse(userString);
+        const user: User = await createUser(session.user);
         user.roles.forEach(role => {
             if (role.id == 'ROLE_ADMIN') {
                 isAdmin = true;
@@ -126,8 +132,7 @@ export async function requireStudent(
         return next(new Error(unauthenticated));
     } else {
         let isStudent = false;
-        const userString = JSON.stringify(session.user);
-        const user: User = JSON.parse(userString);
+        const user: User = await createUser(session.user);
         user.roles.forEach(role => {
             if (role.id == 'ROLE_PORTALSCHUELER') {
                 isStudent = true;
@@ -151,8 +156,7 @@ export async function require5PKAdmin(
         return next(new Error(unauthenticated));
     } else {
         let is5PKAdmin = false;
-        const userString = JSON.stringify(session.user);
-        const user: User = JSON.parse(userString);
+        const user: User = await createUser(session.user);
         user.roles.forEach(role => {
             if (role.id == 'ROLE_5PKADMIN') {
                 is5PKAdmin = true;
