@@ -39,65 +39,10 @@ import { ExamInterface } from "../../reducer/5PKAdminReducer";
 import { useEffect } from 'react';
 
 import sendApiRequest from "../../APIRequestFunction"
+import {stringify} from "querystring";
 
 // @ts-ignore
 var handleOnClickApprove;
-
-/*
-function createData(
-  name: string,
-  partner: string,
-  PPOrBLL: string,
-  referenzfach: string,
-  bezugsfach: string,
-  pruefer: string,
-  topic: string,
-  genehmigt:string,
-): Data {
-  let id=rowID;
-  rowID++;
-  return {
-    name,
-    partner,
-    PPOrBLL,
-    referenzfach,
-    bezugsfach,
-    pruefer,
-    topic,
-    genehmigt,
-    id,
-  };
-}
-
-const rowsMock = [
-  createData('Alex Schmidt', 'Cupcake', 'BLL', 'Deutsch', 'Englisch', 'Mr. Jonson', 'Delfine','Nein'),
-  createData('Alex Schmidt', 'Donut', 'BLL', 'Mathe', 'Mathe', 'Mrs. Heathrow', 'Wasser', 'Ja'),
-  createData('Peter Becker', 'Eclair', 'PP', 'Physik', 'Physik', 'Miss Daisy', 'Feuer', 'Ja'),
-  createData('Maria Koch', 'Frozen yoghurt', 'BLL', '6.0', '24', '4.0', 'jssghdhgsdvjhcbsdjsdhcvjsdsdghvjssdhg sgfgfkysg f kysgf kkcgksdgckd c drkjcfg dzfg', 'Ja'),
-  createData('Monika Meyer', 'Partner1', 'PP', '16.0', '49', '3.9', 'b', 'Nein'),
-  createData('Ursula Schneider', 'Honeycomb', '408', '3.2', '87', '6.5', 'c', 'Nein'),
-  createData('Brigitte Schmitz', 'Ice cream sandwich', '237', '9.0', '37', '4.3', 'd', 'Nein'),
-  createData('Renate Müller', 'Jelly Bean', '375', '0.0', '94', '0.0', 'a', 'Ja'),
-  createData('Heinz Hoffmann', 'KitKat', '518', '26.0', '65', '7.0', 'Wasser', 'Nein'),
-  createData('Gisela Peters', 'Lollipop', '392', '0.2', '98', '0.0', 'Geist', 'Nein'),
-  createData('Karl Klein', 'Marshmallow', '318', '0', '81', '2.0', 'h', 'Nein'),
-  createData('Hildegard Jansen', 'Nougat', '360', '19.0', '9', '37.0', 'k', 'Nein'),
-  createData('Renate Köhler', 'Oreo', '437', '18.0', '63', '4.0', 'g', 'Nein'),
-];
-*/
-
-
-const addIdsToRows = (rows: any)=>{
-  let currentId = 0;
-  rows.forEach((row)=>{
-    row.id = currentId;
-    currentId++;
-  })
-  return rows;
-}
-let rowsWithIds=[];
-rowsWithIds = addIdsToRows(rowsMock);
-
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -345,7 +290,7 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 export default function FifthExamAdminTable() {
   const dispatch = useDispatch();
 
-  const [open, setOpen] = React.useState(false);
+  const [showTopicDialog, setShowTopicDialog] = React.useState(false);
   const [currentAnnotation, setCurrentAnnotation] = React.useState('');
 
   const [order, setOrder] = React.useState<Order>('asc');
@@ -358,22 +303,25 @@ export default function FifthExamAdminTable() {
   const rows : ExamInterface[] = useSelector((state: RootState) => state.fithExamAdminReducer.allExams )
 
   const showFullTopic = (annotation) => {
-    setOpen(true);
+    setShowTopicDialog(true);
     setCurrentAnnotation(annotation);
   };
   const hideFullTopic = () => {
-    setOpen(false);
+    setShowTopicDialog(false);
   };
-  handleOnClickApprove= (event: React.MouseEvent<unknown>) => {
+
+  handleOnClickApprove= (event: React.MouseEvent<unknown>, isApproved: boolean) => {
     console.log("genehmigen!!!");
     console.log(selected);
-    /*sendApiRequest('/api/abitur/setApprovalState', 'POST', {})
+    const examID = selected[0];
+    const body={examId: examID, approved: true };
+    console.log(body);
+    sendApiRequest('/api/abitur/setApprovalState', 'POST', JSON.stringify(body))
       .then((response) => {
-        dispatch({ type: 'LOAD_ALL_EXAMS', payload: response });
-      });*/
+        console.log(response)
+      });
   }
   //{Int examId, Bool approved, string(optional) reason}
-  //dispatch({type:"CHANGE_REFERENZFACH", payload: event.target.value})
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -387,9 +335,9 @@ export default function FifthExamAdminTable() {
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       // @ts-ignore
-      const newSelecteds = rowsWithIds.map((row) => {
+      const newSelecteds = rows.map((row) => {
         // @ts-ignore
-        return row.id;
+        return String(row.examId);
       });
       setSelected(newSelecteds);
       return;
@@ -433,8 +381,14 @@ export default function FifthExamAdminTable() {
   const isSelected = (name: any) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rowsWithIds.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowsWithIds.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  const isPropertyUpdated = (updatedProperty: any) =>{
+    if(updatedProperty==='' || updatedProperty===null){
+      return false;
+    }
+    return true;
+  }
 
   useEffect(() => {
     sendApiRequest('/api/abitur/getAllExams', 'GET')
@@ -443,9 +397,6 @@ export default function FifthExamAdminTable() {
     });
   }, [])
 
-  // @ts-ignore
-  // @ts-ignore
-  // @ts-ignore
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -462,15 +413,17 @@ export default function FifthExamAdminTable() {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rowsWithIds.length}
+              rowCount={rows.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rowsWithIds.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rowsWithIds, getComparator(order, orderBy))
+              {/* @ts-ignore */}
+              {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                  // @ts-ignore
+                  const isItemSelected = isSelected(row.examId);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
@@ -479,8 +432,10 @@ export default function FifthExamAdminTable() {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
-                      onClick={(event) => handleClick(event, row.id)}
+                      // @ts-ignore
+                      key={row.examId}
+                      // @ts-ignore
+                      onClick={(event) => handleClick(event, row.examId)}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -500,13 +455,13 @@ export default function FifthExamAdminTable() {
                       >
                         {row.studentName}
                       </TableCell>
-                      <TableCell align="right">{row.updatedPartnerStudentName === '' ? row.partnerStudentName: row.updatedPartnerStudentName}</TableCell>
+                      <TableCell align="right">{!isPropertyUpdated(row.updatedPartnerStudentName) ? row.partnerStudentName: row.updatedPartnerStudentName}</TableCell>
                       <TableCell align="right">{row.examType}</TableCell>
-                      <TableCell align="right">{row.updatedReferenzfach === '' ? row.referenzfach: row.updatedReferenzfach}</TableCell>
-                      <TableCell align="right">{row.updatedBezugsfach === '' ? row.bezugsfach: row.updatedBezugsfach}</TableCell>
-                      <TableCell align="right">{row.updatedExaminer === '' ? row.examiner: row.updatedExaminer}</TableCell>
+                      <TableCell align="right">{!isPropertyUpdated(row.updatedReferenzfach) ? row.referenzfach: row.updatedReferenzfach}</TableCell>
+                      <TableCell align="right">{!isPropertyUpdated(row.updatedBezugsfach) ? row.bezugsfach: row.updatedBezugsfach}</TableCell>
+                      <TableCell align="right">{!isPropertyUpdated(row.updatedExaminer) ? row.examiner: row.updatedExaminer}</TableCell>
                       <TableCell align="right">
-                        <Button title="Thema ansehen" onClick={() => showFullTopic(row.updatedTopicArea === ''? row.topicArea: row.updatedTopicArea)}>
+                        <Button title="Thema ansehen" onClick={() => showFullTopic(!isPropertyUpdated(row.updatedTopicArea)? row.topicArea: row.updatedTopicArea)}>
                           <DescriptionIcon />
                         </Button>
                       </TableCell>
@@ -529,7 +484,7 @@ export default function FifthExamAdminTable() {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rowsWithIds.length}
+          count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -542,7 +497,7 @@ export default function FifthExamAdminTable() {
       />
 
       <Dialog
-        open={open}
+        open={showTopicDialog}
         onClose={hideFullTopic}
       >
         <DialogTitle id="submit_evaluations_dialog_title">{'Thema: '}</DialogTitle>

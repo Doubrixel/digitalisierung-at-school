@@ -55,6 +55,7 @@ export default class Abitur {
             const args: (string | number)[] = [];
             const setString = buildSetString(args);
             sql = 'UPDATE abiturpruefungen SET' + setString +' WHERE id = ?';
+            console.log(req.body)
             args.push(id);
             updateData(sql, args, defaultUpdateCallback(res));
         };
