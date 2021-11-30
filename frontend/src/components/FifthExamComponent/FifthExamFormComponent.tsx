@@ -1,3 +1,4 @@
+/* eslint-disable*/
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -21,9 +22,11 @@ function FifthExamFormComponent(props) {
       some additional information or
       apply in the updateInputs for a change of his data and he can click the checkboxes
   3 - the application got denied by an admin and now it needs new inputs
-  4 - the form is getting edited by an admin
+  4 - the application got approved
+  5 - the form is getting edited by an admin
    */
   const [formStatus, setFormStatus] = useState(0);
+  const [componentStatusId, setComponentStatusId] = useState(0);
 
   // originalFieldHooks
   const [examType, setExamType] = useState('');
@@ -37,6 +40,7 @@ function FifthExamFormComponent(props) {
   const [presentationForm, setPresentationForm] = useState('');
 
   // updateDataFieldHooks
+  const [updatedExamType, setUpdatedExamType] = useState('');
   const [updatedStudentName, setUpdatedStudentName] = useState('');
   const [updatedStudentPartner, setUpdatedStudentPartner] = useState('');
   const [updatedReferenzfach, setUpdatedReferenzfach] = useState('');
@@ -88,6 +92,9 @@ function FifthExamFormComponent(props) {
   };
 
   // updateField Handler
+  const handleUpdatedExamTypeInputChange = (event) => {
+    setUpdatedExamType(event.target.value);
+  };
   const handleUpdateFieldStudentNameInputChange = (event) => {
     setUpdatedStudentName(event.target.value);
   };
@@ -137,7 +144,30 @@ function FifthExamFormComponent(props) {
     });
     return componentStatusId;
   }
-  const componentStatusId = 1;
+
+  function setAppropriateFormStatus(componentStatusId, approved, examType, problemQuestion){
+    // @ts-ignore
+    if (componentStatusId === 0 || componentStatusId === 1 || componentStatusId === 2) {
+      setFormStatus(componentStatusId);
+    }
+    if (approved === false || approved === 0) {
+      setFormStatus(3);
+      return;
+    }
+    if(approved === true || approved === 1) {
+      setFormStatus(4);
+      return;
+    }
+    // That if-clause checks, if a student already submitted the
+    // form in a specific formStatus, which means he can't submit it again
+    // @ts-ignore
+    if ((examType && componentStatusId === 1)
+      // @ts-ignore
+      || (problemQuestion && componentStatusId === 2)) {
+      setFormStatus(0);
+      alert('Das Formular wurde bereits abgesendet und kann erst zu einem späteren Zeitpunkt nochmals bearbeitet werden, z.B. wenn der Antrag abgelehnt wurde.');
+    }
+  }
 
   function processExamData(prefillDataObject) {
     setExamType(prefillDataObject.examType);
@@ -150,44 +180,31 @@ function FifthExamFormComponent(props) {
     setProblemQuestion(prefillDataObject.problemQuestion);
     setPresentationForm(prefillDataObject.presentationForm);
     setRejectionReason(prefillDataObject.rejectionReason);
-
-    if (isGettingEditedByAdmin === true) {
-      setFormStatus(4);
-      return;
-    }
-    // @ts-ignore
-    if (componentStatusId === 0 || componentStatusId === 1 || componentStatusId === 2) {
-      setFormStatus(componentStatusId);
-    }
-    if (prefillDataObject.approved === false || prefillDataObject.approved === 0) {
-      setFormStatus(3);
-      return;
-    }
-    // That if-clause checks, if a student already submitted the
-    // form in a specific formStatus, which means he can't submit it again
-    // @ts-ignore
-    if ((prefillDataObject.examType && componentStatusId === 1)
-      // @ts-ignore
-      || (prefillDataObject.problemQuestion && componentStatusId === 2)) {
-      // setFormStatus(0);
-      alert('Das Formular wurde bereits abgesendet und kann erst zu einem späteren Zeitpunkt nochmals bearbeitet werden, z.B. wenn der Antrag abgelehnt wurde.');
-    }
   }
 
   useEffect(() => {
+
+    let localComponentStatusId = 2;
+
     if (isGettingEditedByAdmin === true) {
       processExamData(preFilledDataIn5PKFormEditedByAdmin);
+      setFormStatus(5);
     } else {
       /* sendAPIRequest('api/components/getStatusOfAll', 'GET')
            .then((response) => response.json())
            .then(data => componentStatus = data)
            .then((data) => processComponentStatus(data))
+           .then((processedComponentStatusId) => { localComponentStatusId = processedComponentStatusId })
+           .then(() => setAppropriateFormStatus(localComponentStatusId, null, null, null))
            .then(sendAPIRequest('api/abitur/getExamData'...) */
       sendAPIRequest('api/abitur/getExamData', 'GET')
         .then((response) => response.json())
         .then((data) => {
           processExamData(data);
-        });
+          setAppropriateFormStatus(localComponentStatusId, data.approved, data.examType, data.problemQuestion);
+        })
+      setAppropriateFormStatus(localComponentStatusId, null, null, null)
+      setComponentStatusId(localComponentStatusId);
     }
   }, []);
 
@@ -211,6 +228,8 @@ function FifthExamFormComponent(props) {
   };
 
   const handleSubmitFifthExamForm = () => {
+    const submitDate = new Date();
+    const submitNumber = componentStatusId === 1 ? 1 : 2;
     const requestBodyParams = {
       examType,
       studentName,
@@ -229,11 +248,13 @@ function FifthExamFormComponent(props) {
       updatedTopicArea,
       updatedProblemQuestion,
       updatedPresentationForm,
+      submitNumber,
+      submitDate,
     };
 
     // eslint-disable-next-line no-restricted-syntax
     for (const key in requestBodyParams) {
-      if (requestBodyParams[key] === '') {
+      if (!requestBodyParams[key]) {
         delete requestBodyParams[key];
       }
     }
@@ -241,26 +262,26 @@ function FifthExamFormComponent(props) {
     function checkIfDataHasBeenSaved(response) {
       if (response.ok) {
         alert('Daten wurden erfolgreich gespeichert.');
-        history.push(isGettingEditedByAdmin ? '/admin/pruefungskomponente' : '/');
+        isGettingEditedByAdmin ? history.push('/admin/pruefungskomponente') : setFormStatus(0);
       } else {
         alert('Daten konnten nicht gespeichert werden. Bitte kontaktieren Sie einen Administrator.');
       }
     }
     sendAPIRequest('api/abitur/applyForTopic', 'POST', requestBodyParams)
       .then((response) => (checkIfDataHasBeenSaved(response)));
+
+    handleGeneratePDF(componentStatusId)
   };
 
   function getStepOneInputFields(areInputFieldsOriginalDataFields) {
     let inputFieldsAreDisabled = true;
     if (formStatus === 1 && areInputFieldsOriginalDataFields) {
       inputFieldsAreDisabled = false;
-    } else if (formStatus === 2 && areInputFieldsOriginalDataFields) {
-      inputFieldsAreDisabled = true;
     } else if (formStatus === 2 && !areInputFieldsOriginalDataFields) {
       inputFieldsAreDisabled = false;
     } else if (formStatus === 3 && !areInputFieldsOriginalDataFields) {
       inputFieldsAreDisabled = false;
-    } else if (formStatus === 4 && !areInputFieldsOriginalDataFields) {
+    } else if (formStatus === 5 && !areInputFieldsOriginalDataFields) {
       inputFieldsAreDisabled = false;
     }
     return (
@@ -280,6 +301,35 @@ function FifthExamFormComponent(props) {
               <br />
             </text>
           )}
+        {areInputFieldsOriginalDataFields || formStatus === 5 ?
+          <FormControl component="fieldset">
+            <FormLabel component="legend">Prüfungsart</FormLabel>
+            <RadioGroup
+              aria-label="Prüfungsart"
+              name="radio-buttons-group"
+              value={areInputFieldsOriginalDataFields ? examType : updatedExamType}
+              row
+            >
+              <FormControlLabel
+                value="PP"
+                control={<Radio/>}
+                label="Präsentationsprüfung"
+                onChange={areInputFieldsOriginalDataFields
+                  ? handleExamTypeInputChange : handleUpdatedExamTypeInputChange}
+                disabled={inputFieldsAreDisabled || allFieldsAreDisabled}
+              />
+              <FormControlLabel
+                value="BLL"
+                control={<Radio/>}
+                label="Besondere Lernleistung"
+                onChange={areInputFieldsOriginalDataFields
+                  ? handleExamTypeInputChange : handleUpdatedExamTypeInputChange}
+                disabled={inputFieldsAreDisabled || allFieldsAreDisabled}
+              />
+            </RadioGroup>
+          </FormControl>
+          : null
+        }
         <TextField
           label="Prüfling"
           variant="outlined"
@@ -345,11 +395,9 @@ function FifthExamFormComponent(props) {
     let inputFieldsAreDisabled = true;
     if (formStatus === 2 && areInputFieldsOriginalDataFields) {
       inputFieldsAreDisabled = false;
-    } else if (formStatus === 3 && areInputFieldsOriginalDataFields) {
-      inputFieldsAreDisabled = true;
     } else if (formStatus === 3 && !areInputFieldsOriginalDataFields) {
       inputFieldsAreDisabled = false;
-    } else if (formStatus === 4 && !areInputFieldsOriginalDataFields) {
+    } else if (formStatus === 5 && !areInputFieldsOriginalDataFields) {
       inputFieldsAreDisabled = false;
     }
     return (
@@ -406,22 +454,25 @@ function FifthExamFormComponent(props) {
     return null;
   }
 
-  function getDisplayRejectionReasonComponent() {
-    return (
-      <div style={{
-        display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2vh',
-      }}
-      >
-        <Typography style={{ fontSize: 'x-large', color: 'red', fontWeight: 'bold' }}>
-          Ihr Antrag für die 5. PK wurde abgelehnt. Der Ablehnungsgrund lautet:
-          {' '}
-          <br />
-        </Typography>
-        <Typography style={{ fontSize: 'large' }}>
-          {rejectionReason}
-        </Typography>
-      </div>
-    );
+  function displayAppropriateApplicationStatus() {
+
+      return (
+        <div style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '2vh',
+        }}
+        >
+          <Typography style={{fontSize: 'x-large', color: formStatus === 3 ? 'red' : 'green', fontWeight: 'bold'}}>
+            { formStatus === 3 ? 'Ihr Antrag für die 5. PK wurde abgelehnt. Der Ablehnungsgrund lautet:' : null}
+            { formStatus === 4 ? 'Ihr Antrag für die 5. PK wurde genehmigt.' : null}
+            <br/>
+          </Typography>
+          <Typography style={{fontSize: 'large'}}>
+            { formStatus === 3 ? rejectionReason : null}
+            { formStatus === 4 ? 'Weitere Änderungen sind nur noch durch einen Administrator möglich.' : null}
+          </Typography>
+        </div>
+      );
+
   }
 
   function getAppropriateTooltip() {
@@ -488,40 +539,16 @@ function FifthExamFormComponent(props) {
 
       </div>
       <Paper className="fifthExamPaper">
-        {formStatus === 3 ? getDisplayRejectionReasonComponent() : null}
-        <FormControl component="fieldset">
-          <FormLabel component="legend">Prüfungsart</FormLabel>
-          <RadioGroup
-            aria-label="Prüfungsart"
-            name="radio-buttons-group"
-            value={examType}
-            row
-          >
-            <FormControlLabel
-              value="PP"
-              control={<Radio />}
-              label="Präsentationsprüfung"
-              onChange={handleExamTypeInputChange}
-              disabled={formStatus !== 1 || allFieldsAreDisabled}
-            />
-            <FormControlLabel
-              value="BLL"
-              control={<Radio />}
-              label="Besondere Lernleistung"
-              onChange={handleExamTypeInputChange}
-              disabled={formStatus !== 1 || allFieldsAreDisabled}
-            />
-          </RadioGroup>
-        </FormControl>
+        { displayAppropriateApplicationStatus() }
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {getStepOneInputFields(true)}
-          {formStatus === 2 || formStatus === 3 || formStatus === 4
+          {formStatus === 2 || formStatus === 3 || formStatus === 5
             ? getStepOneInputFields(false) : null}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {formStatus === 2 || formStatus === 3 || formStatus === 4
+          {formStatus === 2 || formStatus === 3 || formStatus === 5
             ? getStepTwoInputFields(true) : null}
-          {formStatus === 3 || formStatus === 4 ? getStepTwoInputFields(false) : null}
+          {formStatus === 3 || formStatus === 5 ? getStepTwoInputFields(false) : null}
         </div>
         {formStatus === 2 || formStatus === 3 ? getAppropriateCheckboxes() : null}
         <p style={{ color: 'red', fontWeight: 'bold', marginTop: verticalComponentDistance }}>
