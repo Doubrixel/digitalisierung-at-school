@@ -6,9 +6,11 @@ legende:
 #components
 
 1 status abfragen
-api/components/getStatusOfAll (GET)
+api/components/getTransitionDatesOfAll (GET)
 	{}
-	->[{String componentName, Int componentStatusId}]
+	->[
+	    {String componentName, [{String transitionToWhichStatus, String whenToTransition]}
+	  ]
 
 2 setze status übergangszeitdatum
 /api/components/{componentName}/setTransitionDates (PUT)
@@ -22,7 +24,7 @@ api/components/getStatusOfAll (GET)
 
 2 Thema festlegen
 /api/facharbeit/chooseTopic (POST)
-	{String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId}
+	{String topic, String subject, String choosenTeacher, String subjectTeacher}
 	->{}
 
 
@@ -60,15 +62,17 @@ api/components/getStatusOfAll (GET)
 /api/abitur/applyForTopic (POST) (Nur für Schüler)
 	{String examType (one of ['PP', 'BLL']), partnerStudentName, String updatedPartnerStudentName,
 	String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner, String updatedExaminer,
-	String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, String updatedPresentationForm
+	String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, String updatedPresentationForm,
+	String initialSubmitDate, String finalSubmitDate
 	}
 	->{Int id}
 
 7 admin ändert Daten
 (Alle Parameter sollten optional sein, die Schnittstelle für Änderungen genutzt wird, und bei Änderungen möglicherweise nur ein Parameter (der neue) übergeben wird)
 /api/abitur/editData/{Int examId} (POST)
-	{String examType (one of ['PP', 'BLL']), partnerStudentName, String referenzfach, String bezugsfach, String examiner,
-	String topicArea, String problemQuestion, String presentationForm
+	{String examType (one of ['PP', 'BLL']), partnerStudentName, String updatedPartnerStudentName,
+	String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner, String updatedExaminer,
+	String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, String updatedPresentationForm
 	}
 	->{}
 
@@ -79,7 +83,7 @@ api/components/getStatusOfAll (GET)
 		{Int examId, String examType (one of ['PP', 'BLL']), partnerStudentName, 
 		String updatedPartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner,
 		String updatedExaminer, String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, 
-		String updatedPresentationForm, Boolean approved, String studentName, Int studentId}
+		String updatedPresentationForm, Boolean approved, String studentName, Int studentId, String initialSubmitDate, String finalSubmitDate}
 	]}
 
 3 Schüler sieht daten zu seiner Prüfung ein

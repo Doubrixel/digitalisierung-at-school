@@ -16,7 +16,7 @@ export default class Auth {
                 const backToPath = req.query.backTo as string;
                 const state = serializeAuthState({ backToPath });
                 const authUrl = req.app.authClient?.authorizationUrl({
-                    scope: 'openid roles uuid profile',
+                    scope: 'openid roles uuid profile groups',
                     state,
                 });
 
