@@ -14,6 +14,23 @@ import {getStudentId} from '../../../auth/getRequestCookieData';
 
 export default class Abitur {
 
+    static addToSetStringWhenDefined(params:Record<string, any>, args: Array<number|string>):string {
+        let first = true;
+        let setString = '';
+        const keys = params.keys;
+        for (const key in keys) {
+            if (first) first = false;
+            else setString += ',';
+            setString += ' ' + key + ' = ';
+            if (params[key] !== undefined) {
+                setString += '?';
+                args.push(params[key]);
+            }
+            else setString += null;
+        }
+        return setString;
+    }
+
     static GETtest(req: Request, res: Response): void {
         res.send('abi-test');
     }
@@ -127,5 +144,14 @@ export default class Abitur {
             WHERE studentID IS nutzer.id AND studentID = ?;
             `;
         getFirstResult(sql, [getStudentId()], defaultGetFirstResultCallback(res));
+    }
+
+    static POSTeditData(req: Request, res: Response): void {
+        if (rejectWhenValidationsFail(req, res)) return;
+        const examId = req.params.examId;
+        const args : Array<number|string> = [];
+        const sql = 'UPDATE abiturpruefungen SET' +this.addToSetStringWhenDefined(req.body, args) + ' WHERE id = ?';
+        args.push(examId);
+        updateData(sql, args, defaultUpdateCallback(res));
     }
 }
