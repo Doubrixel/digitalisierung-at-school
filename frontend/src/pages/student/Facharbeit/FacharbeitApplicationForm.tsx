@@ -2,12 +2,13 @@
  * Übersichtsseite für die Facharbeit.
  */
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField,
 } from '@material-ui/core';
 import CreatePDFButton from '../../../components/Buttons/CreatePDFButton';
 import UploadedFileInformationPanel from '../../../components/FileInformationPanel/UploadedFileInformationPanel';
+import sendAPIRequest from "../../../APIRequestFunction";
 
 
 
@@ -39,9 +40,12 @@ function FacharbeitApplicationForm(props) {
   const handleTopicInputChange = (event) => {
     setTopicTextArea(event.target.value);
   };
-  const handleSubmitAdminFacharbeit = (event) => {
 
-  };
+  useEffect(() => {
+    if (isGettingEditedByAdmin === true) {
+      setFormStatus(3);
+    }
+  }, []);
 
   const handleSubmitFacharbeit = () => {
     const requestBody = JSON.stringify({
@@ -57,6 +61,21 @@ function FacharbeitApplicationForm(props) {
       body: requestBody,
     });
   };
+
+  const handleSubmitAdminFacharbeit = () => {
+    const requestBody = JSON.stringify({
+      studentId: 0,
+      topic: topicTextArea,
+      subjectId: choosenSubject,
+      responsibleTeacher: betreuendeLehrkraft,
+      teachingTeacher: unterrichtendeLehrkraft,
+    });
+    fetch('placeholder/api/facharbeit/chooseTopic', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: requestBody,
+    });
+  }
 
   const handleGeneratePDF = () => {
     alert('pdf generiert...');
