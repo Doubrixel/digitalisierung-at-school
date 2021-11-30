@@ -34,7 +34,7 @@ function App() {
           <Route exact path="/student/ag/agbuchung"><AGSinglePage /></Route>
           <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
           <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
-          <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
+          <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /></Route>
           <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
           <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
           {/* Admin-Seiten */}
@@ -43,7 +43,8 @@ function App() {
           <Route exact path="/admin/facharbeit"><AdminFacharbeitPage /></Route>
           <Route exact path="/admin/wahlpflicht"><AdminWahlpflichtPage /></Route>
           <Route exact path="/admin/pruefungskomponente"><AdminPruefungskomponentePage /></Route>
-          <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitUebersicht /></Route>
+          <Route exact path="/admin/pruefungskomponente/editStudentApplication"><PruefungskomponenteEntryPage isGettingEditedByAdmin /></Route>
+          <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
         </Switch>
       </div>
       <Footer />

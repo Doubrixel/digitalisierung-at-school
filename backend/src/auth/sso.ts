@@ -1,9 +1,28 @@
-import {Issuer} from 'openid-client';
+import {Issuer, UserinfoResponse} from 'openid-client';
 import {NextFunction, Request, Response} from 'express';
 import {deserialize, serialize} from './session';
 import {clearSessionCookie, getSessionCookie, setSessionCookie,} from './cookie';
-import {iservConnectionError, iservLink} from './staticAuthStrings';
+import {iservConnectionError, iservLink, unauthenticated} from './staticAuthStrings';
 
+export interface User {
+    uuid : string;
+    roles : Role[];
+    given_name : string;
+    family_name : string;
+}
+
+export interface Role {
+    uuid : string;
+    id : string;
+    displayName : string;
+}
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export async function createUser(pUser: UserinfoResponse<TUserInfo, TAddress>): Promise<User> {
+    const userString = JSON.stringify(pUser);
+    return JSON.parse(userString);
+}
 
 /*
 Initialize two main things: the OpenId issuer and client,
@@ -41,7 +60,7 @@ export async function initialize(
 /*
   This middleware deals with sessions, which involves
   - turning the auth cookie into a valid session object
-  - storing that session object in req.auth.session for other parts of the app to use
+  - storing that session object in req.session for other parts of the app to use
   - refreshing the access_token if necessary
  */
 export async function session(
@@ -77,6 +96,78 @@ export async function session(
     }
 
     req.session = session;
+
+    next();
+}
+
+export async function requireAdmin(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const session = req.session;
+    if (!session) {
+        return next(new Error(unauthenticated));
+    } else {
+        let isAdmin = false;
+        const user: User = await createUser(session.user);
+        user.roles.forEach(role => {
+            if (role.id == 'ROLE_ADMIN') {
+                isAdmin = true;
+            }
+        });
+        if (!isAdmin) {
+            return next(new Error('Admin required'));
+        }
+    }
+
+    next();
+}
+
+export async function requireStudent(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const session = req.session;
+    if (!session) {
+        return next(new Error(unauthenticated));
+    } else {
+        let isStudent = false;
+        const user: User = await createUser(session.user);
+        user.roles.forEach(role => {
+            if (role.id == 'ROLE_PORTALSCHUELER') {
+                isStudent = true;
+            }
+        });
+        if (!isStudent) {
+            return next(new Error('Student required'));
+        }
+    }
+
+    next();
+}
+
+export async function require5PKAdmin(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const session = req.session;
+    if (!session) {
+        return next(new Error(unauthenticated));
+    } else {
+        let is5PKAdmin = false;
+        const user: User = await createUser(session.user);
+        user.roles.forEach(role => {
+            if (role.id == 'ROLE_5PKADMIN') {
+                is5PKAdmin = true;
+            }
+        });
+        if (!is5PKAdmin) {
+            return next(new Error('5PK-Admin required'));
+        }
+    }
 
     next();
 }

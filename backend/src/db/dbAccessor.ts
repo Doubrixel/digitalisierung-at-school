@@ -37,6 +37,22 @@ const getAllResults = (sql: string, params: Array<number | string>, callback: (a
     });
 };
 
+const getFirstResult = (sql: string, params: Array<number | string>, callback: (obj: Record<string,unknown> , err: Error|null) => void): void => {
+    accessDB((db: Database) => {
+        db.get(sql, params, (err, row) => {
+            callback(row, err);
+        });
+        return undefined;
+    });
+};
+
+const defaultGetFirstResultCallback = (res: Response) => (
+    (obj: Record<string,unknown>, err: Error|null): void => {
+        if (err) res.status(500).json(err.message);
+        else res.status(200).json(obj);
+    }
+);
+
 const insertData = (sql: string, values: Array<number | string>, callback: (id: number, err: Error|null) => void): void => {
     accessDB((db) => {
         db.run(sql, values, function(err){
@@ -49,7 +65,7 @@ const insertData = (sql: string, values: Array<number | string>, callback: (id: 
 
 const defaultInsertCallback = (res: Response) => (
     (id: number, err: Error|null): void => {
-        if (err) res.status(500).json(err.name);
+        if (err) res.status(500).json(err.message);
         else res.status(200).json({id});
     }
 );
@@ -66,8 +82,8 @@ const updateData = (sql: string, values: Array<number | string>, callback: (chan
 
 const defaultUpdateCallback = (res: Response) => (
     (changedRowCount: number, err: Error|null): void => {
-        if (err) res.status(500).json(err.name);
-        if (changedRowCount === 0) res.status(409).json('Kein Datensatz geändert.');
+        if (err) res.status(500).json(err.message);
+        else if (changedRowCount === 0) res.status(409).json('Kein Datensatz geändert.');
         else res.status(200).json();
     }
 );
@@ -84,4 +100,4 @@ const testDBConnection = ():void => {
     accessDB(()=>undefined, true);
 };
 
-export { getAllResults, insertData, defaultInsertCallback, testDBConnection, updateData, defaultUpdateCallback, defaultGetAllCallback };
+export { getAllResults, insertData, defaultInsertCallback, testDBConnection, updateData, defaultUpdateCallback, defaultGetAllCallback, getFirstResult, defaultGetFirstResultCallback };

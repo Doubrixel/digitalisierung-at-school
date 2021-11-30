@@ -1,13 +1,23 @@
-import { body } from 'express-validator';
+import {body, ValidationChain} from 'express-validator';
 
 export default class AbiturValidators {
+    static isOptionalString = (fieldName: string): ValidationChain => body(fieldName).isString().trim().optional();
     static POSTapplyForTopic = [
-        body('responsibleTeacherId').isInt(),
-        body('art').isString().isIn(['BLL', 'PP']),
-        body('bezugsfachId').isInt(),
-        body('partnerStudentId').isInt(),
-        body('referenzfachId').isInt(),
-        body('topic').isString().trim(),
+        AbiturValidators.isOptionalString('examiner'),
+        AbiturValidators.isOptionalString('updatedExaminer'),
+        AbiturValidators.isOptionalString('bezugsfach'),
+        AbiturValidators.isOptionalString('updatedBezugsfach'),
+        AbiturValidators.isOptionalString('partnerStudentName'),
+        AbiturValidators.isOptionalString('updatedPartnerStudentName'),
+        AbiturValidators.isOptionalString('referenzfach'),
+        AbiturValidators.isOptionalString('updatedReferenzfach'),
+        AbiturValidators.isOptionalString('topicArea'),
+        AbiturValidators.isOptionalString('updatedTopicArea'),
+        AbiturValidators.isOptionalString('problemQuestion'),
+        AbiturValidators.isOptionalString('updatedProblemQuestion'),
+        AbiturValidators.isOptionalString('presentationForm'),
+        AbiturValidators.isOptionalString('updatedPresentationForm'),
+        body('examType').isString().isIn(['BLL', 'PP']).optional(),
     ];
     static POSTsetApprovalState = [
         body('examId').isInt(),
