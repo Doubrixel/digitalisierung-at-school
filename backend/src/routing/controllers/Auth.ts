@@ -53,7 +53,7 @@ export default class Auth {
 
             const user = await client!.userinfo(tokenSet.access_token!);
 
-            await addOrUpdateUserInDb(await createUser(user), res);
+            await addOrUpdateUserInDb(await createUser(user));
 
             const sessionCookie = serialize({ tokenSet, user });
             setSessionCookie(res, sessionCookie);

@@ -1,26 +1,30 @@
 import {Group, User} from '../../types/sso/interfaces';
-import {Response} from 'express';
-import {defaultInsertCallback, defaultUpdateCallback, getFirstResult, insertData, updateData} from './dbAccessor';
+import {getFirstResult, insertData, updateData} from './dbAccessor';
 
-export async function addOrUpdateUserInDb(user: User, res: Response): Promise<void> {
-    const userExists = await isUserInDb(user.uuid, res);
+export async function addOrUpdateUserInDb(user: User): Promise<void> {
+    const userExists = await isUserInDb(user.uuid);
     if (userExists) {
         // update
-        const sql = 'UPDATE nutzer SET klasse = ?, vorname = ?, nachname = ? WHERE iServUuid = ?';
-        updateData(sql, [await getClassFromGroups(user.groups), user.given_name, user.family_name, user.uuid], defaultUpdateCallback(res));
+        const sql = 'UPDATE nutzer SET klasse = ?, vorname = ?, nachname = ?, name = ? WHERE iServUuid = ?';
+        updateData(sql, [await getClassFromGroups(user.groups), user.given_name, user.family_name, user.name, user.uuid], (changedRowCount, err) => {
+            if (err) console.error(err.message);
+            if (changedRowCount == 0) console.error('User not found');
+        });
     } else {
         // add
-        const sql = 'INSERT INTO nutzer (klasse, vorname, nachname, iServUuid) VALUES (?,?,?,?)';
-        insertData(sql, [await getClassFromGroups(user.groups), user.given_name, user.family_name, user.uuid], defaultInsertCallback(res));
+        const sql = 'INSERT INTO nutzer (klasse, vorname, nachname, iServUuid, name) VALUES (?,?,?,?,?)';
+        insertData(sql, [await getClassFromGroups(user.groups), user.given_name, user.family_name, user.uuid, user.name], (id ,err) => {
+            if (err) console.error(err.message);
+        });
     }
 }
 
-async function isUserInDb(uuid: string, res: Response): Promise<boolean> {
+async function isUserInDb(uuid: string): Promise<boolean> {
     return new Promise<boolean>(resolve => {
         const sql = 'SELECT id FROM nutzer WHERE iServUuid = ?';
         getFirstResult(sql, [uuid], (obj, err) => {
             if (err) {
-                res.status(500).json(err.message);
+                console.error(err.message);
             } else {
                 if (!obj) {
                     resolve(false);
