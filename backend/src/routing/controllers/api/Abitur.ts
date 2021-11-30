@@ -14,11 +14,11 @@ import {getStudentId} from '../../../auth/getRequestCookieData';
 
 export default class Abitur {
 
-    static addToSetStringWhenDefined(params:Record<string, any>, args: Array<number|string>):string {
+    static addToSetStringWhenDefined(params:Record<string, string>, args: Array<number|string>):string {
         let first = true;
         let setString = '';
-        const keys = params.keys;
-        for (const key in keys) {
+        const keys = Object.keys(params);
+        keys.forEach(key => {
             if (first) first = false;
             else setString += ',';
             setString += ' ' + key + ' = ';
@@ -27,7 +27,7 @@ export default class Abitur {
                 args.push(params[key]);
             }
             else setString += null;
-        }
+        });
         return setString;
     }
 
@@ -150,7 +150,11 @@ export default class Abitur {
         if (rejectWhenValidationsFail(req, res)) return;
         const examId = req.params.examId;
         const args : Array<number|string> = [];
-        const sql = 'UPDATE abiturpruefungen SET' +this.addToSetStringWhenDefined(req.body, args) + ' WHERE id = ?';
+        const { examType, updatedPartnerStudentName, updatedReferenzfach, updatedBezugsfach, updatedExaminer, updatedTopicArea, updatedProblemQuestion, updatedPresentationForm } = req.body;
+        const art = examType;
+        const updatedThema = updatedTopicArea;
+        const setString = Abitur.addToSetStringWhenDefined({updatedPartnerStudentName, updatedReferenzfach, updatedBezugsfach, updatedExaminer, updatedThema, updatedProblemQuestion, updatedPresentationForm, art }, args);
+        const sql = 'UPDATE abiturpruefungen SET' +setString + ' WHERE id = ?';
         args.push(examId);
         updateData(sql, args, defaultUpdateCallback(res));
     }
