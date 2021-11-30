@@ -2,6 +2,7 @@ export interface AuthState {
   isLoggedIn: boolean,
   authToken: string,
   userName: string,
+  roles: object[],
   role: string,
   accessibleComponents: string[],
 }
@@ -10,6 +11,7 @@ const initialState: AuthState = {
   isLoggedIn: false,
   authToken: '',
   userName: '',
+  roles: [],
   role: '',
   accessibleComponents: [],
 };
@@ -31,7 +33,7 @@ const authReducer = (state = initialState, action) => {
       };
     case 'SET_USER_DATA':
       return {
-        ...state, userName: action.userName, role: action.role,
+        ...state, userName: action.userName, roles: action.roles,
       };
     default:
       return state;
