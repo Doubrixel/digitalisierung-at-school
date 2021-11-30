@@ -5,10 +5,15 @@
 import React from 'react';
 import FacharbeitApplicationForm from '../student/Facharbeit/FacharbeitApplicationForm';
 
-function AdminFacharbeitEntryPage() {
+function AdminFacharbeitEntryPage(props) {
+  const { isGettingEditedByAdmin } = props;
   return (
     <div style={{ width: '100%' }}>
-      <FacharbeitApplicationForm />
+      <FacharbeitApplicationForm
+        // @ts-ignore
+        isGettingEditedByAdmin={isGettingEditedByAdmin}
+        preFilledDataIn5PKFormEditedByAdmin={{}}
+      />
     </div>
   );
 }

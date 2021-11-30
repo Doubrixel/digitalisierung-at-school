@@ -1,7 +1,7 @@
 /**
  * Übersichtsseite für die Facharbeit.
  */
-
+/* eslint-disable */
 import React, { useState } from 'react';
 import {
   Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField,
@@ -9,22 +9,17 @@ import {
 import CreatePDFButton from '../../../components/Buttons/CreatePDFButton';
 import UploadedFileInformationPanel from '../../../components/FileInformationPanel/UploadedFileInformationPanel';
 
-const lehrkraefteMock = [{ id: 1, name: 'Miss X' }, { id: 2, name: 'Mister A' }, { id: 3, name: 'Lady Y' }];
-const subjectMock = [{ id: 1, name: 'Mathe' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'English' }];
 
-function FacharbeitApplicationForm() {
+
+function FacharbeitApplicationForm(props) {
+  const { isGettingEditedByAdmin, preFilledDataIn5PKFormEditedByAdmin } = props;
   const [studentName, setStudentName] = useState('');
   const [studentClass, setStudentClass] = useState('');
   const [choosenSubject, setChoosenSubject] = useState();
   const [betreuendeLehrkraft, setBetreuendeLehrkraft] = useState();
   const [unterrichtendeLehrkraft, setUnterrichtendeLehrkraft] = useState();
   const [topicTextArea, setTopicTextArea] = useState('');
-
   const [formStatus, setFormStatus] = useState(0);
-
-  const betreuendeLehrkraefteList = lehrkraefteMock;
-  const unterrichtendeLehrkraftList = lehrkraefteMock;
-  const subjectList = subjectMock;
 
   const handleStudentNameInputChange = (event) => {
     setStudentName(event.target.value);
@@ -44,6 +39,10 @@ function FacharbeitApplicationForm() {
   const handleTopicInputChange = (event) => {
     setTopicTextArea(event.target.value);
   };
+  const handleSubmitAdminFacharbeit = (event) => {
+
+  };
+
   const handleSubmitFacharbeit = () => {
     const requestBody = JSON.stringify({
       studentId: 0,
@@ -102,40 +101,16 @@ function FacharbeitApplicationForm() {
         <div id="teacherInputsAndButtons" style={{ display: 'flex', flexDirection: 'column', width: '40%' }}>
           <h2> </h2>
           <FormControl style={{ width: '100%', marginTop: '32px' }} variant="outlined">
-            <InputLabel>Fach</InputLabel>
-            <Select
-              label="Fach"
-              onChange={handleSubjectInputChange}
-            >
-              {subjectList.map((subject) => (
-                <MenuItem value={subject.id}>{subject.name}</MenuItem>
-              ))}
-            </Select>
+            <TextField label="Fach" variant="outlined" style={{ width: '100%', minWidth: '65px' }} onChange={handleSubjectInputChange} />
           </FormControl>
           <FormControl style={{ width: '100%', marginTop: '3vh' }} variant="outlined">
-            <InputLabel>Betreuende Lehrkraft</InputLabel>
-            <Select
-              label="Betreuende Lehrkraft"
-              onChange={handleBetreuendeLehrkraftInputChange}
-            >
-              {betreuendeLehrkraefteList.map((lehrkraft) => (
-                <MenuItem value={lehrkraft.id}>{lehrkraft.name}</MenuItem>
-              ))}
-            </Select>
+            <TextField label="Betreuende Lehrkraft" variant="outlined" style={{ width: '100%', minWidth: '65px' }} onChange={handleBetreuendeLehrkraftInputChange} />
           </FormControl>
           <FormControl style={{ width: '100%', marginTop: '3vh' }} variant="outlined">
-            <InputLabel>Unterrichtende Lehrkraft</InputLabel>
-            <Select
-              label="Unterrichtende Lehrkraft"
-              onChange={handleUnterrichtendeLehrkraftInputChange}
-            >
-              {unterrichtendeLehrkraftList.map((lehrkraft) => (
-                <MenuItem value={lehrkraft.id}>{lehrkraft.name}</MenuItem>
-              ))}
-            </Select>
+            <TextField label="Unterrichtende Lehrkraft" variant="outlined" style={{ width: '100%', minWidth: '65px' }} onChange={handleUnterrichtendeLehrkraftInputChange} />
           </FormControl>
           {formStatus === 3 ? 
-            <Button style={{ marginTop: '3vh' }} variant="contained" color="primary" onClick={handleSubmitFacharbeit}>
+            <Button style={{ marginTop: '3vh' }} variant="contained" color="primary" onClick={handleSubmitAdminFacharbeit}>
               Facharbeit ändern
             </Button>
           :

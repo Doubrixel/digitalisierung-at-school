@@ -44,7 +44,7 @@ function App() {
           <Route exact path="/admin/wahlpflicht"><AdminWahlpflichtPage /></Route>
           <Route exact path="/admin/pruefungskomponente"><AdminPruefungskomponentePage /></Route>
           <Route exact path="/admin/pruefungskomponente/editStudentApplication"><PruefungskomponenteEntryPage isGettingEditedByAdmin /></Route>
-          <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
+          <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitUebersicht isGettingEditedByAdmin /></Route>
         </Switch>
       </div>
       <Footer />
