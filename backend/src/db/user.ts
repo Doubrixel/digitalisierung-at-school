@@ -1,4 +1,4 @@
-import {Group, User} from '../../types/sso/interfaces';
+import {Group, User} from '../../types/sso';
 import {getFirstResult, insertData, updateData} from './dbAccessor';
 
 export async function addOrUpdateUserInDb(user: User): Promise<void> {

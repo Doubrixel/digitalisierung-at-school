@@ -7,7 +7,7 @@ import {
 import {clearSessionCookie, setSessionCookie} from '../../auth/cookie';
 import {getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
 import {createUser, serialize} from '../../auth';
-import {User} from '../../../types/sso/interfaces';
+import {User} from '../../../types/sso';
 import {addOrUpdateUserInDb} from '../../db/user';
 
 export default class Auth {
