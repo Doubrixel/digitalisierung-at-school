@@ -20,7 +20,7 @@ import AdminFacharbeitPage from './pages/admin/AdminFacharbeitPage';
 import AdminAGPage from './pages/admin/AdminAGPage';
 import AdminWahlpflichtPage from './pages/admin/AdminWahlpflichtPage';
 import AdminPruefungskomponentePage from './pages/admin/AdminPruefungskomponentePage';
-import AdminFacharbeitUebersicht from './pages/admin/AdminEinzelnerSchueler/AdminFacharbeitEntryPage';
+import AdminFacharbeitUebersicht from './pages/admin/AdminFacharbeitEntryPage';
 
 function App() {
   return (

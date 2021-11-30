@@ -20,6 +20,8 @@ function FacharbeitApplicationForm() {
   const [unterrichtendeLehrkraft, setUnterrichtendeLehrkraft] = useState();
   const [topicTextArea, setTopicTextArea] = useState('');
 
+  const [formStatus, setFormStatus] = useState(0);
+
   const betreuendeLehrkraefteList = lehrkraefteMock;
   const unterrichtendeLehrkraftList = lehrkraefteMock;
   const subjectList = subjectMock;
@@ -69,7 +71,10 @@ function FacharbeitApplicationForm() {
   return (
     <div>
       <div>
+        {formStatus === 3 ? <h1>Facharbeit Übersicht</h1>
+          :
         <h1>Facharbeit beantragen</h1>
+        }
       </div>
       <Paper className="facharbeitRootPaper">
         <div
@@ -129,9 +134,15 @@ function FacharbeitApplicationForm() {
               ))}
             </Select>
           </FormControl>
-          <Button style={{ marginTop: '3vh' }} variant="contained" color="primary" onClick={handleSubmitFacharbeit}>
-            Facharbeit einreichen / ändern
-          </Button>
+          {formStatus === 3 ? 
+            <Button style={{ marginTop: '3vh' }} variant="contained" color="primary" onClick={handleSubmitFacharbeit}>
+              Facharbeit ändern
+            </Button>
+          :
+            <Button style={{ marginTop: '3vh' }} variant="contained" color="primary" onClick={handleSubmitFacharbeit}>
+              Facharbeit einreichen / ändern
+            </Button>
+          }
           <CreatePDFButton style={{ marginTop: '3vh' }} onClick={handleGeneratePDF} />
         </div>
       </Paper>
