@@ -2,11 +2,13 @@ import {NextFunction, Request, Response} from 'express';
 import {
     iservConnectToLoginError,
     iservRevokeTokenError,
-    iservRetrieveUserDataError
+    iservRetrieveUserDataError, homepage
 } from '../../auth/staticAuthStrings';
 import {clearSessionCookie, setSessionCookie} from '../../auth/cookie';
-import {deserializeAuthState, getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
-import {createUser, serialize, User} from '../../auth';
+import {getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
+import {createUser, serialize} from '../../auth';
+import {User} from '../../../types/sso/interfaces';
+import {addOrUpdateUserInDb} from '../../db/user';
 
 export default class Auth {
 
@@ -39,8 +41,6 @@ export default class Auth {
         try {
             const state = getAuthStateCookie(req);
 
-            const { backToPath } = deserializeAuthState(state);
-
             const client = req.app.authClient;
 
             const params = client!.callbackParams(req);
@@ -53,12 +53,12 @@ export default class Auth {
 
             const user = await client!.userinfo(tokenSet.access_token!);
 
-            console.log(user);
+            await addOrUpdateUserInDb(await createUser(user), res);
 
             const sessionCookie = serialize({ tokenSet, user });
             setSessionCookie(res, sessionCookie);
 
-            res.redirect(backToPath);
+            res.redirect(homepage);
         } catch (e) {
             console.error(iservRetrieveUserDataError, e);
             return next(e);
