@@ -3,19 +3,8 @@ import {NextFunction, Request, Response} from 'express';
 import {deserialize, serialize} from './session';
 import {clearSessionCookie, getSessionCookie, setSessionCookie,} from './cookie';
 import {iservConnectionError, iservLink, unauthenticated} from './staticAuthStrings';
+import {User} from '../../types/sso/interfaces';
 
-export interface User {
-    uuid : string;
-    roles : Role[];
-    given_name : string;
-    family_name : string;
-}
-
-export interface Role {
-    uuid : string;
-    id : string;
-    displayName : string;
-}
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

@@ -1,5 +1,6 @@
 // Links
 export const iservLink = 'https://kant-gymnasium.de/iserv/public';
+export const homepage = 'https://einschreibung.kant-gymnasium.de:8080';
 
 // Errors
 export const iservConnectToLoginError = 'An error occurred while trying to connect to the iserv login page';
