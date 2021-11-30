@@ -7,6 +7,6 @@ CREATE TABLE nutzer(
     name VARCHAR
 );
 
-INSERT INTO nutzer SELECT id, rolle, klassenstufe, name FROM nutzer_alt;
+INSERT INTO nutzer (id) SELECT id FROM nutzer_alt;
 
 DROP TABLE nutzer_alt;
