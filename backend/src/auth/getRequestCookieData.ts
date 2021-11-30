@@ -10,6 +10,7 @@ const getStudentId = async function (req : Request, res : Response): Promise<num
             getFirstResult(sql, [user.uuid], (obj, err) => {
                 if (err) {
                     res.status(500).json(err.message);
+                    resolve(-1);
                 } else {
                     if (!obj) res.status(500).json('Nutzer nicht bekannt');
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -20,7 +21,8 @@ const getStudentId = async function (req : Request, res : Response): Promise<num
             });
         });
     } catch (e) {
-        return 1;
+        res.status(500).json('Fehler bei Ermitteln der studentID');
+        return -1;
     }
 };
 

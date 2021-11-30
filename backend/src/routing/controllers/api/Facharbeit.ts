@@ -24,6 +24,7 @@ export default class Facharbeit {
 
         const sql = 'SELECT id FROM facharbeiten WHERE studentID = ?';
         const studentId = await getStudentId(req, res);
+        if (studentId === -1) return;
         getFirstResult(sql, [studentId], (obj, err) => {
             if (err) {
                 res.status(500).json(err.name);

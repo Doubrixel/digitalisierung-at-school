@@ -39,6 +39,7 @@ export default class Abitur {
         if (rejectWhenValidationsFail(req, res)) return;
 
         const studentId = await getStudentId(req, res);
+        if (studentId === -1) return;
 
         let sql = 'SELECT id FROM abiturpruefungen WHERE studentID = ?';
         getFirstResult(sql, [studentId], (obj, err) => {
@@ -124,6 +125,7 @@ export default class Abitur {
 
     static async GETgetExamData(req: Request, res: Response): Promise<void> {
         const studentId = await getStudentId(req, res);
+        if (studentId === -1) return;
         const sql = `
             SELECT
                 art AS examType,
