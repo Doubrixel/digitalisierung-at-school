@@ -31,8 +31,8 @@ function StatusButton() {
           </DialogContentText>
           <TextField
             autoFocus
-            margin="dense"
-            id="name"
+            margin="normal"
+            id="step_0"
             label=""
             type="date"
             fullWidth
@@ -44,8 +44,8 @@ function StatusButton() {
           </DialogContentText>
           <TextField
             autoFocus
-            margin="dense"
-            id="name"
+            margin="normal"
+            id="step_1"
             label=""
             type="date"
             fullWidth
@@ -57,8 +57,8 @@ function StatusButton() {
           </DialogContentText>
           <TextField
             autoFocus
-            margin="dense"
-            id="name"
+            margin="normal"
+            id="step_2"
             label=""
             type="date"
             fullWidth
