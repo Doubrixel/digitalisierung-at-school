@@ -8,15 +8,13 @@ legende:
 1 status abfragen
 api/components/getTransitionDatesOfAll (GET)
 	{}
-	->[
-	    {String componentName, [{String transitionToWhichStatus, String whenToTransition]}
-	  ]
+	->[{
+	     {String componentName, Date transitionDate1, Date transitionDate2, Date transitionDate3} 
+	  }]
 
 2 setze status übergangszeitdatum
-/api/components/{componentName}/setTransitionDates (PUT)
-	{[
-	 {String statusName, String whenToTransitionToStatusDate}   <--Anmerkung: Das ist ein array of objects
-	 ]}
+/api/components/{componentName}/setTransitionDates (POST)
+	{Date transitionDate1, Date transitionDate2, Date transitionDate3}
 	->{}
 
 
