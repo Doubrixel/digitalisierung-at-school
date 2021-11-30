@@ -70,9 +70,9 @@ api/components/getTransitionDatesOfAll (GET)
 7 admin ändert Daten
 (Alle Parameter sollten optional sein, die Schnittstelle für Änderungen genutzt wird, und bei Änderungen möglicherweise nur ein Parameter (der neue) übergeben wird)
 /api/abitur/editData/{Int examId} (POST)
-	{String examType (one of ['PP', 'BLL']), partnerStudentName, String updatedPartnerStudentName,
-	String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner, String updatedExaminer,
-	String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, String updatedPresentationForm
+	{String examType (one of ['PP', 'BLL']), String updatedPartnerStudentName,
+	String updatedReferenzfach, String updatedBezugsfach, String updatedExaminer,
+	String updatedTopicArea, String updatedProblemQuestion, String updatedPresentationForm
 	}
 	->{}
 
