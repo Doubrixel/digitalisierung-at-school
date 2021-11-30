@@ -23,7 +23,7 @@ const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'LOGIN':
       return {
-        ...state, isLoggedIn: true, authToken: 'authTokenMock', accessibleComponents: getAccessibleComponentsOfUser(),
+        ...state, isLoggedIn: true, authToken: 'authTokenMock', role: 'student', accessibleComponents: getAccessibleComponentsOfUser(),
       };
     case 'LOGOUT':
       return {

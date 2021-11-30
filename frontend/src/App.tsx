@@ -6,7 +6,6 @@ import {
 } from 'react-router-dom';
 import Toolbar from './components/Toolbar/Toolbar';
 import Footer from './components/Footer/Footer';
-/*eslint-disable*/
 // Pages Import
 import HomePage from './pages/student/HomePage';
 import AGEntryPage from './pages/student/AGEntryPage';
@@ -29,7 +28,7 @@ function App() {
   sendAPIRequest('auth/getUserData', 'GET')
     .then((response) => response.json())
     .then((data) => setUserData(data.userName, data.role))
-    .catch((err) => console.log("error: " + err.message));
+    .catch((err) => console.log(`error: ${err.message}`));
   return (
     <BrowserRouter>
       <Toolbar />
