@@ -27,7 +27,7 @@ import { setUserData } from './actions/authActions';
 function App() {
   sendAPIRequest('auth/getUserData', 'GET')
     .then((response) => response.json())
-    .then((data) => { console.log(data); })
+    .then((data) => { setUserData(data.name, data.roles); })
     .catch((err) => console.log(`error: ${err.message}`));
   return (
     <BrowserRouter>
