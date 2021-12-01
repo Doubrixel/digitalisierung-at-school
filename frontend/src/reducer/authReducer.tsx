@@ -4,24 +4,13 @@ export const SUPER_ADMIN_ROLE = 'SUPER_ADMIN_ROLE';
 export const STUDENT_ROLE = 'STUDENT_ROLE';
 
 export interface AuthState {
-  isLoggedIn: any,
+  isLoggedIn: boolean,
   userName: string,
   role: string,
 }
 
-function doesAuthCookieExists() {
-  const cookies = document.cookie.split(';');
-  let authCookieExist = false;
-  cookies.forEach((cookie) => {
-    if (cookie.trim().substring(0, 4) === 'AUTH') {
-      authCookieExist = true;
-    }
-  });
-  return authCookieExist;
-}
-
 const initialState: AuthState = {
-  isLoggedIn: doesAuthCookieExists(),
+  isLoggedIn: false,
   userName: '',
   role: '',
 };
@@ -51,7 +40,7 @@ const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'LOGIN':
       return {
-        ...state,
+        ...state, isLoggedIn: true,
       };
     case 'LOGOUT':
       return {

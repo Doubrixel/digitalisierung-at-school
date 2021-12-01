@@ -21,7 +21,7 @@ import AdminPruefungskomponentePage from './pages/admin/AdminPruefungskomponente
 import AdminFacharbeitEinzelnerSchueler from './pages/admin/AdminFacharbeitEinzelnerSchueler';
 import NoAccessPage from './pages/NoAccessPage';
 import sendAPIRequest from './APIRequestFunction';
-import { setUserData } from './actions/authActions';
+import { login, setUserData } from './actions/authActions';
 import { FA_ADMIN_ROLE, FIFTH_PK_ADMIN_ROLE, SUPER_ADMIN_ROLE } from './reducer/authReducer';
 
 function App(props) {
@@ -29,7 +29,10 @@ function App(props) {
   const dispatch = useDispatch();
   sendAPIRequest('auth/getUserData', 'GET')
     .then((response) => response.json())
-    .then((data) => { dispatch(setUserData(data.name, data.roles, data.groups)); })
+    .then((data) => {
+      dispatch(setUserData(data.name, data.roles, data.groups));
+      dispatch(login());
+    })
     .catch((err) => {
       console.log(`error: ${err.message}`);
       dispatch(setUserData('Nicht eingeloggt', [], []));

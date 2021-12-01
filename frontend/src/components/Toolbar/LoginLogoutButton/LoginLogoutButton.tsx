@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from '@material-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { login, logout } from '../../../actions/authActions';
+import { logout } from '../../../actions/authActions';
 import { RootState } from '../../../reducer';
 import './LoginLogoutButton.css';
 
@@ -13,7 +13,6 @@ export const LoginLogoutButton = () => {
   const isLoggedIn = useSelector((state: RootState) => state.authReducer.isLoggedIn);
 
   const onClickLogin = () => {
-    dispatch(login());
     history.push('/auth/login');
     window.location.reload();
   };
