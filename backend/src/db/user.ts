@@ -38,7 +38,7 @@ async function isUserInDb(uuid: string): Promise<boolean> {
 
 async function getClassFromGroups(groups: Group[]|Group): Promise<string> {
     return new Promise<string>(resolve => {
-        if ('forEach' in groups) {
+        if (Array.isArray(groups)) {
             groups.forEach(group => {
                 const name = group.name;
                 if (name.startsWith('klasse')) {
