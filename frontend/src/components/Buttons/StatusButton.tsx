@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+/* eslint-disable */
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -6,14 +7,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import sendAPIRequest from '../../APIRequestFunction';
 
 function StatusButton() {
   const [open, setOpen] = useState(false);
-  /*
-  const [transitionDate1, transitionDate1] = useState('');
-  const [transitionDate2, transitionDate2] = useState('');
-  const [transitionDate3, transitionDate3] = useState('');
-  */
+
+  const [transitionDate1, setTransitionDate1] = useState('');
+  const [transitionDate2, setTransitionDate2] = useState('');
+  const [transitionDate3, setTransitionDate3] = useState('');
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -29,6 +31,28 @@ function StatusButton() {
   const reset = () => {
     // zurücksetzen für neues Schuljahr
   };
+
+  useEffect(() => {
+    sendAPIRequest("/api/components/getTransitionDatesOfAll", 'GET')
+    .then((response) => response.json())
+    .then((json) => {
+        // @ts-ignore
+        let fifthExamDates
+        for(let i = 0; i < json.length; i++) {
+          if(json[i].name == "fifthExam") {
+            fifthExamDates = json[i];
+          }
+        }      
+
+        setTransitionDate1(fifthExamDates.transitionDate1); 
+        setTransitionDate2(fifthExamDates.transitionDate2);
+        setTransitionDate3(fifthExamDates.transitionDate3);
+      });
+
+    return () => {
+
+    };
+  }, []);
 
   return (
     <div>
@@ -48,6 +72,8 @@ function StatusButton() {
             type="date"
             fullWidth
             variant="outlined"
+            value={transitionDate1}
+            onChange={(event) => setTransitionDate1(event.target.value)}
             style={{ marginBottom: '50px' }}
           />
           <DialogContentText>
@@ -60,6 +86,8 @@ function StatusButton() {
             type="date"
             fullWidth
             variant="outlined"
+            value={transitionDate2}
+            onChange={(event) => setTransitionDate1(event.target.value)}
             style={{ marginBottom: '50px' }}
           />
           <DialogContentText>
@@ -72,6 +100,8 @@ function StatusButton() {
             type="date"
             fullWidth
             variant="outlined"
+            value={transitionDate3}
+            onChange={(event) => setTransitionDate2(event.target.value)}
             style={{ marginBottom: '50px' }}
           />
           <Button variant="contained" onClick={reset} color="secondary">Zurücksetzen</Button>
