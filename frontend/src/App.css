@@ -3,10 +3,14 @@
 }
 
 #applicationRootDiv {
-  margin-bottom: var(--footerHeight);
   display: flex;
   align-items: center;
   flex-direction: column;
   padding-left: 2vw;
   padding-right: 2vw;
+}
+
+#contentWrapper{
+  min-height: calc(100vh - var(--footerHeight));
+  margin-bottom: -2.3vh;
 }

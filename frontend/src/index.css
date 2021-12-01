@@ -13,6 +13,6 @@ body {
   --buttongrey: #CCCCCC ;
   --componentToggleButtonActivatedColor: #3ece47;
   --componentToggleButtonDeactivatedColor: #ff3d3d;
-  --footerHeight: 130px;
+  --footerHeight: 110px;
   --defaultFormPaperPadding: 2vw;
 }

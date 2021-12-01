@@ -11,6 +11,7 @@ import {
 } from '../../../db/dbAccessor';
 import rejectWhenValidationsFail from '../../validators/rejectWhenValidationsFail';
 import {getStudentId} from '../../../auth/getRequestCookieData';
+import * as pdfCreation from '../../routes/pdfCreation/pdfCreation';
 
 export default class Abitur {
 
@@ -127,5 +128,9 @@ export default class Abitur {
             WHERE studentID IS nutzer.id AND studentID = ?;
             `;
         getFirstResult(sql, [getStudentId()], defaultGetFirstResultCallback(res));
+    }
+    static async GETgetPdf(req: Request, res: Response): Promise<void> {
+        const pdfPath = await pdfCreation.makePdf(true, '1');
+        res.download(pdfPath, '5.PK-Rückmeldung.pdf');
     }
 }

@@ -1,7 +1,5 @@
 #footer {
     background-color: #1b2b4b;
-    position: fixed;
-    bottom: 0;
     width: 100%;
     color: #cdc9c9;
     height: var(--footerHeight);
