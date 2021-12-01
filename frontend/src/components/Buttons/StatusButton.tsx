@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -8,14 +8,26 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 function StatusButton() {
-  const [open, setOpen] = React.useState(false);
-
+  const [open, setOpen] = useState(false);
+  /*
+  const [transitionDate1, transitionDate1] = useState('');
+  const [transitionDate2, transitionDate2] = useState('');
+  const [transitionDate3, transitionDate3] = useState('');
+  */
   const handleClickOpen = () => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const close = () => {
     setOpen(false);
+  };
+
+  const save = () => {
+    close();
+  };
+
+  const reset = () => {
+    // zurücksetzen für neues Schuljahr
   };
 
   return (
@@ -23,52 +35,50 @@ function StatusButton() {
       <Button variant="outlined" onClick={handleClickOpen} style={{ marginTop: '2vh', width: '12vw', minWidth: '188px' }}>
         Freigabe bearbeiten
       </Button>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={close}>
         <DialogTitle style={{ fontSize: '35px' }}>Freigabe bearbeiten</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Schritt 0: Komponente sperren.
+            Schritt 0: Komponente zur Eingabe für Schüler freigeben.
           </DialogContentText>
           <TextField
             autoFocus
             margin="normal"
             id="step_0"
-            label=""
             type="date"
             fullWidth
             variant="outlined"
             style={{ marginBottom: '50px' }}
           />
           <DialogContentText>
-            Schritt 1: Schüler können das Formular ausfüllen.
+            Schritt 1: Schüler können Checkboxen, Problemfrage und Präsentationsform eintragen.
           </DialogContentText>
           <TextField
             autoFocus
             margin="normal"
             id="step_1"
-            label=""
             type="date"
             fullWidth
             variant="outlined"
             style={{ marginBottom: '50px' }}
           />
           <DialogContentText>
-            Schritt 2: Schüler können Checkboxen, Problemfrage und Präsentationsform eintragen.
+            Schritt 2: Komponente zur Themen Abgabe sperren
           </DialogContentText>
           <TextField
             autoFocus
             margin="normal"
             id="step_2"
-            label=""
             type="date"
             fullWidth
             variant="outlined"
             style={{ marginBottom: '50px' }}
           />
+          <Button variant="contained" onClick={reset} color="secondary">Zurücksetzen</Button>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Schließen</Button>
-          <Button onClick={handleClose}>Speichern</Button>
+          <Button onClick={close}>Schließen</Button>
+          <Button onClick={save}>Speichern</Button>
         </DialogActions>
       </Dialog>
     </div>
