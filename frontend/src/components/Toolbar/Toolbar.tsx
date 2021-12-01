@@ -14,8 +14,10 @@ import './Toolbar.css';
 import { LoginLogoutButton } from './LoginLogoutButton/LoginLogoutButton';
 
 function Toolbar(props) {
-  const { isLoggedIn, role, accessibleComponents } = props;
-  let approprateRolePath = '';
+  const {
+    isLoggedIn, userName, role, accessibleComponents,
+  } = props;
+  let approprateRolePath;
   if (role === 'student') {
     approprateRolePath = 'student';
   } else if (role === 'admin') {
@@ -26,25 +28,25 @@ function Toolbar(props) {
       id: 1,
       name: 'AG-Buchung',
       path: `/${approprateRolePath}/ag`,
-      disabled: (!(accessibleComponents.includes('ag')) && role === 'admin') || !isLoggedIn,
+      disabled: (!(accessibleComponents.includes('ag')) && role === 'admin') || !isLoggedIn || !approprateRolePath,
     },
     {
       id: 2,
       name: 'Facharbeit',
       path: `/${approprateRolePath}/facharbeit`,
-      disabled: (!(accessibleComponents.includes('fa')) && role === 'admin') || !isLoggedIn,
+      disabled: (!(accessibleComponents.includes('fa')) && role === 'admin') || !isLoggedIn || !approprateRolePath,
     },
     {
       id: 3,
       name: 'Wahlpflicht',
       path: `/${approprateRolePath}/wahlpflicht`,
-      disabled: (!(accessibleComponents.includes('wpf')) && role === 'admin') || !isLoggedIn,
+      disabled: (!(accessibleComponents.includes('wpf')) && role === 'admin') || !isLoggedIn || !approprateRolePath,
     },
     {
       id: 4,
       name: '5. PK',
       path: `/${approprateRolePath}/pruefungskomponente`,
-      disabled: (!(accessibleComponents.includes('5pk')) && role === 'admin') || !isLoggedIn,
+      disabled: (!(accessibleComponents.includes('5pk')) && role === 'admin') || !isLoggedIn || !approprateRolePath,
     },
   ];
   const windowDimensions = useWindowDimensions();
@@ -96,7 +98,10 @@ function Toolbar(props) {
                 );
               })
             }
-            <LoginLogoutButton />
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <LoginLogoutButton />
+              { userName === '' ? null : `Eingeloggt als:${userName}` }
+            </div>
           </div>
         ) : undefined
       }
@@ -107,6 +112,7 @@ function Toolbar(props) {
 function mapStateToProps(state) {
   return {
     isLoggedIn: state.authReducer.isLoggedIn,
+    userName: state.authReducer.userName,
     role: state.authReducer.role,
     accessibleComponents: state.authReducer.accessibleComponents,
   };

@@ -8,15 +8,13 @@ legende:
 1 status abfragen
 api/components/getTransitionDatesOfAll (GET)
 	{}
-	->[
-	    {String componentName, [{String transitionToWhichStatus, String whenToTransition]}
-	  ]
+	->[{
+	     {String componentName, Date transitionDate1, Date transitionDate2, Date transitionDate3} 
+	  }]
 
 2 setze status übergangszeitdatum
-/api/components/{componentName}/setTransitionDates (PUT)
-	{[
-	 {String statusName, String whenToTransitionToStatusDate}   <--Anmerkung: Das ist ein array of objects
-	 ]}
+/api/components/{componentName}/setTransitionDates (POST)
+	{Date transitionDate1, Date transitionDate2, Date transitionDate3}
 	->{}
 
 
@@ -61,18 +59,18 @@ api/components/getTransitionDatesOfAll (GET)
 (Alle Parameter sollten optional sein, da die Schnittstelle auch für Änderungen genutzt wird, und bei Änderungen möglicherweise nur ein Parameter (der neue) übergeben wird)
 /api/abitur/applyForTopic (POST) (Nur für Schüler)
 	{String examType (one of ['PP', 'BLL']), partnerStudentName, String updatedPartnerStudentName,
-	String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner, String updatedExaminer,
+	String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String tutor, String examiner, String updatedExaminer,
 	String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, String updatedPresentationForm,
-	String initialSubmitDate, String finalSubmitDate
+	int submitNumber, Date submitDate
 	}
 	->{Int id}
 
 7 admin ändert Daten
 (Alle Parameter sollten optional sein, die Schnittstelle für Änderungen genutzt wird, und bei Änderungen möglicherweise nur ein Parameter (der neue) übergeben wird)
 /api/abitur/editData/{Int examId} (POST)
-	{String examType (one of ['PP', 'BLL']), partnerStudentName, String updatedPartnerStudentName,
-	String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner, String updatedExaminer,
-	String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, String updatedPresentationForm
+	{String examType (one of ['PP', 'BLL']), String updatedPartnerStudentName,
+	String updatedReferenzfach, String updatedBezugsfach, String updatedTutor, String updatedExaminer,
+	String updatedTopicArea, String updatedProblemQuestion, String updatedPresentationForm
 	}
 	->{}
 
@@ -81,8 +79,9 @@ api/components/getTransitionDatesOfAll (GET)
 	{}
 	->{ArrayOfObjects allExams[
 		{Int examId, String examType (one of ['PP', 'BLL']), partnerStudentName, 
-		String updatedPartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner,
-		String updatedExaminer, String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, 
+		String updatedPartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String tutor,
+		String updatedTutor, String examiner, String updatedExaminer, String topicArea, String updatedTopicArea, String problemQuestion,
+		String updatedProblemQuestion, String presentationForm, 
 		String updatedPresentationForm, Boolean approved, String studentName, Int studentId, String initialSubmitDate, String finalSubmitDate}
 	]}
 
@@ -91,7 +90,8 @@ api/components/getTransitionDatesOfAll (GET)
 	{}
 	-> {
 	String examType (one of ['PP', 'BLL']), partnerStudentName, 
-	String updatedPartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String examiner,
+	String updatedPartnerStudentName, String referenzfach, String updatedReferenzfach, String bezugsfach, String updatedBezugsfach, String tutor,
+	String updatedTutor, String examiner,
 	String updatedExaminer, String topicArea, String updatedTopicArea, String problemQuestion, String updatedProblemQuestion, String presentationForm, 
 	String updatedPresentationForm, Bool approved, String rejectionReason
 	}

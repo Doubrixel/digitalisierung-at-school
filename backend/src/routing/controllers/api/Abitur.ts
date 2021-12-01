@@ -14,6 +14,23 @@ import {getStudentId} from '../../../auth/getRequestCookieData';
 
 export default class Abitur {
 
+    static addToSetStringWhenDefined(params:Record<string, string>, args: Array<number|string>):string {
+        let first = true;
+        let setString = '';
+        const keys = Object.keys(params);
+        keys.forEach(key => {
+            if (first) first = false;
+            else setString += ',';
+            setString += ' ' + key + ' = ';
+            if (params[key] !== undefined) {
+                setString += '?';
+                args.push(params[key]);
+            }
+            else setString += null;
+        });
+        return setString;
+    }
+
     static GETtest(req: Request, res: Response): void {
         res.send('abi-test');
     }
@@ -22,6 +39,7 @@ export default class Abitur {
         if (rejectWhenValidationsFail(req, res)) return;
 
         const studentId = await getStudentId(req, res);
+        if (studentId === -1) return;
 
         let sql = 'SELECT id FROM abiturpruefungen WHERE studentID = ?';
         getFirstResult(sql, [studentId], (obj, err) => {
@@ -107,6 +125,7 @@ export default class Abitur {
 
     static async GETgetExamData(req: Request, res: Response): Promise<void> {
         const studentId = await getStudentId(req, res);
+        if (studentId === -1) return;
         const sql = `
             SELECT
                 art AS examType,
@@ -130,5 +149,18 @@ export default class Abitur {
             WHERE studentID IS nutzer.id AND studentID = ?;
             `;
         getFirstResult(sql, [studentId], defaultGetFirstResultCallback(res));
+    }
+
+    static POSTeditData(req: Request, res: Response): void {
+        if (rejectWhenValidationsFail(req, res)) return;
+        const examId = req.params.examId;
+        const args : Array<number|string> = [];
+        const { examType, updatedPartnerStudentName, updatedReferenzfach, updatedBezugsfach, updatedExaminer, updatedTopicArea, updatedProblemQuestion, updatedPresentationForm } = req.body;
+        const art = examType;
+        const updatedThema = updatedTopicArea;
+        const setString = Abitur.addToSetStringWhenDefined({updatedPartnerStudentName, updatedReferenzfach, updatedBezugsfach, updatedExaminer, updatedThema, updatedProblemQuestion, updatedPresentationForm, art }, args);
+        const sql = 'UPDATE abiturpruefungen SET' +setString + ' WHERE id = ?';
+        args.push(examId);
+        updateData(sql, args, defaultUpdateCallback(res));
     }
 }
