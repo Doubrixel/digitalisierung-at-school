@@ -4,33 +4,24 @@ import './ModulCollection.css';
 import { connect } from 'react-redux';
 import SelectionComponent from '../ModulSelectionComponent/SelectionComponent';
 
-import AG_Image from '../../images/AG.png';
 import Facharbeit_Image from '../../images/Facharbeit.png';
 import PK_Image from '../../images/PK.png';
-import Wahlpflicht_Image from '../../images/Wahlpflicht.png';
+import {
+  FA_ADMIN_ROLE, FIFTH_PK_ADMIN_ROLE, STUDENT_ROLE, SUPER_ADMIN_ROLE,
+} from '../../reducer/authReducer';
 
 function ModulCollection(props) {
-  const { role, accessibleComponents } = props;
+  const { role } = props;
   let approprateRolePath = '';
   if (role === 'student') {
     approprateRolePath = 'student';
   } else if (role === 'admin') {
     approprateRolePath = 'admin';
   }
+
   return (
     <div className="flexboxModul">
-      {accessibleComponents.includes('ag')
-        ? (
-          <div className="flexModulItem">
-            <SelectionComponent
-              image={AG_Image}
-              title="Hier die passende AG auswählen und buchen"
-              buttontext="AG buchen"
-              path={`/${approprateRolePath}/ag`}
-            />
-          </div>
-        ) : null}
-      {accessibleComponents.includes('fa')
+      {role === STUDENT_ROLE || role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
         ? (
           <div className="flexModulItem">
             <SelectionComponent
@@ -41,18 +32,7 @@ function ModulCollection(props) {
             />
           </div>
         ) : null}
-      {accessibleComponents.includes('wpf')
-        ? (
-          <div className="flexModulItem">
-            <SelectionComponent
-              image={Wahlpflicht_Image}
-              title="Wahlpflichtfächer bestimmen"
-              buttontext="Wählfächer"
-              path={`/${approprateRolePath}/wahlpflicht`}
-            />
-          </div>
-        ) : null}
-      {accessibleComponents.includes('5pk')
+      {role === STUDENT_ROLE || role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
         ? (
           <div className="flexModulItem">
             <SelectionComponent
@@ -70,7 +50,6 @@ function ModulCollection(props) {
 function mapStateToProps(state) {
   return {
     role: state.authReducer.role,
-    accessibleComponents: state.authReducer.accessibleComponents,
   };
 }
 

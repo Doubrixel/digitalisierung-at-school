@@ -11,7 +11,7 @@ function NoAccessPage() {
       fontWeight: 'bold',
     }}
     >
-      Als Schüler haben Sie keinen Zugriff auf Seiten der Administration.
+      Sie haben nicht die nötigen Berechtigungen um auf diese Seite zuzugreifen.
     </div>
   );
 }

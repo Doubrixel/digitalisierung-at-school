@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import {
   BrowserRouter, Switch, Route,
 } from 'react-router-dom';
@@ -22,17 +22,17 @@ import AdminFacharbeitEinzelnerSchueler from './pages/admin/AdminFacharbeitEinze
 import NoAccessPage from './pages/NoAccessPage';
 import sendAPIRequest from './APIRequestFunction';
 import { setUserData } from './actions/authActions';
+import { FA_ADMIN_ROLE, FIFTH_PK_ADMIN_ROLE, SUPER_ADMIN_ROLE } from './reducer/authReducer';
 
 function App(props) {
   const { role } = props;
-function App() {
   const dispatch = useDispatch();
   sendAPIRequest('auth/getUserData', 'GET')
     .then((response) => response.json())
-    .then((data) => { dispatch(setUserData(data.name, data.roles)); })
+    .then((data) => { dispatch(setUserData(data.name, data.roles, data.groups)); })
     .catch((err) => {
       console.log(`error: ${err.message}`);
-      dispatch(setUserData('Nicht eingeloggt', []));
+      dispatch(setUserData('Nicht eingeloggt', [], []));
     });
   return (
     <BrowserRouter>
@@ -49,22 +49,34 @@ function App() {
           <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
           <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
           {/* Admin-Seiten */}
+          {/* Facharbeitsseiten */}
           <Route exact path="/admin/facharbeit">
-            { role === 'admin' ? <AdminFacharbeitPage /> : <NoAccessPage /> }
-          </Route>
-          <Route exact path="/admin/pruefungskomponente">
-            { role === 'admin' ? <AdminPruefungskomponentePage /> : <NoAccessPage /> }
+            { role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
+              ? <AdminFacharbeitPage /> : <NoAccessPage /> }
           </Route>
           <Route exact path="/admin/facharbeit/einzelnerSchueler">
-            { role === 'admin' ? <AdminFacharbeitEinzelnerSchueler /> : <NoAccessPage /> }
+            { role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
+              ? <AdminFacharbeitEinzelnerSchueler /> : <NoAccessPage /> }
           </Route>
-          <Route exact path="/settings"><SettingsPage /></Route>
-          <Route exact path="/admin/ag"><AdminAGPage /></Route>
-          <Route exact path="/admin/facharbeit"><AdminFacharbeitPage /></Route>
-          <Route exact path="/admin/wahlpflicht"><AdminWahlpflichtPage /></Route>
-          <Route exact path="/admin/pruefungskomponente"><AdminPruefungskomponentePage /></Route>
-          <Route exact path="/admin/pruefungskomponente/editStudentApplication"><PruefungskomponenteEntryPage isGettingEditedByAdmin /></Route>
+          <Route exact path="/admin/facharbeit">
+            { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+              ? <AdminFacharbeitPage /> : <NoAccessPage /> }
+          </Route>
           <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
+
+          {/* 5. PK seiten */}
+          <Route exact path="/admin/pruefungskomponente">
+            { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+              ? <AdminPruefungskomponentePage /> : <NoAccessPage /> }
+          </Route>
+          <Route exact path="/admin/pruefungskomponente">
+            { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+              ? <AdminPruefungskomponentePage /> : <NoAccessPage /> }
+          </Route>
+          <Route exact path="/admin/pruefungskomponente/editStudentApplication">
+            { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+              ? <PruefungskomponenteEntryPage isGettingEditedByAdmin /> : <NoAccessPage /> }
+          </Route>
         </Switch>
       </div>
       <Footer />
