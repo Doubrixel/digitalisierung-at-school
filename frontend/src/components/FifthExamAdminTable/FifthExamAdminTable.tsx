@@ -35,11 +35,11 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import {useSelector, useDispatch} from "react-redux";
 import {RootState} from "../../reducer";
-import { ExamInterface } from "../../reducer/5PKAdminReducer";
+import { ExamInterface } from "../../reducer/FifthExamReducer";
 import { useEffect } from 'react';
 import { setPreFilledDataIn5PKFormEditedByAdmin } from '../../actions/FifthExamActions'
 import sendApiRequest from "../../APIRequestFunction"
-import {TextField} from "@material-ui/core";
+import TextField from '@mui/material/TextField';
 
 let handleOnClickApprove;
 let handleEditRowClick;
@@ -566,13 +566,17 @@ function FifthExamAdminTable(props) {
         open={showDeclineReasonDialog}
         onClose={hideDeclineReasonAndSendApiRequest}
       >
-        <DialogTitle id="submit_evaluations_dialog_title">{'Ablehnungsgrund: '}</DialogTitle>
-        <DialogContent>
+        <DialogTitle id="submit_evaluations_dialog_title" >{'Ablehnungsgrund: '}</DialogTitle>
+        <DialogContent
+          >
           <TextField
             label="Ablehnungsgrund"
             variant="outlined"
             onChange={handleCurrentDeclineReasonOnChange}
-            value={currentDeclineReason}>
+            value={currentDeclineReason}
+            rows={5}
+            multiline
+            style={{ width: '50vh' }}>
           </TextField>
         </DialogContent>
         <DialogActions>

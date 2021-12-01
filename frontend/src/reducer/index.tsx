@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
 import authReducer, { AuthState } from './authReducer';
-import fithExamAdminReducer, { FifthExamState } from './5PKAdminReducer';
+import fithExamAdminReducer, { FifthExamState } from './FifthExamReducer';
 
 const rootReducer = combineReducers({
   authReducer,
