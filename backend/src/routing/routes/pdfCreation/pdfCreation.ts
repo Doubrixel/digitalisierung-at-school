@@ -1,11 +1,9 @@
-/* eslint-disable */
+/* eslint-disable @typescript-eslint/ban-types */
+import {getFirstResult} from '../../../db/dbAccessor';
+import {layoutMultilineText, PDFDocument, rgb, StandardFonts} from 'pdf-lib';
 
-import {getFirstResult} from "../../../db/dbAccessor";
-import {layoutMultilineText} from "pdf-lib";
-
-const { PDFDocument, rgb, StandardFonts } = require('pdf-lib');
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 interface iAbiturDetails {
     id: number,
@@ -46,47 +44,47 @@ interface iTransitionDates {
 
 
 export async function makePdf(isFormblatt1: boolean, studentID: string):Promise<string> {
-    const pdfPath = '../../../../../data/'
+    const pdfPath = '../../../../../data/';
 
-    //Get abiturpruefungsdetails and check for details
-    let abiturDetailsSql = "SELECT * FROM abiturpruefungen WHERE studentID='" + studentID + "'";
+    // Get abiturpruefungsdetails and check for details
+    const abiturDetailsSql = "SELECT * FROM abiturpruefungen WHERE studentID='" + studentID + "'";
     const abiturDetails:iAbiturDetails = await getFromDatabase(abiturDetailsSql) as iAbiturDetails;
 
-    //Get student name
-    let studentNameSql = "Select * FROM nutzer WHERE id='" + studentID + "'";
+    // Get student name
+    const studentNameSql = "Select * FROM nutzer WHERE id='" + studentID + "'";
     const studentName:iStudentName = await getFromDatabase(studentNameSql) as iStudentName;
 
-    //Get submission date from DB
-    let abiturYearSql = "SELECT * FROM komponenten WHERE name='5pk'";
+    // Get submission date from DB
+    const abiturYearSql = "SELECT * FROM komponenten WHERE name='5pk'";
     const transitionDates: iTransitionDates = await getFromDatabase(abiturYearSql) as iTransitionDates;
 
 
     if (isFormblatt1) {
-        return makeFormblatt1Pdf(pdfPath, studentID, abiturDetails, studentName, transitionDates) //return davorsetzen später, denke ich...
+        return makeFormblatt1Pdf(pdfPath, studentID, abiturDetails, studentName, transitionDates); // return davorsetzen später, denke ich...
     }
     else {
-        return makeFormblatt3Pdf(pdfPath, studentID, abiturDetails, studentName, transitionDates) //return davorsetzen später, denke ich...
+        return makeFormblatt3Pdf(pdfPath, studentID, abiturDetails, studentName, transitionDates); // return davorsetzen später, denke ich...
     }
 }
 
 async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetails: iAbiturDetails, studentName: iStudentName, transitionDates: iTransitionDates):Promise<string> {
-    //distinguish between PP and BLL
+    // distinguish between PP and BLL
     let formblatt1Path = undefined;
-    if (abiturDetails.art == "PP"){
+    if (abiturDetails.art == 'PP'){
         formblatt1Path = pdfPath + '5_PK_Formblatt1_PP.pdf';
     }
-    else if (abiturDetails.art == "BLL"){
+    else if (abiturDetails.art == 'BLL'){
         formblatt1Path = pdfPath + '5_PK_Formblatt1_BLL.pdf';
     }
     else {
-        throw("Missing abiturDetails")
+        throw('Missing abiturDetails');
     }
 
     const filename = 'testBLL';
 
-    //Setup Submission Date
+    // Setup Submission Date
     const abiturYear:string = transitionDates.transitionDate2.substring(0, 4);
-    const abiturDate:string = transitionDates.transitionDate2.substring(8,10) + "." + transitionDates.transitionDate2.substring(5,7) + "." + abiturYear;
+    const abiturDate:string = transitionDates.transitionDate2.substring(8,10) + '.' + transitionDates.transitionDate2.substring(5,7) + '.' + abiturYear;
 
 
     // Load source pdf
@@ -96,12 +94,12 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
     const doc = await PDFDocument.create();
     const [mainPage] = await doc.copyPages(sourceDoc, [0]);
     doc.addPage(mainPage);
-    const pages = doc.getPages()
-    const firstPage = pages[0]
+    const pages = doc.getPages();
+    const firstPage = pages[0];
 
     // Embed the Helvetica fonts
-    const helveticaFont = await doc.embedFont(StandardFonts.Helvetica)
-    const helveticaBoldFont = await doc.embedFont(StandardFonts.HelveticaBold)
+    const helveticaFont = await doc.embedFont(StandardFonts.Helvetica);
+    const helveticaBoldFont = await doc.embedFont(StandardFonts.HelveticaBold);
 
     firstPage.drawText(abiturYear, {
         x: 315,
@@ -109,7 +107,7 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 14,
         font: helveticaBoldFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(studentName.name, {
         x: 180,
@@ -117,7 +115,7 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 14,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(abiturDetails.partnerStudentName, {
         x: 180,
@@ -125,7 +123,7 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 14,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(abiturDetails.referenzfach, {
         x: 180,
@@ -133,7 +131,7 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 14,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(abiturDetails.examiner, {
         x: 180,
@@ -141,7 +139,7 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 14,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(abiturDetails.bezugsfach, {
         x: 180,
@@ -149,7 +147,7 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 14,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(abiturDetails.thema, {
         x: 180,
@@ -157,7 +155,7 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 14,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(abiturDate, {
         x: 348,
@@ -165,7 +163,7 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 14,
         font: helveticaBoldFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     // Write the PDF to a file
     const file = path.join(__dirname, filename + '.pdf');
@@ -174,23 +172,23 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
 }
 
 async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetails: iAbiturDetails, studentName: iStudentName, transitionDates: iTransitionDates):Promise<string> {
-    //distinguish between PP and BLL
+    // distinguish between PP and BLL
     let formblatt3Path = undefined;
     let filename = undefined;
-    if (abiturDetails.art == "PP"){
+    if (abiturDetails.art == 'PP'){
         formblatt3Path = pdfPath + '5_PK_Formblatt3_PP.pdf';
         filename = 'DreiertestPP';
     }
-    else if (abiturDetails.art == "BLL"){
+    else if (abiturDetails.art == 'BLL'){
         formblatt3Path = pdfPath + '5_PK_Formblatt3_BLL.pdf';
         filename = 'DreiertestBLL';
     }
     else {
-        throw("Missing abiturDetails")
+        throw('Missing abiturDetails');
     }
 
-    //check for updatedValues
-    //problemQuestion, referenzfach, bezugsfach, examiner, presentationForm, partnerStudentName
+    // check for updatedValues
+    // problemQuestion, referenzfach, bezugsfach, examiner, presentationForm, partnerStudentName
     let finalProblemQuestion;
     let finalReferenzfach;
     let finalBezugsfach;
@@ -248,10 +246,10 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
     console.log(finalPartnerStudentName);
 
     const abiturYear:string = transitionDates.transitionDate3.substring(0, 4);
-    const abiturDate:string = transitionDates.transitionDate3.substring(8,10) + "." + transitionDates.transitionDate3.substring(5,7) + "." + abiturYear;
-    let finalApprovalDate = new Date(transitionDates.transitionDate3);
+    const abiturDate:string = transitionDates.transitionDate3.substring(8,10) + '.' + transitionDates.transitionDate3.substring(5,7) + '.' + abiturYear;
+    const finalApprovalDate = new Date(transitionDates.transitionDate3);
     finalApprovalDate.setDate(finalApprovalDate.getDate()+7);
-    let monthHelper = finalApprovalDate.getUTCMonth() + 1;
+    const monthHelper = finalApprovalDate.getUTCMonth() + 1;
     const finalApprovalDateAsString = finalApprovalDate.getUTCDate() + '.' + monthHelper + '.' + finalApprovalDate.getFullYear();
 
 
@@ -262,15 +260,15 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
     const doc = await PDFDocument.create();
     const [mainPage] = await doc.copyPages(sourceDoc, [0]);
     doc.addPage(mainPage);
-    const pages = doc.getPages()
-    const firstPage = pages[0]
-    const { width, height } = firstPage.getSize()
+    const pages = doc.getPages();
+    const firstPage = pages[0];
+    const { width, height } = firstPage.getSize();
     console.log(width);
     console.log(height);
 
     // Embed the Helvetica fonts
-    const helveticaFont = await doc.embedFont(StandardFonts.Helvetica)
-    const helveticaBoldFont = await doc.embedFont(StandardFonts.HelveticaBold)
+    const helveticaFont = await doc.embedFont(StandardFonts.Helvetica);
+    const helveticaBoldFont = await doc.embedFont(StandardFonts.HelveticaBold);
 
     firstPage.drawText(abiturYear, {
         x: 318,
@@ -278,7 +276,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 14,
         font: helveticaBoldFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(abiturDate, {
         x: 372,
@@ -286,7 +284,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 10,
         font: helveticaBoldFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(studentName.nachname, {
         x: 125,
@@ -294,7 +292,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 11,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(studentName.vorname, {
         x: 375,
@@ -302,7 +300,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 11,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(abiturDetails.tutor, {
         x: 125,
@@ -310,7 +308,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 11,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     const multiText = layoutMultilineText(finalProblemQuestion, {
         alignment: 0,
@@ -322,17 +320,17 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
             x: 200,
             y: 100
         }
-    })
+    });
 
     for(let i = 0; i < multiText.lines.length; i++) {
-        if (i > 2) {break}
+        if (i > 2) {break;}
         firstPage.drawText(`${multiText.lines[i].text}`, {
             x: 75,
             y: 591.5 - i*20.2,
             size: 12,
             maxWidth: width - 100,
             font: helveticaFont
-        })
+        });
     }
 
     firstPage.drawText(finalReferenzfach, {
@@ -341,7 +339,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 11,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(finalBezugsfach, {
         x: 217,
@@ -349,7 +347,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 11,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
     firstPage.drawText(finalExaminer, {
         x: 217,
@@ -357,16 +355,16 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
         size: 11,
         font: helveticaFont,
         color: rgb(0.0, 0.0, 0.0),
-    })
+    });
 
-    if (abiturDetails.art == "BLL") {
+    if (abiturDetails.art == 'BLL') {
         firstPage.drawText(finalPresentationForm, {
             x: 75,
             y: 438.2,
             size: 11,
             font: helveticaFont,
             color: rgb(0.0, 0.0, 0.0),
-        })
+        });
 
         firstPage.drawText(finalPartnerStudentName, {
             x: 75,
@@ -374,7 +372,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
             size: 11,
             font: helveticaFont,
             color: rgb(0.0, 0.0, 0.0),
-        })
+        });
 
         firstPage.drawText('xx.xx.xxxx', {
             x: 482.2,
@@ -382,7 +380,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
             size: 10.5,
             font: helveticaBoldFont,
             color: rgb(0.0, 0.0, 0.0),
-        })
+        });
 
         firstPage.drawText(finalApprovalDateAsString, {
             x: 393.2,
@@ -390,16 +388,16 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
             size: 10.5,
             font: helveticaBoldFont,
             color: rgb(0.0, 0.0, 0.0),
-        })
+        });
     }
-    else if (abiturDetails.art == "PP") {
+    else if (abiturDetails.art == 'PP') {
         firstPage.drawText(finalPartnerStudentName, {
             x: 75,
             y: 438.2,
             size: 11,
             font: helveticaFont,
             color: rgb(0.0, 0.0, 0.0),
-        })
+        });
 
         firstPage.drawText('xx.xx.xxxx', {
             x: 253,
@@ -407,7 +405,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
             size: 10.5,
             font: helveticaBoldFont,
             color: rgb(0.0, 0.0, 0.0),
-        })
+        });
 
         firstPage.drawText(finalApprovalDateAsString, {
             x: 393.2,
@@ -415,7 +413,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
             size: 10.5,
             font: helveticaBoldFont,
             color: rgb(0.0, 0.0, 0.0),
-        })
+        });
     }
 
 
@@ -430,16 +428,19 @@ async function getFromDatabase(sql: string){
     return new Promise<object>(resolve => {
         getFirstResult(sql, [], (obj, err) => {
             if (err) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                // @ts-ignore
-                resolve (undefined)
+                resolve (undefined);
             } else {
                 if (obj) {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     resolve (obj);
                 } else {
-                    console.log('object not there')
+                    console.log('object not there');
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
-                    resolve (undefined)
+                    resolve (undefined);
                 }
             }
         });
