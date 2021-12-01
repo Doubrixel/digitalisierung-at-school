@@ -12,41 +12,32 @@ import Logo from '../../images/kant.png';
 import useWindowDimensions from '../../hooks/useWindowDimensions';
 import './Toolbar.css';
 import { LoginLogoutButton } from './LoginLogoutButton/LoginLogoutButton';
+import {
+  FA_ADMIN_ROLE, FIFTH_PK_ADMIN_ROLE, STUDENT_ROLE, SUPER_ADMIN_ROLE,
+} from '../../reducer/authReducer';
 
 function Toolbar(props) {
   const {
-    isLoggedIn, userName, role, accessibleComponents,
+    isLoggedIn, userName, role,
   } = props;
-  let approprateRolePath;
-  if (role === 'student') {
-    approprateRolePath = 'student';
-  } else if (role === 'admin') {
-    approprateRolePath = 'admin';
+  let appropriateRolePath;
+  if (role === STUDENT_ROLE) {
+    appropriateRolePath = 'student';
+  } else if (role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE) {
+    appropriateRolePath = 'admin';
   }
   const links = [
     {
       id: 1,
-      name: 'AG-Buchung',
-      path: `/${approprateRolePath}/ag`,
-      disabled: (!(accessibleComponents.includes('ag')) && role === 'admin') || !isLoggedIn || !approprateRolePath,
+      name: 'Facharbeit',
+      path: `/${appropriateRolePath}/facharbeit`,
+      disabled: role === FIFTH_PK_ADMIN_ROLE || !isLoggedIn || !appropriateRolePath,
     },
     {
       id: 2,
-      name: 'Facharbeit',
-      path: `/${approprateRolePath}/facharbeit`,
-      disabled: (!(accessibleComponents.includes('fa')) && role === 'admin') || !isLoggedIn || !approprateRolePath,
-    },
-    {
-      id: 3,
-      name: 'Wahlpflicht',
-      path: `/${approprateRolePath}/wahlpflicht`,
-      disabled: (!(accessibleComponents.includes('wpf')) && role === 'admin') || !isLoggedIn || !approprateRolePath,
-    },
-    {
-      id: 4,
       name: '5. PK',
-      path: `/${approprateRolePath}/pruefungskomponente`,
-      disabled: (!(accessibleComponents.includes('5pk')) && role === 'admin') || !isLoggedIn || !approprateRolePath,
+      path: `/${appropriateRolePath}/pruefungskomponente`,
+      disabled: role === FA_ADMIN_ROLE || !isLoggedIn || !appropriateRolePath,
     },
   ];
   const windowDimensions = useWindowDimensions();
@@ -100,7 +91,7 @@ function Toolbar(props) {
             }
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <LoginLogoutButton />
-              { userName === '' ? null : `Eingeloggt als:${userName}` }
+              { isLoggedIn ? `Eingeloggt als:${userName}` : null }
             </div>
           </div>
         ) : undefined
@@ -114,7 +105,6 @@ function mapStateToProps(state) {
     isLoggedIn: state.authReducer.isLoggedIn,
     userName: state.authReducer.userName,
     role: state.authReducer.role,
-    accessibleComponents: state.authReducer.accessibleComponents,
   };
 }
 

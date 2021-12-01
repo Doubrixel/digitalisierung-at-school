@@ -24,7 +24,6 @@
   color: var(--blue);
   background: transparent;
   border-color: transparent;
-  transition: var(--transition);
   cursor: pointer;
 }
 
@@ -54,7 +53,7 @@
     display: flex;
     justify-content: space-between;
     align-self: flex-end;
-    width: 1000px;
+    width: 700px;
   }
 }
 
