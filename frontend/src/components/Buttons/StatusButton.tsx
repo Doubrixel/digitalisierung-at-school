@@ -25,6 +25,13 @@ function StatusButton() {
   };
 
   const save = () => {
+    const body = {
+      transitionDate1,
+      transitionDate2,
+      transitionDate3
+    }
+    sendAPIRequest('/api/components/fifthExam/setTransitionDates', 'POST', body);
+
     close();
   };
 
@@ -87,7 +94,7 @@ function StatusButton() {
             fullWidth
             variant="outlined"
             value={transitionDate2}
-            onChange={(event) => setTransitionDate1(event.target.value)}
+            onChange={(event) => setTransitionDate2(event.target.value)}
             style={{ marginBottom: '50px' }}
           />
           <DialogContentText>
@@ -101,7 +108,7 @@ function StatusButton() {
             fullWidth
             variant="outlined"
             value={transitionDate3}
-            onChange={(event) => setTransitionDate2(event.target.value)}
+            onChange={(event) => setTransitionDate3(event.target.value)}
             style={{ marginBottom: '50px' }}
           />
           <Button variant="contained" onClick={reset} color="secondary">Zurücksetzen</Button>
