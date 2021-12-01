@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import './App.css';
 import {
   BrowserRouter, Switch, Route,
@@ -25,10 +25,14 @@ import sendAPIRequest from './APIRequestFunction';
 import { setUserData } from './actions/authActions';
 
 function App() {
+  const dispatch = useDispatch();
   sendAPIRequest('auth/getUserData', 'GET')
     .then((response) => response.json())
-    .then((data) => { setUserData(data.name, data.roles); })
-    .catch((err) => console.log(`error: ${err.message}`));
+    .then((data) => { dispatch(setUserData(data.name, data.roles)); })
+    .catch((err) => {
+      console.log(`error: ${err.message}`);
+      dispatch(setUserData('Nicht eingeloggt', []));
+    });
   return (
     <BrowserRouter>
       <Toolbar />
@@ -58,4 +62,4 @@ function App() {
   );
 }
 
-export default connect(null, { setUserData })(App);
+export default App;
