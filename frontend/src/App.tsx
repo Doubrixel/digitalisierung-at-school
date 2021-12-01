@@ -35,27 +35,29 @@ function App() {
     });
   return (
     <BrowserRouter>
-      <Toolbar />
-      <div id="applicationRootDiv">
-        <Switch>
-          {/* Schüler-Seiten */}
-          <Route exact path="/"><HomePage /></Route>
-          <Route exact path="/student/ag"><AGEntryPage /></Route>
-          <Route exact path="/student/ag/agbuchung"><AGSinglePage /></Route>
-          <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
-          <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
-          <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /></Route>
-          <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
-          <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
-          {/* Admin-Seiten */}
-          <Route exact path="/settings"><SettingsPage /></Route>
-          <Route exact path="/admin/ag"><AdminAGPage /></Route>
-          <Route exact path="/admin/facharbeit"><AdminFacharbeitPage /></Route>
-          <Route exact path="/admin/wahlpflicht"><AdminWahlpflichtPage /></Route>
-          <Route exact path="/admin/pruefungskomponente"><AdminPruefungskomponentePage /></Route>
-          <Route exact path="/admin/pruefungskomponente/editStudentApplication"><PruefungskomponenteEntryPage isGettingEditedByAdmin /></Route>
-          <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
-        </Switch>
+      <div id="applicationContent">
+        <Toolbar />
+        <div id="applicationRootDiv">
+          <Switch>
+            {/* Schüler-Seiten */}
+            <Route exact path="/"><HomePage /></Route>
+            <Route exact path="/student/ag"><AGEntryPage /></Route>
+            <Route exact path="/student/ag/agbuchung"><AGSinglePage /></Route>
+            <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
+            <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
+            <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /></Route>
+            <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
+            <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
+            {/* Admin-Seiten */}
+            <Route exact path="/settings"><SettingsPage /></Route>
+            <Route exact path="/admin/ag"><AdminAGPage /></Route>
+            <Route exact path="/admin/facharbeit"><AdminFacharbeitPage /></Route>
+            <Route exact path="/admin/wahlpflicht"><AdminWahlpflichtPage /></Route>
+            <Route exact path="/admin/pruefungskomponente"><AdminPruefungskomponentePage /></Route>
+            <Route exact path="/admin/pruefungskomponente/editStudentApplication"><PruefungskomponenteEntryPage isGettingEditedByAdmin /></Route>
+            <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
+          </Switch>
+        </div>
       </div>
       <Footer />
     </BrowserRouter>

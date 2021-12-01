@@ -5,6 +5,7 @@
     width: 100%;
     color: #cdc9c9;
     height: var(--footerHeight);
+    padding-top: 1px;
 }
 
 #erreichbarkeit {
