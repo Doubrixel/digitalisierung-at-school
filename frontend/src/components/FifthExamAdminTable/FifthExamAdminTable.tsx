@@ -39,7 +39,6 @@ import { ExamInterface } from "../../reducer/5PKAdminReducer";
 import { useEffect } from 'react';
 import { setPreFilledDataIn5PKFormEditedByAdmin } from '../../actions/FifthExamActions'
 import sendApiRequest from "../../APIRequestFunction"
-import {waitFor} from "@testing-library/react";
 import {TextField} from "@material-ui/core";
 
 let handleOnClickApprove;
@@ -322,15 +321,19 @@ function FifthExamAdminTable(props) {
     sendApiRequest('/api/abitur/setApprovalState', 'POST', body)
       .then((response) => {
         if (response.status != 200) {
-          console.log('Fehler beim Genehmigen/Ablehnen: Http-Statuscode: ' + response.status)
+          console.log('Fehler beim Ablehnen: Http-Statuscode: ' + response.status)
         }
       });
+    //no need for page reloading
+    rows.map((row) => {
+      if(String(row.examId) == currentSelectedExamId){
+        row.approved=false;
+      }
+    });
   };
   const handleCurrentDeclineReasonOnChange= (event) => {
     setCurrentDeclineReason(event.target.value);
   };
-
-
 
   const history = useHistory();
   handleEditRowClick = (selectedRows) => {
@@ -344,9 +347,9 @@ function FifthExamAdminTable(props) {
     history.push('/admin/pruefungskomponente/editStudentApplication')
   }
 
-  //body = {examId: examID, approved: isApproved, reason: 'weil ich nicht wollte'};
   handleOnClickApprove= (event: React.MouseEvent<unknown>, isApproved: boolean) => {
-    if(isApproved){//Genehmigen
+    if(isApproved){
+      //approve
       let body, examId;
 
       for (let i = 0; i < selected.length; i++) {
@@ -355,11 +358,18 @@ function FifthExamAdminTable(props) {
         sendApiRequest('/api/abitur/setApprovalState', 'POST', body)
           .then((response) => {
             if (response.status != 200) {
-              console.log('Fehler beim Genehmigen/Ablehnen: Http-Statuscode: ' + response.status)
+              console.log('Fehler beim Genehmigen: Http-Statuscode: ' + response.status)
             }
           });
+        //no need for page reloading
+        rows.map((row) => {
+          if(String(row.examId) == examId){
+            row.approved=true;
+          }
+        });
       }
-    }else{//Ablehnen
+    }else{
+      //decline
       setCurrentSelectedExamId(selected[0]);
       setShowDeclineReasonDialog(true);
     }
@@ -426,10 +436,7 @@ function FifthExamAdminTable(props) {
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   const isPropertyUpdated = (updatedProperty: any) =>{
-    if(updatedProperty===('' || null) ){
-      return false;
-    }
-    return true;
+    return updatedProperty !== ('' || null);
   }
 
   useEffect(() => {
@@ -561,16 +568,16 @@ function FifthExamAdminTable(props) {
       >
         <DialogTitle id="submit_evaluations_dialog_title">{'Ablehnungsgrund: '}</DialogTitle>
         <DialogContent>
-          <TextField>
+          <TextField
             label="Ablehnungsgrund"
             variant="outlined"
             onChange={handleCurrentDeclineReasonOnChange}
-            value={currentDeclineReason}
+            value={currentDeclineReason}>
           </TextField>
         </DialogContent>
         <DialogActions>
           <Button onClick={hideDeclineReasonAndSendApiRequest} color="primary">
-            Schließen
+            Bestätigen
           </Button>
         </DialogActions>
     </Dialog>
