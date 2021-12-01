@@ -46,7 +46,7 @@ async function getClassFromGroups(groups: Group[]|Group): Promise<string> {
                 }
             });
         } else {
-            const name = groups.name;
+            const name = Object.values(groups)[0].name;
             if (name.startsWith('klasse')) {
                 resolve(name.split('-')[1]);
             }
