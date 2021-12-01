@@ -39,49 +39,51 @@ function App(props) {
     });
   return (
     <BrowserRouter>
-      <Toolbar />
-      <div id="applicationRootDiv">
-        <Switch>
-          {/* Schüler-Seiten */}
-          <Route exact path="/"><HomePage /></Route>
-          <Route exact path="/student/ag"><AGEntryPage /></Route>
-          <Route exact path="/student/ag/agbuchung"><AGSinglePage /></Route>
-          <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
-          <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
-          <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /></Route>
-          <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
-          <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
-          {/* Admin-Seiten */}
-          {/* Facharbeitsseiten */}
-          <Route exact path="/admin/facharbeit">
-            { role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
-              ? <AdminFacharbeitPage /> : <NoAccessPage /> }
-          </Route>
-          <Route exact path="/admin/facharbeit/einzelnerSchueler">
-            { role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
-              ? <AdminFacharbeitEinzelnerSchueler /> : <NoAccessPage /> }
-          </Route>
-          <Route exact path="/admin/facharbeit">
-            { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
-              ? <AdminFacharbeitPage /> : <NoAccessPage /> }
-          </Route>
-          <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
+      <div id="applicationContent">
+        <Toolbar />
+        <div id="applicationRootDiv">
+          <Switch>
+            {/* Schüler-Seiten */}
+            <Route exact path="/"><HomePage /></Route>
+            <Route exact path="/student/ag"><AGEntryPage /></Route>
+            <Route exact path="/student/ag/agbuchung"><AGSinglePage /></Route>
+            <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
+            <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
+            <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /></Route>
+            <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
+            <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
+            {/* Admin-Seiten */}
+            {/* Facharbeitsseiten */}
+            <Route exact path="/admin/facharbeit">
+              { role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
+                ? <AdminFacharbeitPage /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/admin/facharbeit/einzelnerSchueler">
+              { role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
+                ? <AdminFacharbeitEinzelnerSchueler /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/admin/facharbeit">
+              { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+                ? <AdminFacharbeitPage /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
 
-          {/* 5. PK seiten */}
-          <Route exact path="/admin/pruefungskomponente">
-            { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
-              ? <AdminPruefungskomponentePage /> : <NoAccessPage /> }
-          </Route>
-          <Route exact path="/admin/pruefungskomponente">
-            { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
-              ? <AdminPruefungskomponentePage /> : <NoAccessPage /> }
-          </Route>
-          <Route exact path="/admin/pruefungskomponente/editStudentApplication">
-            { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
-              ? <PruefungskomponenteEntryPage isGettingEditedByAdmin /> : <NoAccessPage /> }
-          </Route>
-        </Switch>
-      </div>
+            {/* 5. PK seiten */}
+            <Route exact path="/admin/pruefungskomponente">
+              { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+                ? <AdminPruefungskomponentePage /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/admin/pruefungskomponente">
+              { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+                ? <AdminPruefungskomponentePage /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/admin/pruefungskomponente/editStudentApplication">
+              { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+                ? <PruefungskomponenteEntryPage isGettingEditedByAdmin /> : <NoAccessPage /> }
+            </Route>
+          </Switch>
+         </div>
+        </div>
       <Footer />
     </BrowserRouter>
   );
