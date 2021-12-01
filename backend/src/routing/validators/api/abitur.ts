@@ -17,7 +17,11 @@ export default class AbiturValidators {
         AbiturValidators.isOptionalString('updatedProblemQuestion'),
         AbiturValidators.isOptionalString('presentationForm'),
         AbiturValidators.isOptionalString('updatedPresentationForm'),
+        AbiturValidators.isOptionalString('tutor'),
+        AbiturValidators.isOptionalString('updatedTutor'),
         body('examType').isString().isIn(['BLL', 'PP']).optional(),
+        body('submitNumber').isInt().isIn([1,2]),
+        body('submitDate').isISO8601(),
     ];
     static POSTsetApprovalState = [
         body('examId').isInt(),
@@ -35,6 +39,7 @@ export default class AbiturValidators {
         AbiturValidators.isOptionalString('updatedTopicArea'),
         AbiturValidators.isOptionalString('updatedProblemQuestion'),
         AbiturValidators.isOptionalString('updatedPresentationForm'),
+        AbiturValidators.isOptionalString('updatedTutor'),
         body('examType').isString().isIn(['BLL', 'PP'])
     ];
 }
