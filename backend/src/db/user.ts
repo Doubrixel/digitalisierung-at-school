@@ -36,15 +36,21 @@ async function isUserInDb(uuid: string): Promise<boolean> {
     });
 }
 
-async function getClassFromGroups(groups: Group[]): Promise<string> {
+async function getClassFromGroups(groups: Group[]|Group): Promise<string> {
     return new Promise<string>(resolve => {
-        groups.forEach(group => {
-            const name = group.name;
+        if ('name' in groups) {
+            const name = groups.name;
             if (name.startsWith('klasse')) {
                 resolve(name.split('-')[1]);
             }
-        });
-
+        } else {
+            groups.forEach(group => {
+                const name = group.name;
+                if (name.startsWith('klasse')) {
+                    resolve(name.split('-')[1]);
+                }
+            });
+        }
         resolve('');
     });
 }
