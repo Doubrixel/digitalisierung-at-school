@@ -26,4 +26,15 @@ export default class AbiturValidators {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         body('reason').if((value: any, {req}: any) => !req.body.approved).isString(),
     ];
+
+    static POSTeditData = [
+        AbiturValidators.isOptionalString('updatedExaminer'),
+        AbiturValidators.isOptionalString('updatedBezugsfach'),
+        AbiturValidators.isOptionalString('updatedPartnerStudentName'),
+        AbiturValidators.isOptionalString('updatedReferenzfach'),
+        AbiturValidators.isOptionalString('updatedTopicArea'),
+        AbiturValidators.isOptionalString('updatedProblemQuestion'),
+        AbiturValidators.isOptionalString('updatedPresentationForm'),
+        body('examType').isString().isIn(['BLL', 'PP'])
+    ];
 }

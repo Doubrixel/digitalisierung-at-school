@@ -2,11 +2,13 @@ import {NextFunction, Request, Response} from 'express';
 import {
     iservConnectToLoginError,
     iservRevokeTokenError,
-    iservRetrieveUserDataError
+    iservRetrieveUserDataError, homepage
 } from '../../auth/staticAuthStrings';
 import {clearSessionCookie, setSessionCookie} from '../../auth/cookie';
-import {deserializeAuthState, getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
-import {serialize, User} from '../../auth';
+import {getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
+import {createUser, serialize} from '../../auth';
+import {User} from '../../../types/sso';
+import {addOrUpdateUserInDb} from '../../db/user';
 
 export default class Auth {
 
@@ -16,7 +18,7 @@ export default class Auth {
                 const backToPath = req.query.backTo as string;
                 const state = serializeAuthState({ backToPath });
                 const authUrl = req.app.authClient?.authorizationUrl({
-                    scope: 'openid roles uuid profile',
+                    scope: 'openid roles uuid profile groups',
                     state,
                 });
 
@@ -39,8 +41,6 @@ export default class Auth {
         try {
             const state = getAuthStateCookie(req);
 
-            const { backToPath } = deserializeAuthState(state);
-
             const client = req.app.authClient;
 
             const params = client!.callbackParams(req);
@@ -53,12 +53,12 @@ export default class Auth {
 
             const user = await client!.userinfo(tokenSet.access_token!);
 
-            console.log(user);
+            await addOrUpdateUserInDb(await createUser(user));
 
             const sessionCookie = serialize({ tokenSet, user });
             setSessionCookie(res, sessionCookie);
 
-            res.redirect(backToPath);
+            res.redirect(homepage);
         } catch (e) {
             console.error(iservRetrieveUserDataError, e);
             return next(e);
@@ -84,13 +84,16 @@ export default class Auth {
         if (!session) {
             return next(new Error('unauthenticated'));
         } else {
-            const userString = JSON.stringify(session.user);
-            const user: User = JSON.parse(userString);
+            const user: User = await createUser(session.user);
             res.json(user);
         }
     }
 
     static GETstudentTest(req: Request, res: Response, next: NextFunction): void {
         res.send('Student angemeldet');
+    }
+
+    static GETadminTest(req: Request, res: Response, next: NextFunction): void {
+        res.send('Admin angemeldet');
     }
 }

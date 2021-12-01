@@ -1,6 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import './App.css';
+import { useDispatch } from 'react-redux';
 import {
   BrowserRouter, Switch, Route,
 } from 'react-router-dom';
@@ -20,9 +20,20 @@ import AdminFacharbeitPage from './pages/admin/AdminFacharbeitPage';
 import AdminPruefungskomponentePage from './pages/admin/AdminPruefungskomponentePage';
 import AdminFacharbeitEinzelnerSchueler from './pages/admin/AdminFacharbeitEinzelnerSchueler';
 import NoAccessPage from './pages/NoAccessPage';
+import sendAPIRequest from './APIRequestFunction';
+import { setUserData } from './actions/authActions';
 
 function App(props) {
   const { role } = props;
+function App() {
+  const dispatch = useDispatch();
+  sendAPIRequest('auth/getUserData', 'GET')
+    .then((response) => response.json())
+    .then((data) => { dispatch(setUserData(data.name, data.roles)); })
+    .catch((err) => {
+      console.log(`error: ${err.message}`);
+      dispatch(setUserData('Nicht eingeloggt', []));
+    });
   return (
     <BrowserRouter>
       <Toolbar />
@@ -34,7 +45,7 @@ function App(props) {
           <Route exact path="/student/ag/agbuchung"><AGSinglePage /></Route>
           <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
           <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
-          <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
+          <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /></Route>
           <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
           <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
           {/* Admin-Seiten */}
@@ -47,6 +58,13 @@ function App(props) {
           <Route exact path="/admin/facharbeit/einzelnerSchueler">
             { role === 'admin' ? <AdminFacharbeitEinzelnerSchueler /> : <NoAccessPage /> }
           </Route>
+          <Route exact path="/settings"><SettingsPage /></Route>
+          <Route exact path="/admin/ag"><AdminAGPage /></Route>
+          <Route exact path="/admin/facharbeit"><AdminFacharbeitPage /></Route>
+          <Route exact path="/admin/wahlpflicht"><AdminWahlpflichtPage /></Route>
+          <Route exact path="/admin/pruefungskomponente"><AdminPruefungskomponentePage /></Route>
+          <Route exact path="/admin/pruefungskomponente/editStudentApplication"><PruefungskomponenteEntryPage isGettingEditedByAdmin /></Route>
+          <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
         </Switch>
       </div>
       <Footer />

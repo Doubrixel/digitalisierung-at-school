@@ -10,6 +10,7 @@ export default (): Router => {
     router.get('/getExamData', Abitur.GETgetExamData);
     router.post('/applyForTopic', AbiturValidators.POSTapplyForTopic, Abitur.POSTapplyForTopic);
     router.post('/setApprovalState', AbiturValidators.POSTsetApprovalState, Abitur.POSTsetApprovalState);
+    router.post('/editData/:examId', AbiturValidators.POSTeditData, Abitur.POSTeditData);
 
     return router;
 };
