@@ -27,8 +27,8 @@ api/components/getTransitionDatesOfAll (GET)
 
 
 4 Thema bearbeiten
-/api/facharbeit/editTopic (POST)
-	{Int studentId, String topic, Int subjectId, Int choosenTeacherId, Int subjectTeacherId} (Wenn studentID übergeben wird, muss geprüft werden, ob der sender ein admin ist. weil nur admins können topics von anderen editieren)
+/api/facharbeit/editTopic (POST) (Nur für Admins)
+	{String topic, String subject, String choosenTeacher, String subjectTeacher} 
 	->{}
 
 6 Arbeit hochladen
