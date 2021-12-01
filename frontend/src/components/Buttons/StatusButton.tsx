@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -28,8 +27,8 @@ function StatusButton() {
     const body = {
       transitionDate1,
       transitionDate2,
-      transitionDate3
-    }
+      transitionDate3,
+    };
     sendAPIRequest('/api/components/fifthExam/setTransitionDates', 'POST', body);
 
     close();
@@ -40,18 +39,19 @@ function StatusButton() {
   };
 
   useEffect(() => {
-    sendAPIRequest("/api/components/getTransitionDatesOfAll", 'GET')
-    .then((response) => response.json())
-    .then((json) => {
-        // @ts-ignore
-        let fifthExamDates
-        for(let i = 0; i < json.length; i++) {
-          if(json[i].name == "fifthExam") {
+    sendAPIRequest('/api/components/getTransitionDatesOfAll', 'GET')
+      .then((response) => response.json())
+      .then((json) => {
+      // @ts-ignore
+        let fifthExamDates;
+        // eslint-disable-next-line
+        for (let i = 0; i < json.length; i++) {
+          if (json[i].name === 'fifthExam') {
             fifthExamDates = json[i];
           }
-        }      
+        }
 
-        setTransitionDate1(fifthExamDates.transitionDate1); 
+        setTransitionDate1(fifthExamDates.transitionDate1);
         setTransitionDate2(fifthExamDates.transitionDate2);
         setTransitionDate3(fifthExamDates.transitionDate3);
       });
