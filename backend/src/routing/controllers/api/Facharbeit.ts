@@ -19,11 +19,12 @@ export default class Facharbeit {
         `;
         getAllResults(sql, [], defaultGetAllCallback(res));
     }
-    static POSTchooseTopic(req: Request, res: Response): void {
+    static async POSTchooseTopic(req: Request, res: Response): Promise<void> {
         if (rejectWhenValidationsFail(req, res)) return;
 
         const sql = 'SELECT id FROM facharbeiten WHERE studentID = ?';
-        const studentId = getStudentId();
+        const studentId = await getStudentId(req, res);
+        if (studentId === -1) return;
         getFirstResult(sql, [studentId], (obj, err) => {
             if (err) {
                 res.status(500).json(err.name);

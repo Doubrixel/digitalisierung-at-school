@@ -1,11 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import './App.css';
 import {
   BrowserRouter, Switch, Route,
 } from 'react-router-dom';
 import Toolbar from './components/Toolbar/Toolbar';
 import Footer from './components/Footer/Footer';
-
 // Pages Import
 import HomePage from './pages/student/HomePage';
 import AGEntryPage from './pages/student/AGEntryPage';
@@ -21,8 +21,14 @@ import AdminAGPage from './pages/admin/AdminAGPage';
 import AdminWahlpflichtPage from './pages/admin/AdminWahlpflichtPage';
 import AdminPruefungskomponentePage from './pages/admin/AdminPruefungskomponentePage';
 import AdminFacharbeitEinzelnerSchueler from './pages/admin/AdminFacharbeitEinzelnerSchueler';
+import sendAPIRequest from './APIRequestFunction';
+import { setUserData } from './actions/authActions';
 
 function App() {
+  sendAPIRequest('auth/getUserData', 'GET')
+    .then((response) => response.json())
+    .then((data) => { console.log(data); })
+    .catch((err) => console.log(`error: ${err.message}`));
   return (
     <BrowserRouter>
       <Toolbar />
@@ -52,4 +58,4 @@ function App() {
   );
 }
 
-export default App;
+export default connect(null, { setUserData })(App);
