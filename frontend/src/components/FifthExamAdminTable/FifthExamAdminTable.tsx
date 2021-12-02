@@ -305,6 +305,8 @@ function FifthExamAdminTable(props) {
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const [forceRerender, setForceRerender] = React.useState(true);
+
   const rows: ExamInterface[] = useSelector((state: RootState) => state.fithExamAdminReducer.allExams )
 
   const showFullTopic = (annotation) => {
@@ -361,10 +363,10 @@ function FifthExamAdminTable(props) {
               console.log('Fehler beim Genehmigen: Http-Statuscode: ' + response.status)
             }
           });
-        //no need for page reloading
         rows.map((row) => {
           if(String(row.examId) == examId){
             row.approved=true;
+            setForceRerender(!forceRerender);
           }
         });
       }
