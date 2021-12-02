@@ -42,4 +42,7 @@ export default class AbiturValidators {
         AbiturValidators.isOptionalString('updatedTutor'),
         body('examType').isString().isIn(['BLL', 'PP'])
     ];
+    static GETgetPdf = [
+        body('submitNumber').isInt().isIn([1,2])
+    ]
 }

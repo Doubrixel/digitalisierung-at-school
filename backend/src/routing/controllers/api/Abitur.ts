@@ -11,6 +11,8 @@ import {
 } from '../../../db/dbAccessor';
 import rejectWhenValidationsFail from '../../validators/rejectWhenValidationsFail';
 import {getStudentId} from '../../../auth/getRequestCookieData';
+import * as pdfCreation from '../../routes/pdfCreation/pdfCreation';
+import fs from 'fs';
 
 export default class Abitur {
 
@@ -180,5 +182,23 @@ export default class Abitur {
         const sql = 'UPDATE abiturpruefungen SET' +setString + ' WHERE id = ?';
         args.push(examId);
         updateData(sql, args, defaultUpdateCallback(res));
+    }
+    static async GETgetPdf(req: Request, res: Response): Promise<void> {
+        if (rejectWhenValidationsFail(req, res)) return;
+        const studentID = await getStudentId(req, res);
+        if (studentID == -1) return;
+        const { submitNumber } = req.body;
+        try {
+            const pdfPath = await pdfCreation.makePdf(submitNumber, studentID);
+            const rueckmeldungString = submitNumber === 1 ? '_erste_rueckmeldung' : '_finale_rueckmeldung';
+            res.download(pdfPath.filePath, pdfPath.studentName+rueckmeldungString+'.pdf');
+            setTimeout(() => {
+                fs.rm(pdfPath.filePath, () => {console.log('Pdf deleted.');});
+            },10000);
+        } catch (e:any) {
+            console.error(e.message);
+            res.status(500).json('unexpected error while creating PDF: '+ e.message);
+        }
+
     }
 }
