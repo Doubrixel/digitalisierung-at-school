@@ -9,7 +9,7 @@ import {
 import TextField from '@mui/material/TextField';
 import CreatePDFButton from '../Buttons/CreatePDFButton';
 import sendAPIRequest from '../../APIRequestFunction';
-import { getComponentStatusId, getNextTransitionDate } from '../ReusableComponentsAndFunctions/processComponentStatusFunctions';
+import { getComponentStatusId, getTransitionDisplayString } from '../ReusableComponentsAndFunctions/processComponentStatusFunctions';
 
 function FifthExamFormComponent(props) {
   const { isGettingEditedByAdmin, preFilledDataIn5PKFormEditedByAdmin, userName } = props;
@@ -62,7 +62,7 @@ function FifthExamFormComponent(props) {
   const [BLLCheckBox4, setBLLCheckBox4] = useState(false);
 
   const [rejectionReason, setRejectionReason] = useState('');
-  const [applicationDeadline, setApplicationDeadline] = useState('Keine Deadline vorhanden');
+  const [applicationDeadlineString, setApplicationDeadlineString] = useState('Keine Deadline vorhanden');
 
   // originalDataField Handler
   const handleExamTypeInputChange = (event) => {
@@ -202,7 +202,7 @@ function FifthExamFormComponent(props) {
           localComponentStatusId = getComponentStatusId(data, 'fifthExam');
           setAppropriateFormStatus(localComponentStatusId, null, null, null);
           setComponentStatusId(localComponentStatusId);
-          setApplicationDeadline(getNextTransitionDate(data, 'fifthExam'));
+          setApplicationDeadlineString(getTransitionDisplayString(data, 'fifthExam'));
         })
         .then(() => {
           sendAPIRequest('api/abitur/getExamData', 'GET')
@@ -537,7 +537,7 @@ function FifthExamFormComponent(props) {
   function getAppropriateTooltip() {
     let tooltipText;
     if (formStatus === 6) {
-      tooltipText = 'Der Antrag wurde aufgrund der Fristüberschreitung deaktiviert. Bitte reichen sie ihren Antrag über den Button "Antrag nachträglich einreichen" ein';
+      tooltipText = 'Der Button wurde aufgrund der Fristüberschreitung deaktiviert. Bitte reichen sie ihren Antrag über den Button "Antrag nachträglich einreichen" ein';
     } else if (formStatus === 1) {
       tooltipText = 'Es müssen die Prüfungsart, Prüflingsname, Referenzfach, Bezugsfach, Tutor, Prüfer:in und Themenbereich  eingetragen werden.';
     } else if (formStatus === 2 && examType === 'PP') {
@@ -590,7 +590,15 @@ function FifthExamFormComponent(props) {
     }
     if (formStatus === 6) {
       buttonArray.push(
-        <Tooltip title="Alle bearbeitbaren Felder (außer das Partnerfeld) müssen ausgefüllt werden.">
+        <Tooltip
+          style={{ fontSize: 'medium' }}
+          title={(
+            <Typography style={{ fontSize: 'medium' }}>
+              Alle bearbeitbaren
+              Felder (außer das Partnerfeld) müssen ausgefüllt werden.
+            </Typography>
+          )}
+        >
           <span>
             <Button
               id="lateSubmitButtonFifthExam"
@@ -638,12 +646,12 @@ function FifthExamFormComponent(props) {
         </div>
         {formStatus === 2 || formStatus === 3 ? getAppropriateCheckboxes() : null}
         <p style={{ color: 'red', fontWeight: 'bold', marginTop: verticalComponentDistance }}>
-          Abgabetermin:
-          {' '}
-          {`${applicationDeadline.substring(8, 10)}.${applicationDeadline.substring(5, 7)}.${applicationDeadline.substring(0, 4)}`}
-          formStatus:
-          {' '}
-          {formStatus}
+          { applicationDeadlineString }
+          <br />
+          <br />
+          { formStatus === 6
+            ? 'Die Abgabefrist ist abgelaufen. Bitte reichen sie das Formular über den Button "Antrag nachträglich einreichen" ein. Das verspätete Abgabedatum wird registriert.'
+            : null}
         </p>
         <div id="buttonContainer5PK">
           {getSubmitAndGeneratePDFButtons()}
