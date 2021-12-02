@@ -4,6 +4,7 @@ import {deserialize, serialize} from './session';
 import {clearSessionCookie, getSessionCookie, setSessionCookie,} from './cookie';
 import {iservConnectionError, iservLink, unauthenticated} from './staticAuthStrings';
 import {User} from '../../types/sso';
+import {transformGroupToArray} from "../db/user";
 
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -89,30 +90,6 @@ export async function session(
     next();
 }
 
-export async function requireAdmin(
-    req: Request,
-    res: Response,
-    next: NextFunction
-): Promise<void> {
-    const session = req.session;
-    if (!session) {
-        return next(new Error(unauthenticated));
-    } else {
-        let isAdmin = false;
-        const user: User = await createUser(session.user);
-        user.roles.forEach(role => {
-            if (role.id == 'ROLE_ADMIN') {
-                isAdmin = true;
-            }
-        });
-        if (!isAdmin) {
-            return next(new Error('Admin required'));
-        }
-    }
-
-    next();
-}
-
 export async function requireStudent(
     req: Request,
     res: Response,
@@ -123,9 +100,10 @@ export async function requireStudent(
         return next(new Error(unauthenticated));
     } else {
         let isStudent = false;
-        const user: User = await createUser(session.user);
-        user.roles.forEach(role => {
-            if (role.id == 'ROLE_PORTALSCHUELER') {
+        const user = await createUser(session.user);
+        const groups = await transformGroupToArray(user.groups);
+        groups.forEach(group => {
+            if (group.name == 'Schuelerschaft') {
                 isStudent = true;
             }
         });
@@ -137,7 +115,7 @@ export async function requireStudent(
     next();
 }
 
-export async function require5PKAdmin(
+export async function requireAdmin5PK(
     req: Request,
     res: Response,
     next: NextFunction
@@ -147,14 +125,38 @@ export async function require5PKAdmin(
         return next(new Error(unauthenticated));
     } else {
         let is5PKAdmin = false;
-        const user: User = await createUser(session.user);
+        const user = await createUser(session.user);
         user.roles.forEach(role => {
-            if (role.id == 'ROLE_5PKADMIN') {
+            if (role.id == 'ROLE_PORTAL5PK') {
                 is5PKAdmin = true;
             }
         });
         if (!is5PKAdmin) {
             return next(new Error('5PK-Admin required'));
+        }
+    }
+
+    next();
+}
+
+export async function requireAdminFA(
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> {
+    const session = req.session;
+    if (!session) {
+        return next(new Error(unauthenticated));
+    } else {
+        let isAdmin = false;
+        const user = await createUser(session.user);
+        user.roles.forEach(role => {
+            if (role.id == 'ROLE_PORTALFA') {
+                isAdmin = true;
+            }
+        });
+        if (!isAdmin) {
+            return next(new Error('Admin required'));
         }
     }
 
