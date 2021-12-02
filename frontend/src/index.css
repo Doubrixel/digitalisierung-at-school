@@ -14,5 +14,5 @@ body {
   --componentToggleButtonActivatedColor: #3ece47;
   --componentToggleButtonDeactivatedColor: #ff3d3d;
   --footerHeight: 130px;
-  --defaultFormPaperPadding: 2vw;
+  --defaultFormPaperPadding: 1vw;
 }

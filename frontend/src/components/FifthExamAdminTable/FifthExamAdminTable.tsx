@@ -463,7 +463,9 @@ function FifthExamAdminTable(props) {
     const updatedPropertyExists = !(updatedProperty === null || updatedProperty === '');
       return (
         <div style={{display: "flex", justifyContent: 'end', alignItems: 'center'}}>
-          {updatedPropertyExists ?<Typography style={{textDecoration: 'line-through', backgroundColor: '#fd4c4c'}}>{originalProperty}</Typography> : null}
+          {updatedPropertyExists
+            ? <Typography style={{textDecoration: 'line-through', backgroundColor: '#fd4c4c'}}>{originalProperty}</Typography>
+            : <Typography>{originalProperty}</Typography>}
           {updatedProperty ? <ArrowRightAltIcon/> : null}
           <Typography style={updatedPropertyExists ? {backgroundColor: '#a3ff97'} : {}}>{updatedProperty}</Typography>
         </div>
@@ -482,7 +484,7 @@ function FifthExamAdminTable(props) {
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} selectedRows={selected} setPreFilledDataIn5PKFormEditedByAdmin={props.setPreFilledDataIn5PKFormEditedByAdmin} />
-        <TableContainer>
+        <TableContainer style={{maxWidth: '98vw'}}>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"

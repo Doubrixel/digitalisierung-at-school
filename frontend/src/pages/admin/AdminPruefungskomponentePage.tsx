@@ -3,7 +3,6 @@
 */
 
 /* eslint: I fixed everything I knew how to manually, it is still upset with some brackets */
-/* eslint-disable */
 import React from 'react';
 import { Paper } from '@material-ui/core';
 import StatusButton from '../../components/Buttons/StatusButton';
@@ -21,15 +20,13 @@ function AdminPruefungskomponentePage() {
     console.log(csv.toString());
   };
 
-  const handleComponentActivation = () => {};
-
   return (
     <div>
       <div id="firstLine">
-        <h1>Fünfte PK Übersicht</h1>
-        <span style={{ marginRight: '0', marginLeft: 'auto', width: '50vw', maxWidth: '320px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+          <h1>Fünfte PK Übersicht</h1>
           <StatusButton />
-        </span>
+        </div>
       </div>
       <Paper className="fifthExamPaper">
         <FifthExamAdminTable />

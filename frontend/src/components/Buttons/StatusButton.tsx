@@ -114,7 +114,8 @@ function StatusButton() {
         <DialogTitle style={{ fontSize: '35px' }}>Freigabe bearbeiten</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Schritt 0: Komponente für Schüler freigeben.
+            Schritt 1: Komponente für Schüler freigeben.
+            Das Datum ist der Tag, ab dem die Komponente genutzt werden kann.
           </DialogContentText>
           <TextField
             autoFocus
@@ -127,10 +128,12 @@ function StatusButton() {
             onChange={(event) => handleSetTransitionDate1(event)}
             style={{ marginBottom: '50px' }}
             error={firstDateFieldError}
-            helperText={firstDateFieldError ? 'Das Datum für Schritt 0 muss vor Schritt 1 und 2 liegen.' : null}
+            helperText={firstDateFieldError ? 'Das Datum für Schritt 1 muss vor Schritt 2 und 3 liegen.' : null}
           />
           <DialogContentText>
-            Schritt 1: Schüler können Checkboxen, Problemfrage und Präsentationsform eintragen.
+            Schritt 2: Schüler können Problemfrage und Präsentationsform eintragen
+            und die Checkboxen bestätigen. Das Datum ist der letzte Tag an dem Schüler
+            das Formular des 1. Schrittes nutzen können (letzter Abgabetag).
           </DialogContentText>
           <TextField
             autoFocus
@@ -143,10 +146,11 @@ function StatusButton() {
             onChange={(event) => handleSetTransitionDate2(event)}
             style={{ marginBottom: '50px' }}
             error={secondDateFieldError}
-            helperText={secondDateFieldError ? 'Das Datum für Schritt 1 muss nach Schritt 0 und vor Schritt 2 liegen.' : null}
+            helperText={secondDateFieldError ? 'Das Datum für Schritt 2 muss nach Schritt 1 und vor Schritt 3 liegen.' : null}
           />
           <DialogContentText>
-            Schritt 2: Komponente sperren
+            Schritt 3: Komponente sperren.  Das Datum ist der letzte Tag an dem Schüler das
+            Formular des 2. Schrittes nutzen können (letzter Abgabetag).
           </DialogContentText>
           <TextField
             autoFocus
@@ -159,7 +163,7 @@ function StatusButton() {
             onChange={(event) => handleSetTransitionDate3(event)}
             style={{ marginBottom: '50px' }}
             error={thirdDateFieldError}
-            helperText={thirdDateFieldError ? 'Das Datum für Schritt 3 muss nach Schritt 0 und 1 liegen.' : null}
+            helperText={thirdDateFieldError ? 'Das Datum für Schritt 3 muss nach Schritt 1 und 2 liegen.' : null}
           />
           <Button variant="contained" onClick={reset} color="secondary">Zurücksetzen</Button>
         </DialogContent>
