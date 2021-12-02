@@ -248,7 +248,7 @@ function FifthExamFormComponent(props) {
     if (formStatus === 1) {
       requestBodyParams = {
         examType,
-        studentPartner,
+        partnerStudentName: studentPartner,
         referenzfach,
         bezugsfach,
         tutor,
@@ -257,7 +257,7 @@ function FifthExamFormComponent(props) {
       };
     } else if (formStatus === 2) {
       requestBodyParams = {
-        updatedStudentPartner,
+        updatedPartnerStudentName: updatedStudentPartner,
         updatedReferenzfach,
         updatedBezugsfach,
         updatedExaminer,
@@ -269,7 +269,7 @@ function FifthExamFormComponent(props) {
     } else {
       requestBodyParams = {
         examType: updatedExamType !== '' ? updatedExamType : examType,
-        updatedStudentPartner,
+        updatedPartnerStudentName: updatedStudentPartner,
         updatedReferenzfach,
         updatedBezugsfach,
         updatedExaminer,

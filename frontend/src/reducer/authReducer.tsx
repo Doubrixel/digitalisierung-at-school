@@ -17,6 +17,7 @@ const initialState: AuthState = {
 
 function getUserRole(roles, groups) {
   if (window.location.origin === 'http://localhost:3000') {
+    /// return STUDENT_ROLE;
     return SUPER_ADMIN_ROLE;
   }
   const groupValueArray = Object.values(groups);

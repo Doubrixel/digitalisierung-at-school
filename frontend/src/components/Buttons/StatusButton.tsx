@@ -170,7 +170,7 @@ function StatusButton() {
             error={thirdDateFieldError}
             helperText={thirdDateFieldError ? 'Das Datum für Schritt 3 muss nach Schritt 1 und 2 liegen.' : null}
           />
-          <Button variant="contained" onClick={reset} color="secondary">Zurücksetzen</Button>
+          <Button variant="contained" onClick={reset} color="secondary">Gesamte Komponente Zurücksetzen</Button>
         </DialogContent>
         <DialogActions>
           <Button onClick={close}>Schließen</Button>
