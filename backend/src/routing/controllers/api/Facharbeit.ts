@@ -83,10 +83,11 @@ export default class Facharbeit {
             insertData(sql, args, defaultInsertCallback(res));
         };
     }
-    static POSTuploadDocument(req: Request, res: Response): void {
+    static async POSTuploadDocument(req: Request, res: Response): Promise<void> {
         if (rejectWhenValidationsFail(req, res)) return;
 
-        const studentId = getStudentId();
+        const studentId = await getStudentId(req, res);
+        if (studentId === -1) return;
         const sql = 'SELECT id from facharbeiten WHERE studentId IS ?;';
         // prüfen, ob der SuS eine Facharbeit angelegt hat
         getFirstResult(sql, [studentId], (obj, err) => {
