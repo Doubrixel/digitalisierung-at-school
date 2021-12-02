@@ -188,10 +188,17 @@ export default class Abitur {
         const studentID = await getStudentId(req, res);
         if (studentID == -1) return;
         const { submitNumber } = req.body;
-        const pdfPath = await pdfCreation.makePdf(submitNumber, studentID);
-        res.download(pdfPath, '5.PK-Rückmeldung.pdf');
-        setTimeout(() => {
-            fs.rm(pdfPath, () => {console.log('Pdf deleted.');});
-        },10000);
+        try {
+            const pdfPath = await pdfCreation.makePdf(submitNumber, studentID);
+            const rueckmeldungString = submitNumber === 1 ? '_erste_rueckmeldung' : '_finale_rueckmeldung';
+            res.download(pdfPath.filePath, pdfPath.studentName+rueckmeldungString+'.pdf');
+            setTimeout(() => {
+                fs.rm(pdfPath.filePath, () => {console.log('Pdf deleted.');});
+            },10000);
+        } catch (e:any) {
+            console.error(e.message);
+            res.status(500).json('unexpected error while creating PDF: '+ e.message);
+        }
+
     }
 }

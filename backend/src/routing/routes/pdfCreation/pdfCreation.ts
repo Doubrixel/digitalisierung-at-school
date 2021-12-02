@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import {getFirstResult} from '../../../db/dbAccessor';
-import {layoutMultilineText, PDFDocument, rgb, StandardFonts} from 'pdf-lib';
+import {Color, layoutMultilineText, PDFDocument, PDFFont, rgb, StandardFonts} from 'pdf-lib';
 
 import fs from 'fs';
 import path from 'path';
@@ -44,30 +44,43 @@ interface iTransitionDates {
 
 
 
-export async function makePdf(FormblattVersion: number, studentID: number):Promise<string> {
+export async function makePdf(FormblattVersion: number, studentID: number):Promise<{ filePath: string, studentName: string }> {
     const pdfPath = '../../../../../data/';
 
     // Get abiturpruefungsdetails and check for details
-    const abiturDetailsSql = "SELECT * FROM abiturpruefungen WHERE studentID='" + studentID + "'";
-    const abiturDetails:iAbiturDetails = await getFromDatabase(abiturDetailsSql) as iAbiturDetails;
+    const abiturDetailsSql = 'SELECT * FROM abiturpruefungen WHERE studentID=?';
+    const abiturDetailsArgs = [studentID];
+    const abiturDetails:iAbiturDetails = await getFromDatabase(abiturDetailsSql, abiturDetailsArgs) as iAbiturDetails;
 
     // Get student name
-    const studentNameSql = "Select * FROM nutzer WHERE id='" + studentID + "'";
-    const studentName:iStudentName = await getFromDatabase(studentNameSql) as iStudentName;
+    const studentNameSql = 'Select * FROM nutzer WHERE id=?';
+    const studentNameArgs = [studentID];
+    const studentName:iStudentName = await getFromDatabase(studentNameSql, studentNameArgs) as iStudentName;
+    if (!studentName.name || !studentName.vorname || !studentName.nachname) {
+        throw new Error('Unexpected null in nutzer table');
+    }
 
     // Get submission date from DB
-    const abiturYearSql = "SELECT * FROM komponenten WHERE name='5pk'";
-    const transitionDates: iTransitionDates = await getFromDatabase(abiturYearSql) as iTransitionDates;
+    const abiturYearSql = "SELECT * FROM komponenten WHERE name='fifthExam'";
+    const transitionDates: iTransitionDates = await getFromDatabase(abiturYearSql, []) as iTransitionDates;
+    transitionDates.transitionDate2 = new Date(transitionDates.transitionDate2).toISOString();
+    transitionDates.transitionDate3 = new Date(transitionDates.transitionDate3).toISOString();
+
+    let doc:PDFDocument;
 
     if (FormblattVersion == 1) {
-        return makeFormblatt1Pdf(pdfPath, abiturDetails, studentName, transitionDates); // return davorsetzen später, denke ich...
+        doc = await makeFormblatt1Pdf(pdfPath, abiturDetails, studentName, transitionDates);
     }
     else {
-        return makeFormblatt3Pdf(pdfPath, abiturDetails, studentName, transitionDates); // return davorsetzen später, denke ich...
+        doc = await makeFormblatt3Pdf(pdfPath, abiturDetails, studentName, transitionDates);
     }
+
+    const filePath = path.join(__dirname, studentName.name+'.pdf');
+    fs.writeFileSync(filePath, await doc.save());
+    return {filePath, studentName: studentName.nachname};
 }
 
-async function makeFormblatt1Pdf(pdfPath: string, abiturDetails: iAbiturDetails, studentName: iStudentName, transitionDates: iTransitionDates):Promise<string> {
+async function makeFormblatt1Pdf(pdfPath: string, abiturDetails: iAbiturDetails, studentName: iStudentName, transitionDates: iTransitionDates):Promise<PDFDocument> {
     // distinguish between PP and BLL
     let formblatt1Path = undefined;
     if (abiturDetails.art == 'PP'){
@@ -80,171 +93,75 @@ async function makeFormblatt1Pdf(pdfPath: string, abiturDetails: iAbiturDetails,
         throw('Missing abiturDetails');
     }
 
-    const filename = 'testBLL';
-
     // Setup Submission Date
     const abiturYear:string = transitionDates.transitionDate2.substring(0, 4);
     const abiturDate:string = transitionDates.transitionDate2.substring(8,10) + '.' + transitionDates.transitionDate2.substring(5,7) + '.' + abiturYear;
 
 
-    // Load source pdf
-    const sourceDoc = await PDFDocument.load(fs.readFileSync(path.join(__dirname, formblatt1Path)));
-
-    // Init the new document
-    const doc = await PDFDocument.create();
-    const [mainPage] = await doc.copyPages(sourceDoc, [0]);
-    doc.addPage(mainPage);
-    const pages = doc.getPages();
-    const firstPage = pages[0];
+    const doc = await loadAndInitPdf(formblatt1Path);
+    const firstPage = doc.getPages()[0];
 
     // Embed the Helvetica fonts
     const helveticaFont = await doc.embedFont(StandardFonts.Helvetica);
     const helveticaBoldFont = await doc.embedFont(StandardFonts.HelveticaBold);
 
-    firstPage.drawText(abiturYear, {
-        x: 315,
-        y: 703.2,
-        size: 14,
-        font: helveticaBoldFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
+    const drawText = (
+        value: string,
+        x:number,
+        y:number,
+        font:PDFFont=helveticaFont,
+        size=14,
+        color:Color=rgb(0.0, 0.0, 0.0)) =>
+    {
+        firstPage.drawText(value, {
+            x,
+            y,
+            size,
+            font,
+            color
+        });
+    };
 
-    firstPage.drawText(studentName.name, {
-        x: 180,
-        y: 578.2,
-        size: 14,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
+    const { partnerStudentName, referenzfach, examiner, bezugsfach, thema } = abiturDetails;
+    drawText(abiturYear, 315, 703.2, helveticaBoldFont);
+    drawText(studentName.name, 180, 578.2);
+    drawText(partnerStudentName, 180, 538.2);
+    drawText(referenzfach, 180, 471.2);
+    drawText(examiner, 180, 433.2);
+    drawText(bezugsfach, 180, 369.2);
+    drawText(thema, 180, 299.2);
+    drawText(abiturDate, 348, 236.8, helveticaBoldFont);
 
-    firstPage.drawText(abiturDetails.partnerStudentName, {
-        x: 180,
-        y: 538.2,
-        size: 14,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(abiturDetails.referenzfach, {
-        x: 180,
-        y: 471.2,
-        size: 14,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(abiturDetails.examiner, {
-        x: 180,
-        y: 433.2,
-        size: 14,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(abiturDetails.bezugsfach, {
-        x: 180,
-        y: 369.2,
-        size: 14,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(abiturDetails.thema, {
-        x: 180,
-        y: 299.2,
-        size: 14,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(abiturDate, {
-        x: 348,
-        y: 236.8,
-        size: 14,
-        font: helveticaBoldFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    // Write the PDF to a file
-    const file = path.join(__dirname, filename + '.pdf');
-    fs.writeFileSync(file, await doc.save());
-    return file;
+    return doc;
 }
 
-async function makeFormblatt3Pdf(pdfPath: string, abiturDetails: iAbiturDetails, studentName: iStudentName, transitionDates: iTransitionDates):Promise<string> {
+async function makeFormblatt3Pdf(pdfPath: string, abiturDetails: iAbiturDetails, studentName: iStudentName, transitionDates: iTransitionDates):Promise<PDFDocument> {
     // distinguish between PP and BLL
     let formblatt3Path = undefined;
-    let filename = undefined;
     if (abiturDetails.art == 'PP'){
         formblatt3Path = pdfPath + '5_PK_Formblatt3_PP.pdf';
-        filename = 'DreiertestPP';
     }
     else if (abiturDetails.art == 'BLL'){
         formblatt3Path = pdfPath + '5_PK_Formblatt3_BLL.pdf';
-        filename = 'DreiertestBLL';
     }
     else {
         throw('Missing abiturDetails');
     }
 
-    // check for updatedValues
-    // problemQuestion, referenzfach, bezugsfach, examiner, presentationForm, partnerStudentName
-    let finalProblemQuestion;
-    let finalReferenzfach;
-    let finalBezugsfach;
-    let finalExaminer;
-    let finalPresentationForm;
-    let finalPartnerStudentName;
-    let finalTutor;
+    const { problemQuestion, updatedProblemQuestion, referenzfach, updatedReferenzfach, bezugsfach, updatedBezugsfach, examiner, updatedExaminer, presentationForm, updatedPresentationForm, partnerStudentName, updatedPartnerStudentName, tutor, updatedTutor } = abiturDetails;
 
-    if (abiturDetails.updatedProblemQuestion) {
-        finalProblemQuestion = abiturDetails.updatedProblemQuestion;
-    }
-    else {
-        finalProblemQuestion = abiturDetails.problemQuestion;
-    }
-
-    if (abiturDetails.updatedReferenzfach) {
-        finalReferenzfach = abiturDetails.updatedReferenzfach;
-    }
-    else {
-        finalReferenzfach = abiturDetails.referenzfach;
-    }
-
-    if (abiturDetails.updatedBezugsfach) {
-        finalBezugsfach = abiturDetails.updatedBezugsfach;
-    }
-    else {
-        finalBezugsfach = abiturDetails.bezugsfach;
-    }
-
-    if (abiturDetails.updatedExaminer) {
-        finalExaminer = abiturDetails.updatedExaminer;
-    }
-    else {
-        finalExaminer = abiturDetails.examiner;
-    }
-
-    if (abiturDetails.updatedPresentationForm) {
-        finalPresentationForm = abiturDetails.updatedPresentationForm;
-    }
-    else {
-        finalPresentationForm = abiturDetails.presentationForm;
-    }
-
-    if (abiturDetails.updatedPartnerStudentName) {
-        finalPartnerStudentName = abiturDetails.updatedPartnerStudentName;
-    }
-    else {
-        finalPartnerStudentName = abiturDetails.partnerStudentName;
-    }
-
-    if (abiturDetails.updatedTutor) {
-        finalTutor = abiturDetails.updatedTutor;
-    }
-    else {
-        finalTutor = abiturDetails.tutor;
-    }
+    const checkIfUpdated = (original:string|null, updated:string|null) => {
+        if (updated) return updated;
+        if (original) return original;
+        return '';
+    };
+    const finalProblemQuestion = checkIfUpdated(problemQuestion, updatedProblemQuestion);
+    const finalReferenzfach = checkIfUpdated(referenzfach, updatedReferenzfach);
+    const finalBezugsfach = checkIfUpdated(bezugsfach, updatedBezugsfach);
+    const finalExaminer = checkIfUpdated(examiner, updatedExaminer);
+    const finalPresentationForm = checkIfUpdated(presentationForm, updatedPresentationForm);
+    const finalPartnerStudentName = checkIfUpdated(partnerStudentName, updatedPartnerStudentName);
+    const finalTutor = checkIfUpdated(tutor, updatedTutor);
 
     const abiturYear:string = transitionDates.transitionDate3.substring(0, 4);
     const abiturDate:string = transitionDates.transitionDate3.substring(8,10) + '.' + transitionDates.transitionDate3.substring(5,7) + '.' + abiturYear;
@@ -253,62 +170,35 @@ async function makeFormblatt3Pdf(pdfPath: string, abiturDetails: iAbiturDetails,
     const monthHelper = finalApprovalDate.getUTCMonth() + 1;
     const finalApprovalDateAsString = finalApprovalDate.getUTCDate() + '.' + monthHelper + '.' + finalApprovalDate.getFullYear();
 
-    // Load source pdf
-    const sourceDoc = await PDFDocument.load(fs.readFileSync(path.join(__dirname, formblatt3Path)));
-
-    // Init the new document
-    const doc = await PDFDocument.create();
-    const [mainPage] = await doc.copyPages(sourceDoc, [0]);
-    doc.addPage(mainPage);
-    const pages = doc.getPages();
-    const firstPage = pages[0];
-    const { width, height } = firstPage.getSize();
-    console.log(width);
-    console.log(height);
+    const doc = await loadAndInitPdf(formblatt3Path);
+    const firstPage = doc.getPages()[0];
+    const { width } = firstPage.getSize();
 
     // Embed the Helvetica fonts
     const helveticaFont = await doc.embedFont(StandardFonts.Helvetica);
     const helveticaBoldFont = await doc.embedFont(StandardFonts.HelveticaBold);
 
-    firstPage.drawText(abiturYear, {
-        x: 318,
-        y: 726,
-        size: 14,
-        font: helveticaBoldFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(abiturDate, {
-        x: 372,
-        y: 692.8,
-        size: 10,
-        font: helveticaBoldFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(studentName.nachname, {
-        x: 125,
-        y: 673.2,
-        size: 11,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(studentName.vorname, {
-        x: 375,
-        y: 673.2,
-        size: 11,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(finalTutor, {
-        x: 125,
-        y: 653.2,
-        size: 11,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
+    const drawText = (
+        value: string,
+        x:number,
+        y:number,
+        font:PDFFont=helveticaFont,
+        size=11,
+        color:Color=rgb(0.0, 0.0, 0.0)) =>
+    {
+        firstPage.drawText(value, {
+            x,
+            y,
+            size,
+            font,
+            color
+        });
+    };
+    drawText(abiturYear, 318, 726, helveticaBoldFont, 14);
+    drawText(abiturDate, 372, 692.8, helveticaBoldFont, 10);
+    drawText(studentName.nachname, 125, 673.2);
+    drawText(studentName.vorname, 375, 673.2);
+    drawText(finalTutor, 125, 653.2);
 
     const multiText = layoutMultilineText(finalProblemQuestion, {
         alignment: 0,
@@ -332,101 +222,27 @@ async function makeFormblatt3Pdf(pdfPath: string, abiturDetails: iAbiturDetails,
             font: helveticaFont
         });
     }
-
-    firstPage.drawText(finalReferenzfach, {
-        x: 217,
-        y: 524.2,
-        size: 11,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(finalBezugsfach, {
-        x: 217,
-        y: 502.2,
-        size: 11,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    firstPage.drawText(finalExaminer, {
-        x: 217,
-        y: 480.2,
-        size: 11,
-        font: helveticaFont,
-        color: rgb(0.0, 0.0, 0.0),
-    });
-
-    if (abiturDetails.art == 'BLL') {
-        firstPage.drawText(finalPresentationForm, {
-            x: 75,
-            y: 438.2,
-            size: 11,
-            font: helveticaFont,
-            color: rgb(0.0, 0.0, 0.0),
-        });
-
-        firstPage.drawText(finalPartnerStudentName, {
-            x: 75,
-            y: 397.2,
-            size: 11,
-            font: helveticaFont,
-            color: rgb(0.0, 0.0, 0.0),
-        });
-
-        firstPage.drawText('xx.xx.xxxx', {
-            x: 482.2,
-            y: 274.25,
-            size: 10.5,
-            font: helveticaBoldFont,
-            color: rgb(0.0, 0.0, 0.0),
-        });
-
-        firstPage.drawText(finalApprovalDateAsString, {
-            x: 393.2,
-            y: 56.8,
-            size: 10.5,
-            font: helveticaBoldFont,
-            color: rgb(0.0, 0.0, 0.0),
-        });
+    drawText(finalReferenzfach, 217, 524.2);
+    drawText(finalBezugsfach, 217, 502.2);
+    drawText(finalExaminer, 217, 480.2);
+    if (abiturDetails.art == 'PP') {
+        drawText(finalPresentationForm, 75, 438.2);
+        drawText(finalPartnerStudentName, 75, 397.2);
+        drawText('xx.xx.xxxx', 482.2, 274.25, helveticaBoldFont,10.5);
+        drawText(finalApprovalDateAsString, 390, 56.8, helveticaBoldFont, 10.5);
     }
-    else if (abiturDetails.art == 'PP') {
-        firstPage.drawText(finalPartnerStudentName, {
-            x: 75,
-            y: 438.2,
-            size: 11,
-            font: helveticaFont,
-            color: rgb(0.0, 0.0, 0.0),
-        });
-
-        firstPage.drawText('xx.xx.xxxx', {
-            x: 253,
-            y: 350.9,
-            size: 10.5,
-            font: helveticaBoldFont,
-            color: rgb(0.0, 0.0, 0.0),
-        });
-
-        firstPage.drawText(finalApprovalDateAsString, {
-            x: 393.2,
-            y: 163.9,
-            size: 10.5,
-            font: helveticaBoldFont,
-            color: rgb(0.0, 0.0, 0.0),
-        });
+    else if (abiturDetails.art == 'BLL') {
+        drawText(finalPartnerStudentName, 75, 438.2);
+        drawText('xx.xx.xxxx', 253, 350.9, helveticaBoldFont, 10.5);
+        drawText(finalApprovalDateAsString, 390, 163.9, helveticaBoldFont, 10.5);
     }
 
-
-
-    // Write the PDF to a file
-    const file = path.join(__dirname, filename + '.pdf');
-    fs.writeFileSync(file, await doc.save());
-    return file;
+    return doc;
 }
 
-async function getFromDatabase(sql: string){
+async function getFromDatabase(sql: string, args: Array<string|number>){
     return new Promise<object>(resolve => {
-        getFirstResult(sql, [], (obj, err) => {
+        getFirstResult(sql, args, (obj, err) => {
             if (err) {
                 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                // @ts-ignore
@@ -445,6 +261,15 @@ async function getFromDatabase(sql: string){
             }
         });
     });
-
 }
+
+const loadAndInitPdf = async (sourceDocPath:string):Promise<PDFDocument> => {
+    const sourceDoc = await PDFDocument.load(fs.readFileSync(path.join(__dirname, sourceDocPath)));
+
+    // Init the new document
+    const doc = await PDFDocument.create();
+    const [mainPage] = await doc.copyPages(sourceDoc, [0]);
+    doc.addPage(mainPage);
+    return doc;
+};
 
