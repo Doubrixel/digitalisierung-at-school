@@ -11,6 +11,8 @@ export default (): Router => {
 
     router.get('/logout', Auth.GETlogout);
 
+    router.get('/logout/sso', Auth.GETlogoutSso);
+
     router.get('/getUserData', Auth.GETuserData);
 
     router.get('/studentTest', requireStudent,  Auth.GETstudentTest);

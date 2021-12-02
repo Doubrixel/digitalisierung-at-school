@@ -79,6 +79,15 @@ export default class Auth {
         res.redirect('/');
     }
 
+    static async GETlogoutSso(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const client = req.app.authClient;
+
+        clearSessionCookie(res);
+
+        const endSessionUrl = client!.endSessionUrl();
+        res.redirect(endSessionUrl);
+    }
+
     static async GETuserData(req: Request, res: Response, next: NextFunction): Promise<void> {
         const session = req.session;
         if (!session) {
