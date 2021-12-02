@@ -221,23 +221,24 @@ function FifthExamFormComponent(props) {
   }, []);
 
   const handleGeneratePDF = (pdfNr) => {
-    if (pdfNr === 1) {
-      // generiere erste PDF
-    } else if (pdfNr === 2) {
-      // generiere finale pdf
-    }
-    alert('pdf generiert...');
-    const pdf = {
-      examType,
-      userName,
-      studentPartner,
-      chosenTopicArea: topicArea,
-      referenzfach,
-      examiner,
-      bezugsfach,
-      tutor,
-    };
-    console.log(pdf.toString());
+    sendAPIRequest(`api/abitur/getPdf/${pdfNr}`, 'GET')
+      .then(async (res) => ({
+        filename: pdfNr === 1 ? `${userName}_erste_Rückmeldung.pdf` : `${userName}_finale_Rückmeldung.pdf`,
+        blob: await res.blob(),
+      }))
+      .then((resObj) => {
+        const newBlob = new Blob([resObj.blob], { type: 'application/pdf' });
+        const objUrl = window.URL.createObjectURL(newBlob);
+        const link = document.createElement('a');
+        link.href = objUrl;
+        link.download = resObj.filename;
+        link.click();
+
+        // For Firefox it is necessary to delay revoking the ObjectURL.
+        setTimeout(() => {
+          window.URL.revokeObjectURL(objUrl);
+        }, 250);
+      });
   };
 
   const handleSubmitFifthExamForm = () => {
