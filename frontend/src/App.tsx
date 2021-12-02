@@ -82,8 +82,8 @@ function App(props) {
                 ? <PruefungskomponenteEntryPage isGettingEditedByAdmin /> : <NoAccessPage /> }
             </Route>
           </Switch>
-         </div>
         </div>
+      </div>
       <Footer />
     </BrowserRouter>
   );
