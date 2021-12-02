@@ -1,9 +1,16 @@
-Es gibt insgesamt 2 Module, denen jeweils eine ID zugewiesen sind um sie als Komponente identifizieren zu können:
+Es gibt insgesamt 2 Komponenten, denen jeweils eine ID zugewiesen sind um sie als Komponente identifizieren zu können:
 Facharbeiten (ID: 1)
 5. PK (ID: 2)
 
-Diese Module können in verschiedenen Status sein, abhängig was die Admins als Komponentenstatus festgelegt haben.
+Diese Komponenten können in verschiedenen Status sein, abhängig was die Admins als Komponentenstatus festgelegt haben.
 Abhängig vom Status, können Schüler verschiedene Sachen in den Modulen eintragen/beantragen
 
 Informationen über die verschiedenen Status der 5. PK Formular Komponente findet sich in der
 entsprechenden Klasse (FifthExamFormComponent)
+
+Für beide Komponenten gibt es drei Status, die der indirekt Admin über die Statusübergangszeitpunkte festlegen kann.
+Status 0: Komponente ist noch gesperrt, da der Beantragunsgzeitraum noch nicht begonnen hat
+Status 1: Von den Schülern können initiale Daten eingetragen werden
+Status 2: von den Schülern können weitere Daten eingetragen werden bzw. es kann eine Facharbeit hochgeladen werden
+Status 3: Die Frist zum einreichen der letzten Daten bzw. zum hochladen der facharbeit ist verstrichen, die Komponente ist wieder
+          gesperrt und muss für einen erneuten durchlauf resettet werden.
