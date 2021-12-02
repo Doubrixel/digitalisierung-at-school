@@ -33,72 +33,16 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
-import { setPreFilledDataIn5PKFormEditedByAdmin } from '../../actions/FifthExamActions';
+import {useSelector, useDispatch} from "react-redux";
+import {RootState} from "../../reducer";
+import { ExamInterface } from "../../reducer/FifthExamReducer";
+import { useEffect } from 'react';
+import { setPreFilledDataIn5PKFormEditedByAdmin } from '../../actions/FifthExamActions'
+import sendApiRequest from "../../APIRequestFunction"
+import TextField from '@mui/material/TextField';
 
-interface Data {
-  partnerName: string;
-  referenzfach: string;
-  examiner: string;
-  bezugsfach: string;
-  studentName: string;
-  examType: string;
-  topicArea: string;
-  approved: string;
-  id: any;
-}
-let rowID=0;
-function createData(
-  studentName: string,
-  partnerName: string,
-  examType: string,
-  referenzfach: string,
-  bezugsfach: string,
-  examiner: string,
-  topicArea: string,
-  approved:string,
-): Data {
-  let id=rowID;
-  rowID++;
-  return {
-    studentName,
-    partnerName,
-    examType,
-    referenzfach,
-    bezugsfach,
-    examiner,
-    topicArea,
-    approved,
-    id,
-  };
-}
-
-const rowsMock = [
-  createData('Alex Schmidt', 'Cupcake', 'BLL', 'Deutsch', 'Englisch', 'Mr. Jonson', 'Delfine','Nein'),
-  createData('Alex Schmidt', 'Donut', 'BLL', 'Mathe', 'Mathe', 'Mrs. Heathrow', 'Wasser', 'Ja'),
-  createData('Peter Becker', 'Eclair', 'PP', 'Physik', 'Physik', 'Miss Daisy', 'Feuer', 'Ja'),
-  createData('Maria Koch', 'Frozen yoghurt', 'BLL', '6.0', '24', '4.0', 'jssghdhgsdvjhcbsdjsdhcvjsdsdghvjssdhg sgfgfkysg f kysgf kkcgksdgckd c drkjcfg dzfg', 'Ja'),
-  createData('Monika Meyer', 'Partner1', 'PP', '16.0', '49', '3.9', 'b', 'Nein'),
-  createData('Ursula Schneider', 'Honeycomb', '408', '3.2', '87', '6.5', 'c', 'Nein'),
-  createData('Brigitte Schmitz', 'Ice cream sandwich', '237', '9.0', '37', '4.3', 'd', 'Nein'),
-  createData('Renate Müller', 'Jelly Bean', '375', '0.0', '94', '0.0', 'a', 'Ja'),
-  createData('Heinz Hoffmann', 'KitKat', '518', '26.0', '65', '7.0', 'Wasser', 'Nein'),
-  createData('Gisela Peters', 'Lollipop', '392', '0.2', '98', '0.0', 'Geist', 'Nein'),
-  createData('Karl Klein', 'Marshmallow', '318', '0', '81', '2.0', 'h', 'Nein'),
-  createData('Hildegard Jansen', 'Nougat', '360', '19.0', '9', '37.0', 'k', 'Nein'),
-  createData('Renate Köhler', 'Oreo', '437', '18.0', '63', '4.0', 'g', 'Nein'),
-];
-
-const addIdsToRows = (rows: any)=>{
-  let currentId = 0;
-  rows.forEach((row)=>{
-    row.id = currentId;
-    currentId++;
-  })
-  return rows;
-}
-let rowsWithIds=[];
-rowsWithIds = addIdsToRows(rowsMock);
-
+let handleOnClickApprove;
+let handleEditRowClick;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -140,7 +84,7 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Data;
+  id: keyof ExamInterface;
   label: string;
   numeric: boolean;
 }
@@ -153,7 +97,7 @@ const headCells: readonly HeadCell[] = [
     label: 'Schüler:in',
   },
   {
-    id: 'partnerName',
+    id: 'partnerStudentName',
     numeric: false,
     disablePadding: true,
     label: 'Partner:in',
@@ -198,7 +142,7 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof ExamInterface) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
@@ -209,7 +153,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof ExamInterface) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -255,18 +199,7 @@ interface EnhancedTableToolbarProps {
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected, selectedRows, setPreFilledDataIn5PKFormEditedByAdmin } = props;
-  const history = useHistory();
-  function handleEditRowClick(selectedRows){
-    const selectedRowData = rowsWithIds.find((row) => {
-      // @ts-ignore
-      if(row.id === selectedRows[0]){
-        return true;
-      }
-    })
-    setPreFilledDataIn5PKFormEditedByAdmin(selectedRowData)
-    history.push('/admin/pruefungskomponente/editStudentApplication')
-  }
+  const { numSelected, selectedRows} = props;
 
   return (
     <Toolbar
@@ -313,26 +246,26 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         </Tooltip>
       )}
       {numSelected > 0 ? (
-        <Tooltip title="Genehmigen">
-          <IconButton>
+        <Tooltip title="Ausgewählte Einträge genehmigen">
+          <IconButton onClick={(event: React.MouseEvent<unknown>) =>handleOnClickApprove(event, true)}>
             <CheckIcon color="success" />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="select Data">
+        <Tooltip title="Zum Genehmigen müssen Einträge ausgewählt werden">
           <IconButton>
             <CheckIcon color="disabled" />
           </IconButton>
         </Tooltip>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Ablehnen">
+      {numSelected == 1 ? (
+        <Tooltip title="Eintrag ablehnen">
           <IconButton>
-            <ClearIcon sx={{ color: 'red' }} />
+            <ClearIcon onClick={(event: React.MouseEvent<unknown>) =>handleOnClickApprove(event, false)} sx={{ color: 'red' }} />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="select Data">
+        <Tooltip title="Zum Ablehnen muss genau ein Eintrag ausgewählt sein">
           <IconButton>
             <ClearIcon color="disabled" />
           </IconButton>
@@ -357,27 +290,96 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 };
 
 function FifthExamAdminTable(props) {
-  const [open, setOpen] = React.useState(false);
+  const dispatch = useDispatch();
+
+  const [showTopicDialog, setShowTopicDialog] = React.useState(false);
   const [currentAnnotation, setCurrentAnnotation] = React.useState('');
+  const [showDeclineReasonDialog, setShowDeclineReasonDialog] = React.useState(false);
+  const [currentDeclineReason, setCurrentDeclineReason] = React.useState('');
+  const [currentSelectedExamId, setCurrentSelectedExamId] = React.useState('');
 
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('studentName');
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [orderBy, setOrderBy] = React.useState<keyof ExamInterface>('studentName');
+  const [selected, setSelected] = React.useState<readonly any[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
+  const [forceRerender, setForceRerender] = React.useState(true);
+
+  const rows: ExamInterface[] = useSelector((state: RootState) => state.fithExamAdminReducer.allExams )
+
   const showFullTopic = (annotation) => {
-    setOpen(true);
+    setShowTopicDialog(true);
     setCurrentAnnotation(annotation);
   };
   const hideFullTopic = () => {
-    setOpen(false);
+    setShowTopicDialog(false);
   };
+  const hideDeclineReasonAndSendApiRequest = () => {
+    setShowDeclineReasonDialog(false);
+
+    let body = {examId: currentSelectedExamId, approved: false, reason: currentDeclineReason}
+    sendApiRequest('/api/abitur/setApprovalState', 'POST', body)
+      .then((response) => {
+        if (response.status != 200) {
+          console.log('Fehler beim Ablehnen: Http-Statuscode: ' + response.status)
+        }
+      });
+    //no need for page reloading
+    rows.map((row) => {
+      if(String(row.examId) == currentSelectedExamId){
+        row.approved=false;
+      }
+    });
+  };
+  const handleCurrentDeclineReasonOnChange= (event) => {
+    setCurrentDeclineReason(event.target.value);
+  };
+
+  const history = useHistory();
+  handleEditRowClick = (selectedRows) => {
+    const selectedRowData = rows.find((row) => {
+      // @ts-ignore
+      if(row.examId === selectedRows[0]){
+        return true;
+      }
+    })
+    setPreFilledDataIn5PKFormEditedByAdmin(selectedRowData)
+    history.push('/admin/pruefungskomponente/editStudentApplication')
+  }
+
+  handleOnClickApprove= (event: React.MouseEvent<unknown>, isApproved: boolean) => {
+    if(isApproved){
+      //approve
+      let body, examId;
+
+      for (let i = 0; i < selected.length; i++) {
+        examId = selected[i];
+        body = {examId: examId, approved: isApproved}
+        sendApiRequest('/api/abitur/setApprovalState', 'POST', body)
+          .then((response) => {
+            if (response.status != 200) {
+              console.log('Fehler beim Genehmigen: Http-Statuscode: ' + response.status)
+            }
+          });
+        rows.map((row) => {
+          if(String(row.examId) == examId){
+            row.approved=true;
+            setForceRerender(!forceRerender);
+          }
+        });
+      }
+    }else{
+      //decline
+      setCurrentSelectedExamId(selected[0]);
+      setShowDeclineReasonDialog(true);
+    }
+  }
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data,
+    property: keyof ExamInterface,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -387,9 +389,9 @@ function FifthExamAdminTable(props) {
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       // @ts-ignore
-      const newSelecteds = rowsWithIds.map((row) => {
+      const newSelecteds = rows.map((row) => {
         // @ts-ignore
-        return row.id;
+        return row.examId;
       });
       setSelected(newSelecteds);
       return;
@@ -433,7 +435,19 @@ function FifthExamAdminTable(props) {
   const isSelected = (name: any) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rowsWithIds.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowsWithIds.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+  const isPropertyUpdated = (updatedProperty: any) =>{
+    return updatedProperty !== ('' || null);
+  }
+
+  useEffect(() => {
+    sendApiRequest('/api/abitur/getAllExams', 'GET')
+      .then((response) => response.json())
+      .then((json) => {
+        dispatch({ type: 'LOAD_ALL_EXAMS', payload: json });
+      });
+  }, [])
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -451,15 +465,17 @@ function FifthExamAdminTable(props) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rowsWithIds.length}
+              rowCount={rows.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rowsWithIds.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rowsWithIds, getComparator(order, orderBy))
+              {/* @ts-ignore */}
+              {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                  // @ts-ignore
+                  const isItemSelected = isSelected(row.examId);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
@@ -468,8 +484,10 @@ function FifthExamAdminTable(props) {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
-                      onClick={(event) => handleClick(event, row.id)}
+                      // @ts-ignore
+                      key={row.examId}
+                      // @ts-ignore
+                      onClick={(event) => handleClick(event, row.examId)}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -489,17 +507,17 @@ function FifthExamAdminTable(props) {
                       >
                         {row.studentName}
                       </TableCell>
-                      <TableCell align="right">{row.partnerName}</TableCell>
-                      <TableCell align="right">{row.referenzfach}</TableCell>
-                      <TableCell align="right">{row.bezugsfach}</TableCell>
-                      <TableCell align="right">{row.examiner}</TableCell>
+                      <TableCell align="right">{!isPropertyUpdated(row.updatedPartnerStudentName) ? row.partnerStudentName: row.updatedPartnerStudentName}</TableCell>
                       <TableCell align="right">{row.examType}</TableCell>
+                      <TableCell align="right">{!isPropertyUpdated(row.updatedReferenzfach) ? row.referenzfach: row.updatedReferenzfach}</TableCell>
+                      <TableCell align="right">{!isPropertyUpdated(row.updatedBezugsfach) ? row.bezugsfach: row.updatedBezugsfach}</TableCell>
+                      <TableCell align="right">{!isPropertyUpdated(row.updatedExaminer) ? row.examiner: row.updatedExaminer}</TableCell>
                       <TableCell align="right">
-                        <Button title="Thema ansehen" onClick={() => showFullTopic(row.topicArea)}>
+                        <Button title="Thema ansehen" onClick={() => showFullTopic(!isPropertyUpdated(row.updatedTopicArea)? row.topicArea: row.updatedTopicArea)}>
                           <DescriptionIcon />
                         </Button>
                       </TableCell>
-                      <TableCell align="right">{row.approved}</TableCell>
+                      <TableCell align="right">{row.approved ? "Ja" : "Nein"}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -518,7 +536,7 @@ function FifthExamAdminTable(props) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rowsWithIds.length}
+          count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -531,7 +549,7 @@ function FifthExamAdminTable(props) {
       />
 
       <Dialog
-        open={open}
+        open={showTopicDialog}
         onClose={hideFullTopic}
       >
         <DialogTitle id="submit_evaluations_dialog_title">{'Thema: '}</DialogTitle>
@@ -546,7 +564,29 @@ function FifthExamAdminTable(props) {
           </Button>
         </DialogActions>
       </Dialog>
-
+      <Dialog
+        open={showDeclineReasonDialog}
+        onClose={hideDeclineReasonAndSendApiRequest}
+      >
+        <DialogTitle id="submit_evaluations_dialog_title" >{'Ablehnungsgrund: '}</DialogTitle>
+        <DialogContent
+          >
+          <TextField
+            label="Ablehnungsgrund"
+            variant="outlined"
+            onChange={handleCurrentDeclineReasonOnChange}
+            value={currentDeclineReason}
+            rows={5}
+            multiline
+            style={{ width: '50vh' }}>
+          </TextField>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={hideDeclineReasonAndSendApiRequest} color="primary">
+            Bestätigen
+          </Button>
+        </DialogActions>
+    </Dialog>
     </Box>
   );
 }
