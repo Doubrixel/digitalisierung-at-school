@@ -463,7 +463,7 @@ function FifthExamAdminTable(props) {
     const updatedPropertyExists = !(updatedProperty === null || updatedProperty === '');
       return (
         <div style={{display: "flex", justifyContent: 'end', alignItems: 'center'}}>
-          {updatedPropertyExists ?<Typography style={{textDecoration: 'line-through', backgroundColor: '#fd4c4c'}}>{originalProperty}</Typography> : null}
+          {updatedPropertyExists ?<Typography style={{textDecoration: 'line-through', backgroundColor: '#fd4c4c'}}>{updatedProperty}</Typography> : null}
           {updatedProperty ? <ArrowRightAltIcon/> : null}
           <Typography style={updatedPropertyExists ? {backgroundColor: '#a3ff97'} : {}}>{originalProperty}</Typography>
         </div>
