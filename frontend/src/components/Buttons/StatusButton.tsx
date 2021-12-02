@@ -95,7 +95,12 @@ function StatusButton() {
   };
 
   const reset = () => {
-    // zurücksetzen für neues Schuljahr
+    const confirmed = window.confirm('Wollen Sie die Abiturpüfungskomponente wirklich zurücksetzen?');
+    if (confirmed) window.confirm('Wenn Sie die Komponente zurücksetzen, dann gehen alle von den Schülern eingetragene Daten verloren. Dies sollte nur am Ende des Schuljahres passieren. \nWirklich zurücksetzen?');
+    if (confirmed) {
+      sendAPIRequest('/api/abitur/clearAllData', 'POST');
+      window.location.reload();
+    }
   };
 
   useEffect(() => {
