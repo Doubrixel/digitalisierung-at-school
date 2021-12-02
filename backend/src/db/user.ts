@@ -37,16 +37,23 @@ async function isUserInDb(uuid: string): Promise<boolean> {
 }
 
 async function getClassFromGroups(groups: Group[]|Group): Promise<string> {
+    const groupArray = await transformGroupToArray(groups);
     return new Promise<string>(resolve => {
-        if (!Array.isArray(groups)) {
-            groups = Object.values(groups);
-        }
-        groups.forEach(group => {
+        groupArray.forEach(group => {
             const name = group.name;
             if (name.startsWith('klasse')) {
                 resolve(name.split('-')[1]);
             }
         });
         resolve('');
+    });
+}
+
+export async function transformGroupToArray(groups: Group[]|Group): Promise<Group[]> {
+    return new Promise<Group[]>(resolve => {
+        if (!Array.isArray(groups)) {
+            groups = Object.values(groups);
+        }
+        resolve(groups);
     });
 }

@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import {
     iservConnectToLoginError,
     iservRevokeTokenError,
-    iservRetrieveUserDataError, homepage
+    iservRetrieveUserDataError
 } from '../../auth/staticAuthStrings';
 import {clearSessionCookie, setSessionCookie} from '../../auth/cookie';
 import {getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
@@ -58,7 +58,7 @@ export default class Auth {
             const sessionCookie = serialize({ tokenSet, user });
             setSessionCookie(res, sessionCookie);
 
-            res.redirect(homepage);
+            res.redirect('/');
         } catch (e) {
             console.error(iservRetrieveUserDataError, e);
             return next(e);
@@ -102,7 +102,11 @@ export default class Auth {
         res.send('Student angemeldet');
     }
 
-    static GETadminTest(req: Request, res: Response, next: NextFunction): void {
-        res.send('Admin angemeldet');
+    static GETadminFATest(req: Request, res: Response, next: NextFunction): void {
+        res.send('AdminFA angemeldet');
+    }
+
+    static GETadmin5PKTest(req: Request, res: Response, next: NextFunction): void {
+        res.send('Admin5PK angemeldet');
     }
 }
