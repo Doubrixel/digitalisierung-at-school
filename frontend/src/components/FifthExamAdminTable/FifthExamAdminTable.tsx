@@ -41,7 +41,10 @@ import { useEffect } from 'react';
 import { setPreFilledDataIn5PKFormEditedByAdmin } from '../../actions/FifthExamActions'
 import sendApiRequest from "../../APIRequestFunction"
 import TextField from '@mui/material/TextField';
-import { transformISOstringToGermanDateString } from '../ReusableComponentsAndFunctions/processComponentStatusFunctions';
+import {
+  getComponentStatusId,
+  transformISOstringToGermanDateString
+} from '../ReusableComponentsAndFunctions/processComponentStatusFunctions';
 
 let handleOnClickApprove;
 let handleEditRowClick;
@@ -228,10 +231,11 @@ interface EnhancedTableToolbarProps {
   numSelected: number;
   selectedRows: any;
   setPreFilledDataIn5PKFormEditedByAdmin: any;
+  componentStatus: number;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected, selectedRows} = props;
+  const { numSelected, selectedRows, componentStatus} = props;
 
   return (
     <Toolbar
@@ -266,46 +270,32 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           </IconButton>
         </Tooltip>
       )}
-      {numSelected > 0 ? (
+      {numSelected > 0 && componentStatus === 3 ? (
         <Tooltip title="Ausgewählte Einträge genehmigen">
           <IconButton onClick={(event: React.MouseEvent<unknown>) =>handleOnClickApprove(event, true)}>
             <CheckIcon color="success" />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Zum Genehmigen müssen Einträge ausgewählt werden">
+        <Tooltip title={componentStatus === 3 ? "Zum Genehmigen müssen Einträge ausgewählt werden." : "Anträge können erst angenommen werden, wenn die Einreichfrist vorbei ist."}>
           <IconButton>
             <CheckIcon color="disabled" />
           </IconButton>
         </Tooltip>
       )}
-      {numSelected == 1 ? (
+      {numSelected == 1  && componentStatus === 3 ? (
         <Tooltip title="Eintrag ablehnen">
           <IconButton>
             <ClearIcon onClick={(event: React.MouseEvent<unknown>) =>handleOnClickApprove(event, false)} sx={{ color: 'red' }} />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Zum Ablehnen muss genau ein Eintrag ausgewählt sein">
+        <Tooltip title={componentStatus === 3 ? "Zum Ablehnen muss genau ein Eintrag ausgewählt sein" : "Anträge können erst abgelehnt werden, wenn die Einreichfrist vorbei ist."}>
           <IconButton>
             <ClearIcon color="disabled" />
           </IconButton>
         </Tooltip>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="select Data">
-          <IconButton>
-            <DeleteIcon color="disabled" />
-          </IconButton>
-        </Tooltip>
-      )}
-
     </Toolbar>
   );
 };
@@ -318,6 +308,7 @@ function FifthExamAdminTable(props) {
   const [showDeclineReasonDialog, setShowDeclineReasonDialog] = React.useState(false);
   const [currentDeclineReason, setCurrentDeclineReason] = React.useState('');
   const [currentSelectedExamId, setCurrentSelectedExamId] = React.useState('');
+  const [componentStatus, setComponentStatus] = React.useState(0);
 
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof ExamInterface>('studentName');
@@ -476,12 +467,18 @@ function FifthExamAdminTable(props) {
       .then((json) => {
         dispatch({ type: 'LOAD_ALL_EXAMS', payload: json });
       });
+    sendApiRequest('api/components/getTransitionDatesOfAll', 'GET')
+        .then((response) => response.json())
+        .then((data) => setComponentStatus(getComponentStatusId(data, 'fifthExam')));
   }, [])
 
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} selectedRows={selected} setPreFilledDataIn5PKFormEditedByAdmin={props.setPreFilledDataIn5PKFormEditedByAdmin} />
+        <EnhancedTableToolbar numSelected={selected.length}
+                              selectedRows={selected}
+                              setPreFilledDataIn5PKFormEditedByAdmin={props.setPreFilledDataIn5PKFormEditedByAdmin}
+                              componentStatus={componentStatus} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
