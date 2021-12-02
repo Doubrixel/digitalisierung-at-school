@@ -13,9 +13,9 @@ import {
 function ModulCollection(props) {
   const { role } = props;
   let approprateRolePath = '';
-  if (role === 'student') {
+  if (role === STUDENT_ROLE) {
     approprateRolePath = 'student';
-  } else if (role === 'admin') {
+  } else if (role === SUPER_ADMIN_ROLE || FA_ADMIN_ROLE || FIFTH_PK_ADMIN_ROLE) {
     approprateRolePath = 'admin';
   }
 
