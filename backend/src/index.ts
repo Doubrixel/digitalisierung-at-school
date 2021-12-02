@@ -6,6 +6,7 @@ import { testDBConnection } from './db/dbAccessor';
 import * as auth from './auth';
 import * as dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import * as fileUpload from 'express-fileupload';
 
 dotenv.config({ path: join(__dirname, '../../data/.env') });
 
@@ -18,6 +19,9 @@ const main = async (port: number) =>
 
     const app: Express = express();
 
+    app.use(fileUpload.default({
+        createParentPath: true,
+    }));
     app.use(cookieParser());
     app.use(express.json());
     app.use(auth.initialize);

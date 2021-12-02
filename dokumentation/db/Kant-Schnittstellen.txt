@@ -33,7 +33,7 @@ api/components/getTransitionDatesOfAll (GET)
 
 6 Arbeit hochladen
 /api/facharbeit/uploadDocument (POST)
-	{Blob document}
+	{Blob document (pdf)}
 	->{string deliveryTime}
 
 3 alle Facharbeiten anzeigen lassen
