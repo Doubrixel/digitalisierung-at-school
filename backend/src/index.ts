@@ -29,7 +29,6 @@ const main = async (port: number) =>
     });
 
     testDBConnection();
-    console.log('Reached end of index.ts');
 };
 
 main(5000);
