@@ -6,7 +6,6 @@ import { testDBConnection } from './db/dbAccessor';
 import * as auth from './auth';
 import * as dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
-import * as pdfCreation from './routing/routes/pdfCreation/pdfCreation';
 
 dotenv.config({ path: join(__dirname, '../../data/.env') });
 
@@ -30,7 +29,6 @@ const main = async (port: number) =>
     });
 
     testDBConnection();
-    await pdfCreation.makePdf(false, '1');
     console.log('Reached end of index.ts');
 };
 

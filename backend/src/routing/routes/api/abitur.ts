@@ -8,7 +8,7 @@ export default (): Router => {
     router.get('/test', Abitur.GETtest);
     router.get('/getAllExams', Abitur.GETgetAllExams);
     router.get('/getExamData', Abitur.GETgetExamData);
-    router.get('/getPdf', Abitur.GETgetPdf);
+    router.get('/getPdf', AbiturValidators.GETgetPdf, Abitur.GETgetPdf);
     router.post('/applyForTopic', AbiturValidators.POSTapplyForTopic, Abitur.POSTapplyForTopic);
     router.post('/setApprovalState', AbiturValidators.POSTsetApprovalState, Abitur.POSTsetApprovalState);
     router.post('/editData/:examId', AbiturValidators.POSTeditData, Abitur.POSTeditData);

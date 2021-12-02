@@ -12,6 +12,7 @@ import {
 import rejectWhenValidationsFail from '../../validators/rejectWhenValidationsFail';
 import {getStudentId} from '../../../auth/getRequestCookieData';
 import * as pdfCreation from '../../routes/pdfCreation/pdfCreation';
+import fs from 'fs';
 
 export default class Abitur {
 
@@ -183,7 +184,14 @@ export default class Abitur {
         updateData(sql, args, defaultUpdateCallback(res));
     }
     static async GETgetPdf(req: Request, res: Response): Promise<void> {
-        const pdfPath = await pdfCreation.makePdf(true, '1');
+        if (rejectWhenValidationsFail(req, res)) return;
+        const studentID = await getStudentId(req, res);
+        if (studentID == -1) return;
+        const { submitNumber } = req.body;
+        const pdfPath = await pdfCreation.makePdf(submitNumber, studentID);
         res.download(pdfPath, '5.PK-Rückmeldung.pdf');
+        setTimeout(() => {
+            fs.rm(pdfPath, () => {console.log('Pdf deleted.');});
+        },10000);
     }
 }

@@ -26,7 +26,8 @@ interface iAbiturDetails {
     ablehnungsgrund: string,
     studentID: number,
     secondStepSubmitted: number,
-    tutor: string
+    tutor: string,
+    updatedTutor: string
 }
 
 interface iStudentName {
@@ -43,7 +44,7 @@ interface iTransitionDates {
 
 
 
-export async function makePdf(isFormblatt1: boolean, studentID: string):Promise<string> {
+export async function makePdf(FormblattVersion: number, studentID: number):Promise<string> {
     const pdfPath = '../../../../../data/';
 
     // Get abiturpruefungsdetails and check for details
@@ -58,16 +59,15 @@ export async function makePdf(isFormblatt1: boolean, studentID: string):Promise<
     const abiturYearSql = "SELECT * FROM komponenten WHERE name='5pk'";
     const transitionDates: iTransitionDates = await getFromDatabase(abiturYearSql) as iTransitionDates;
 
-
-    if (isFormblatt1) {
-        return makeFormblatt1Pdf(pdfPath, studentID, abiturDetails, studentName, transitionDates); // return davorsetzen später, denke ich...
+    if (FormblattVersion == 1) {
+        return makeFormblatt1Pdf(pdfPath, abiturDetails, studentName, transitionDates); // return davorsetzen später, denke ich...
     }
     else {
-        return makeFormblatt3Pdf(pdfPath, studentID, abiturDetails, studentName, transitionDates); // return davorsetzen später, denke ich...
+        return makeFormblatt3Pdf(pdfPath, abiturDetails, studentName, transitionDates); // return davorsetzen später, denke ich...
     }
 }
 
-async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetails: iAbiturDetails, studentName: iStudentName, transitionDates: iTransitionDates):Promise<string> {
+async function makeFormblatt1Pdf(pdfPath: string, abiturDetails: iAbiturDetails, studentName: iStudentName, transitionDates: iTransitionDates):Promise<string> {
     // distinguish between PP and BLL
     let formblatt1Path = undefined;
     if (abiturDetails.art == 'PP'){
@@ -171,7 +171,7 @@ async function makeFormblatt1Pdf(pdfPath: string, studentID: string, abiturDetai
     return file;
 }
 
-async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetails: iAbiturDetails, studentName: iStudentName, transitionDates: iTransitionDates):Promise<string> {
+async function makeFormblatt3Pdf(pdfPath: string, abiturDetails: iAbiturDetails, studentName: iStudentName, transitionDates: iTransitionDates):Promise<string> {
     // distinguish between PP and BLL
     let formblatt3Path = undefined;
     let filename = undefined;
@@ -195,6 +195,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
     let finalExaminer;
     let finalPresentationForm;
     let finalPartnerStudentName;
+    let finalTutor;
 
     if (abiturDetails.updatedProblemQuestion) {
         finalProblemQuestion = abiturDetails.updatedProblemQuestion;
@@ -238,12 +239,12 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
         finalPartnerStudentName = abiturDetails.partnerStudentName;
     }
 
-    console.log(finalProblemQuestion);
-    console.log(finalReferenzfach);
-    console.log(finalBezugsfach);
-    console.log(finalExaminer);
-    console.log(finalPresentationForm);
-    console.log(finalPartnerStudentName);
+    if (abiturDetails.updatedTutor) {
+        finalTutor = abiturDetails.updatedTutor;
+    }
+    else {
+        finalTutor = abiturDetails.tutor;
+    }
 
     const abiturYear:string = transitionDates.transitionDate3.substring(0, 4);
     const abiturDate:string = transitionDates.transitionDate3.substring(8,10) + '.' + transitionDates.transitionDate3.substring(5,7) + '.' + abiturYear;
@@ -251,7 +252,6 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
     finalApprovalDate.setDate(finalApprovalDate.getDate()+7);
     const monthHelper = finalApprovalDate.getUTCMonth() + 1;
     const finalApprovalDateAsString = finalApprovalDate.getUTCDate() + '.' + monthHelper + '.' + finalApprovalDate.getFullYear();
-
 
     // Load source pdf
     const sourceDoc = await PDFDocument.load(fs.readFileSync(path.join(__dirname, formblatt3Path)));
@@ -302,7 +302,7 @@ async function makeFormblatt3Pdf(pdfPath: string, studentID: string, abiturDetai
         color: rgb(0.0, 0.0, 0.0),
     });
 
-    firstPage.drawText(abiturDetails.tutor, {
+    firstPage.drawText(finalTutor, {
         x: 125,
         y: 653.2,
         size: 11,
