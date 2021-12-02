@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import Auth from '../controllers/Auth';
-import {requireStudent} from '../../auth';
+import {requireAdmin, requireStudent} from '../../auth';
 
 export default (): Router => {
     const router = Router();
@@ -14,6 +14,8 @@ export default (): Router => {
     router.get('/getUserData', Auth.GETuserData);
 
     router.get('/studentTest', requireStudent,  Auth.GETstudentTest);
+
+    router.get('/adminTest', requireAdmin, Auth.GETadminTest);
 
     return router;
 };

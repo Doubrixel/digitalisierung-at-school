@@ -1,8 +1,11 @@
 #footer {
     background-color: #1b2b4b;
+    position: relative;
+    bottom: 0;
     width: 100%;
     color: #cdc9c9;
     height: var(--footerHeight);
+    padding-top: 1px;
 }
 
 #erreichbarkeit {

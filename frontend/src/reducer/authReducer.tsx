@@ -1,36 +1,54 @@
+export const FA_ADMIN_ROLE = 'FA_ADMIN_ROLE';
+export const FIFTH_PK_ADMIN_ROLE = 'FIFTH_PK_ADMIN_ROLE';
+export const SUPER_ADMIN_ROLE = 'SUPER_ADMIN_ROLE';
+export const STUDENT_ROLE = 'STUDENT_ROLE';
+
 export interface AuthState {
   isLoggedIn: boolean,
-  authToken: string,
+  userName: string,
   role: string,
-  accessibleComponents: string[],
 }
 
 const initialState: AuthState = {
   isLoggedIn: false,
-  authToken: '',
+  userName: '',
   role: '',
-  accessibleComponents: [],
 };
 
-// funktionen erstmal nur gemockt
-function getRoleOfUser() {
-  return 'admin';
-}
-
-// funktionen erstmal nur gemockt
-function getAccessibleComponentsOfUser() {
-  return ['ag', 'fa', 'wpf', '5pk'];
+function getUserRole(roles, groups) {
+  const groupKeys = Object.values(groups);
+  // @ts-ignore
+  const isStudent = groupKeys.findIndex((group) => group.name === 'Schuelerschaft');
+  const isFaAdmin = roles.findIndex((role) => role.id === 'ROLE_PORTALFA');
+  const isFifthPKAdmin = roles.findIndex((role) => role.id === 'ROLE_PORTAL5PK');
+  if (isFaAdmin !== -1 && isFifthPKAdmin !== -1) {
+    return SUPER_ADMIN_ROLE;
+  }
+  if (isFaAdmin !== -1) {
+    return FA_ADMIN_ROLE;
+  }
+  if (isFifthPKAdmin !== -1) {
+    return FIFTH_PK_ADMIN_ROLE;
+  }
+  if (isStudent !== -1) {
+    return STUDENT_ROLE;
+  }
+  return null;
 }
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'LOGIN':
       return {
-        ...state, isLoggedIn: true, authToken: 'authTokenMock', role: getRoleOfUser(), accessibleComponents: getAccessibleComponentsOfUser(),
+        ...state, isLoggedIn: true,
       };
     case 'LOGOUT':
       return {
-        ...state, isLoggedIn: false, authToken: null, role: null, accessibleComponents: [],
+        ...state, isLoggedIn: false, role: null,
+      };
+    case 'SET_USER_DATA':
+      return {
+        ...state, userName: action.userName, role: getUserRole(action.roles, action.groups),
       };
     default:
       return state;

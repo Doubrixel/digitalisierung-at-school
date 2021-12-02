@@ -1,0 +1,45 @@
+export interface FifthExamState {
+  allExams: Array<ExamInterface>,
+  preFilledDataIn5PKFormEditedByAdmin: object;
+}
+
+export interface ExamInterface {
+  examId: number,
+  examType: string,
+  studentName: string,
+  partnerStudentName: string,
+  updatedPartnerStudentName: string,
+  referenzfach: string,
+  updatedReferenzfach: string,
+  bezugsfach: string,
+  updatedBezugsfach: string,
+  examiner: string,
+  updatedExaminer: string,
+  topicArea: string,
+  updatedTopicArea: string,
+  problemQuestion: string,
+  updatedProblemQuestion: string,
+  presentationForm: string,
+  updatedPresentationForm: string,
+  approved: boolean,
+}
+
+const initialState: FifthExamState = {
+  preFilledDataIn5PKFormEditedByAdmin: {},
+  allExams: [],
+};
+
+const FifthExamReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case 'SET_PREFILLED_DATA':
+      return {
+        ...state, preFilledDataIn5PKFormEditedByAdmin: action.prefilledData,
+      };
+    case 'LOAD_ALL_EXAMS':
+      return { ...state, allExams: action.payload };
+    default:
+      return state;
+  }
+};
+
+export default FifthExamReducer;

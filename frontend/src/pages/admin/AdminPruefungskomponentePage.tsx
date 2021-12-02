@@ -6,7 +6,7 @@
 /* eslint-disable */
 import React from 'react';
 import { Paper } from '@material-ui/core';
-import ComponentToggleButton from '../../components/Buttons/ComponentToggleButton';
+import StatusButton from '../../components/Buttons/StatusButton';
 
 import './AdminPruefungskomponentePage.css';
 import CreateCSVButton from '../../components/Buttons/CreateCSVButton';
@@ -28,7 +28,7 @@ function AdminPruefungskomponentePage() {
       <div id="firstLine">
         <h1>Fünfte PK Übersicht</h1>
         <span style={{ marginRight: '0', marginLeft: 'auto', width: '50vw', maxWidth: '320px' }}>
-          <ComponentToggleButton buttonHandleClickFunction={handleComponentActivation} componentLabel="Komponente deaktivieren" />
+          <StatusButton />
         </span>
       </div>
       <Paper className="fifthExamPaper">

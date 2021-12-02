@@ -1,5 +1,6 @@
 import React from 'react';
 import './App.css';
+import { connect, useDispatch } from 'react-redux';
 import {
   BrowserRouter, Switch, Route,
 } from 'react-router-dom';
@@ -15,40 +16,83 @@ import WahlpflichtEntryPage from './pages/student/WahlpflichtEntryPage';
 import PruefungskomponenteEntryPage from './pages/student/PruefungskomponenteEntryPage';
 import FacharbeitApplicationForm from './pages/student/Facharbeit/FacharbeitApplicationForm';
 import FacharbeitStudentListPage from './pages/student/Facharbeit/FacharbeitStudentListPage';
-import SettingsPage from './pages/admin/SettingsPage';
 import AdminFacharbeitPage from './pages/admin/AdminFacharbeitPage';
-import AdminAGPage from './pages/admin/AdminAGPage';
-import AdminWahlpflichtPage from './pages/admin/AdminWahlpflichtPage';
 import AdminPruefungskomponentePage from './pages/admin/AdminPruefungskomponentePage';
 import AdminFacharbeitEinzelnerSchueler from './pages/admin/AdminFacharbeitEinzelnerSchueler';
+import NoAccessPage from './pages/NoAccessPage';
+import sendAPIRequest from './APIRequestFunction';
+import { login, setUserData } from './actions/authActions';
+import { FA_ADMIN_ROLE, FIFTH_PK_ADMIN_ROLE, SUPER_ADMIN_ROLE } from './reducer/authReducer';
 
-function App() {
+function App(props) {
+  const { role } = props;
+  const dispatch = useDispatch();
+  sendAPIRequest('auth/getUserData', 'GET')
+    .then((response) => response.json())
+    .then((data) => {
+      dispatch(setUserData(data.name, data.roles, data.groups));
+      dispatch(login());
+    })
+    .catch((err) => {
+      console.log(`error: ${err.message}`);
+      dispatch(setUserData('Nicht eingeloggt', [], []));
+    });
   return (
     <BrowserRouter>
-      <Toolbar />
-      <div id="applicationRootDiv">
-        <Switch>
-          {/* Schüler-Seiten */}
-          <Route exact path="/"><HomePage /></Route>
-          <Route exact path="/student/ag"><AGEntryPage /></Route>
-          <Route exact path="/student/ag/agbuchung"><AGSinglePage /></Route>
-          <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
-          <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
-          <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage /></Route>
-          <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
-          <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
-          {/* Admin-Seiten */}
-          <Route exact path="/settings"><SettingsPage /></Route>
-          <Route exact path="/admin/ag"><AdminAGPage /></Route>
-          <Route exact path="/admin/facharbeit"><AdminFacharbeitPage /></Route>
-          <Route exact path="/admin/wahlpflicht"><AdminWahlpflichtPage /></Route>
-          <Route exact path="/admin/pruefungskomponente"><AdminPruefungskomponentePage /></Route>
-          <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
-        </Switch>
+      <div id="applicationContent">
+        <Toolbar />
+        <div id="applicationRootDiv">
+          <Switch>
+            {/* Schüler-Seiten */}
+            <Route exact path="/"><HomePage /></Route>
+            <Route exact path="/student/ag"><AGEntryPage /></Route>
+            <Route exact path="/student/ag/agbuchung"><AGSinglePage /></Route>
+            <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
+            <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
+            <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /></Route>
+            <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
+            <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
+            {/* Admin-Seiten */}
+            {/* Facharbeitsseiten */}
+            <Route exact path="/admin/facharbeit">
+              { role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
+                ? <AdminFacharbeitPage /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/admin/facharbeit/einzelnerSchueler">
+              { role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
+                ? <AdminFacharbeitEinzelnerSchueler /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/admin/facharbeit">
+              { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+                ? <AdminFacharbeitPage /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
+
+            {/* 5. PK seiten */}
+            <Route exact path="/admin/pruefungskomponente">
+              { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+                ? <AdminPruefungskomponentePage /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/admin/pruefungskomponente">
+              { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+                ? <AdminPruefungskomponentePage /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/admin/pruefungskomponente/editStudentApplication">
+              { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+                ? <PruefungskomponenteEntryPage isGettingEditedByAdmin /> : <NoAccessPage /> }
+            </Route>
+          </Switch>
+        </div>
       </div>
       <Footer />
     </BrowserRouter>
   );
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    role: state.authReducer.role,
+  };
+}
+
+export default connect(mapStateToProps, null)(App);

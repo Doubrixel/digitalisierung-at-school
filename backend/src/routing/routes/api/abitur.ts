@@ -11,6 +11,7 @@ export default (): Router => {
     router.get('/getPdf', Abitur.GETgetPdf);
     router.post('/applyForTopic', AbiturValidators.POSTapplyForTopic, Abitur.POSTapplyForTopic);
     router.post('/setApprovalState', AbiturValidators.POSTsetApprovalState, Abitur.POSTsetApprovalState);
+    router.post('/editData/:examId', AbiturValidators.POSTeditData, Abitur.POSTeditData);
 
 
     return router;
