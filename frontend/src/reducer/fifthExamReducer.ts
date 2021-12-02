@@ -15,12 +15,16 @@ export interface ExamInterface {
   updatedBezugsfach: string,
   examiner: string,
   updatedExaminer: string,
+  tutor: string,
+  updatedTutor: string,
   topicArea: string,
   updatedTopicArea: string,
   problemQuestion: string,
   updatedProblemQuestion: string,
   presentationForm: string,
   updatedPresentationForm: string,
+  firstSubmissionDate: Date,
+  finalSubmissionDate: Date,
   approved: boolean,
 }
 

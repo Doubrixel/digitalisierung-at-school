@@ -25,6 +25,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import CreateIcon from '@mui/icons-material/Create';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 import Button from '@material-ui/core/Button';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -40,6 +41,7 @@ import { useEffect } from 'react';
 import { setPreFilledDataIn5PKFormEditedByAdmin } from '../../actions/FifthExamActions'
 import sendApiRequest from "../../APIRequestFunction"
 import TextField from '@mui/material/TextField';
+import { transformISOstringToGermanDateString } from '../ReusableComponentsAndFunctions/processComponentStatusFunctions';
 
 let handleOnClickApprove;
 let handleEditRowClick;
@@ -127,10 +129,40 @@ const headCells: readonly HeadCell[] = [
     label: 'Prüfer:in',
   },
   {
+    id: 'tutor',
+    numeric: true,
+    disablePadding: false,
+    label: 'Tutor:in',
+  },
+  {
     id: 'topicArea',
     numeric: true,
     disablePadding: false,
     label: 'Themenbereich',
+  },
+  {
+    id: 'problemQuestion',
+    numeric: true,
+    disablePadding: false,
+    label: 'Problemfrage',
+  },
+  {
+    id: 'presentationForm',
+    numeric: true,
+    disablePadding: false,
+    label: 'Präsentationsform (Medien)',
+  },
+  {
+    id: 'firstSubmissionDate',
+    numeric: true,
+    disablePadding: false,
+    label: 'Abgabe erstes Formular',
+  },
+  {
+    id: 'finalSubmissionDate',
+    numeric: true,
+    disablePadding: false,
+    label: 'Abgabe finales Formular',
   },
   {
     id: 'approved',
@@ -167,14 +199,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{
-              'aria-label': 'select all desserts',
+              'aria-label': 'select all',
             }}
           />
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={"right"}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -212,26 +244,15 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected}
-          selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Anträge
-        </Typography>
-      )}
+    <Typography
+      sx={{ flex: '1 1 100%' }}
+      color="inherit"
+      variant="subtitle1"
+      component="div"
+    >
+      {numSelected === 1 ? '1 Antrag ausgewählt' : `${numSelected} Anträge ausgewählt` }
+    </Typography>
+
       {numSelected == 1 ? (
         <Tooltip title="Eintrag bearbeiten">
           <IconButton>
@@ -292,8 +313,8 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
 function FifthExamAdminTable(props) {
   const dispatch = useDispatch();
 
-  const [showTopicDialog, setShowTopicDialog] = React.useState(false);
-  const [currentAnnotation, setCurrentAnnotation] = React.useState('');
+  const [showDialogWithLargeContent, setShowDialogWithLargeContent] = React.useState(false);
+  const [currentlyDisplayedContentOfDialog, setCurrentlyDisplayedContentOfDialog] = React.useState('');
   const [showDeclineReasonDialog, setShowDeclineReasonDialog] = React.useState(false);
   const [currentDeclineReason, setCurrentDeclineReason] = React.useState('');
   const [currentSelectedExamId, setCurrentSelectedExamId] = React.useState('');
@@ -309,12 +330,13 @@ function FifthExamAdminTable(props) {
 
   const rows: ExamInterface[] = useSelector((state: RootState) => state.fifthExamReducer.allExams );
 
-  const showFullTopic = (annotation) => {
-    setShowTopicDialog(true);
-    setCurrentAnnotation(annotation);
+  const openDialogWithContent = (content) => {
+    setShowDialogWithLargeContent(true);
+    setCurrentlyDisplayedContentOfDialog(content);
   };
+
   const hideFullTopic = () => {
-    setShowTopicDialog(false);
+    setShowDialogWithLargeContent(false);
   };
   const hideDeclineReasonAndSendApiRequest = () => {
     setShowDeclineReasonDialog(false);
@@ -437,9 +459,16 @@ function FifthExamAdminTable(props) {
   // Avoid a layout jump when reaching the last page with empty rowsWithIds.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const isPropertyUpdated = (updatedProperty: any) =>{
-    return updatedProperty !== ('' || null);
-  }
+  const showAppropriateCellContent = (originalProperty: any, updatedProperty: any) =>{
+    const updatedPropertyExists = !(updatedProperty === null || updatedProperty === '');
+      return (
+        <div style={{display: "flex", justifyContent: 'end', alignItems: 'center'}}>
+          {updatedPropertyExists ?<Typography style={{textDecoration: 'line-through', backgroundColor: '#fd4c4c'}}>{originalProperty}</Typography> : null}
+          {updatedProperty ? <ArrowRightAltIcon/> : null}
+          <Typography style={updatedPropertyExists ? {backgroundColor: '#a3ff97'} : {}}>{originalProperty}</Typography>
+        </div>
+      )
+    }
 
   useEffect(() => {
     sendApiRequest('/api/abitur/getAllExams', 'GET')
@@ -507,16 +536,25 @@ function FifthExamAdminTable(props) {
                       >
                         {row.studentName}
                       </TableCell>
-                      <TableCell align="right">{!isPropertyUpdated(row.updatedPartnerStudentName) ? row.partnerStudentName: row.updatedPartnerStudentName}</TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.partnerStudentName, row.updatedPartnerStudentName)}</TableCell>
                       <TableCell align="right">{row.examType}</TableCell>
-                      <TableCell align="right">{!isPropertyUpdated(row.updatedReferenzfach) ? row.referenzfach: row.updatedReferenzfach}</TableCell>
-                      <TableCell align="right">{!isPropertyUpdated(row.updatedBezugsfach) ? row.bezugsfach: row.updatedBezugsfach}</TableCell>
-                      <TableCell align="right">{!isPropertyUpdated(row.updatedExaminer) ? row.examiner: row.updatedExaminer}</TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.referenzfach, row.updatedReferenzfach)}</TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.bezugsfach, row.updatedBezugsfach)}</TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.examiner, row.updatedExaminer)}</TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.tutor, row.updatedTutor)}</TableCell>
                       <TableCell align="right">
-                        <Button title="Thema ansehen" onClick={() => showFullTopic(!isPropertyUpdated(row.updatedTopicArea)? row.topicArea: row.updatedTopicArea)}>
+                        <Button title="Thema ansehen" onClick={() => openDialogWithContent(showAppropriateCellContent(row.topicArea, row.updatedTopicArea))}>
                           <DescriptionIcon />
                         </Button>
                       </TableCell>
+                      <TableCell align="right">
+                        <Button title="Problemfrage ansehen" onClick={() => openDialogWithContent(showAppropriateCellContent(row.problemQuestion, row.updatedProblemQuestion))}>
+                          <DescriptionIcon />
+                        </Button>
+                      </TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.presentationForm, row.updatedPresentationForm)}</TableCell>
+                      <TableCell align="right">{transformISOstringToGermanDateString(new Date(row.firstSubmissionDate).toISOString())}</TableCell>
+                      <TableCell align="right">{transformISOstringToGermanDateString(new Date(row.finalSubmissionDate).toISOString())}</TableCell>
                       <TableCell align="right">{row.approved ? "Ja" : "Nein"}</TableCell>
                     </TableRow>
                   );
@@ -549,13 +587,13 @@ function FifthExamAdminTable(props) {
       />
 
       <Dialog
-        open={showTopicDialog}
+        open={showDialogWithLargeContent}
         onClose={hideFullTopic}
       >
-        <DialogTitle id="submit_evaluations_dialog_title">{'Thema: '}</DialogTitle>
+        <DialogTitle id="submit_evaluations_dialog_title">{'Inhalt:'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="submit_evaluations__dialog_content">
-            {currentAnnotation}
+            {currentlyDisplayedContentOfDialog}
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -18,7 +18,7 @@ export function getComponentStatusId(componentObjectArray, whichComponent): numb
   return 0;
 }
 
-function transformISOstringToGermanDateString(ISOstring) {
+export function transformISOstringToGermanDateString(ISOstring) {
   return `${ISOstring.substring(8, 10)}.${ISOstring.substring(5, 7)}.${ISOstring.substring(0, 4)}`;
 }
 
