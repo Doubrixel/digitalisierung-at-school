@@ -202,4 +202,9 @@ export default class Abitur {
         }
 
     }
+
+    static POSTclearAllData(req: Request, res: Response): void{
+        const sql = 'DELETE FROM abiturpruefungen';
+        updateData(sql, [], defaultUpdateCallback(res));
+    }
 }
