@@ -303,9 +303,8 @@ function FifthExamFormComponent(props) {
       }
     }
     sendAPIRequest('api/abitur/applyForTopic', 'POST', requestBodyParams)
-      .then((response) => (checkIfDataHasBeenSaved(response)));
-
-    handleGeneratePDF(componentStatusId);
+      .then((response) => (checkIfDataHasBeenSaved(response)))
+      .then(() => handleGeneratePDF(componentStatusId));
   };
 
   function getStepOneInputFields(areInputFieldsOriginalDataFields) {
