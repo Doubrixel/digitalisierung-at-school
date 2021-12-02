@@ -70,7 +70,7 @@ const defaultInsertCallback = (res: Response) => (
     }
 );
 
-const updateData = (sql: string, values: Array<number | string>, callback: (changedRowCount: number, err: Error|null) => void): void => {
+const updateData = (sql: string, values: Array<number | string | null>, callback: (changedRowCount: number, err: Error|null) => void): void => {
     accessDB((db) => {
         db.run(sql, values, function(err){
             if (err) callback(-1, err);

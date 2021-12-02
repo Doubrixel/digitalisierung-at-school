@@ -1,4 +1,4 @@
-import {body, ValidationChain} from 'express-validator';
+import {body, ValidationChain, param} from 'express-validator';
 
 export default class AbiturValidators {
     static isOptionalString = (fieldName: string): ValidationChain => body(fieldName).isString().trim().optional();
@@ -43,6 +43,6 @@ export default class AbiturValidators {
         body('examType').isString().isIn(['BLL', 'PP'])
     ];
     static GETgetPdf = [
-        body('submitNumber').isInt().isIn([1,2])
+        param('submitNumber').isInt().isIn([1,2])
     ]
 }
