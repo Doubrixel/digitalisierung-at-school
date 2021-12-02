@@ -5,7 +5,7 @@
 import React from 'react';
 import './AdminFacharbeitPage.css';
 import ComponentToggleButton from '../../components/Buttons/ComponentToggleButton';
-import TableUebersichtFA from '../../components/ReusableComponents/TableUebersichtFA';
+import TableUebersichtFA from '../../components/ReusableComponentsAndFunctions/TableUebersichtFA';
 import CreateCSVButton from '../../components/Buttons/CreateCSVButton';
 
 function AdminFacharbeitPage() {

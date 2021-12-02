@@ -35,7 +35,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import {useSelector, useDispatch} from "react-redux";
 import {RootState} from "../../reducer";
-import { ExamInterface } from "../../reducer/FifthExamReducer";
+import { ExamInterface } from '../../reducer/fifthExamReducer';
 import { useEffect } from 'react';
 import { setPreFilledDataIn5PKFormEditedByAdmin } from '../../actions/FifthExamActions'
 import sendApiRequest from "../../APIRequestFunction"
@@ -307,7 +307,7 @@ function FifthExamAdminTable(props) {
 
   const [forceRerender, setForceRerender] = React.useState(true);
 
-  const rows: ExamInterface[] = useSelector((state: RootState) => state.fithExamAdminReducer.allExams )
+  const rows: ExamInterface[] = useSelector((state: RootState) => state.fifthExamReducer.allExams );
 
   const showFullTopic = (annotation) => {
     setShowTopicDialog(true);

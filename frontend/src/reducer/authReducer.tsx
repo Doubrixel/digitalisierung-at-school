@@ -16,9 +16,9 @@ const initialState: AuthState = {
 };
 
 function getUserRole(roles, groups) {
-  const groupKeys = Object.values(groups);
+  const groupValueArray = Object.values(groups);
   // @ts-ignore
-  const isStudent = groupKeys.findIndex((group) => group.name === 'Schuelerschaft');
+  const isStudent = groupValueArray.findIndex((group) => group.name === 'Schuelerschaft');
   const isFaAdmin = roles.findIndex((role) => role.id === 'ROLE_PORTALFA');
   const isFifthPKAdmin = roles.findIndex((role) => role.id === 'ROLE_PORTAL5PK');
   if (isFaAdmin !== -1 && isFifthPKAdmin !== -1) {

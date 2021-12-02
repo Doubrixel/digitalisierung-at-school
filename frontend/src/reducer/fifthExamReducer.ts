@@ -29,7 +29,7 @@ const initialState: FifthExamState = {
   allExams: [],
 };
 
-const FifthExamReducer = (state = initialState, action) => {
+const fifthExamReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_PREFILLED_DATA':
       return {
@@ -42,4 +42,4 @@ const FifthExamReducer = (state = initialState, action) => {
   }
 };
 
-export default FifthExamReducer;
+export default fifthExamReducer;

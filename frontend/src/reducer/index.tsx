@@ -1,14 +1,14 @@
 import { combineReducers } from 'redux';
 import authReducer, { AuthState } from './authReducer';
-import fithExamAdminReducer, { FifthExamState } from './FifthExamReducer';
+import fifthExamReducer, { FifthExamState } from './fifthExamReducer';
 
 const rootReducer = combineReducers({
   authReducer,
-  fithExamAdminReducer,
+  fifthExamReducer,
 });
 export interface RootState {
   authReducer: AuthState,
-  fithExamAdminReducer: FifthExamState,
+  fifthExamReducer: FifthExamState,
 }
 
 export default rootReducer;

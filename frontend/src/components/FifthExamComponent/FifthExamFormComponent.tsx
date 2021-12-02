@@ -9,7 +9,7 @@ import {
 import TextField from '@mui/material/TextField';
 import CreatePDFButton from '../Buttons/CreatePDFButton';
 import sendAPIRequest from '../../APIRequestFunction';
-import { EINREICHFRIST_FUENFTE_PK } from '../../CONFIG';
+import { getComponentStatusId, getTransitionDisplayString } from '../ReusableComponentsAndFunctions/processComponentStatusFunctions';
 
 function FifthExamFormComponent(props) {
   const { isGettingEditedByAdmin, preFilledDataIn5PKFormEditedByAdmin, userName } = props;
@@ -61,7 +61,8 @@ function FifthExamFormComponent(props) {
   const [BLLCheckBox3, setBLLCheckBox3] = useState(false);
   const [BLLCheckBox4, setBLLCheckBox4] = useState(false);
 
-  const [rejectionReason, setRejectionReason] = useState('false');
+  const [rejectionReason, setRejectionReason] = useState('');
+  const [applicationDeadlineString, setApplicationDeadlineString] = useState('Keine Deadline vorhanden');
 
   // originalDataField Handler
   const handleExamTypeInputChange = (event) => {
@@ -135,20 +136,6 @@ function FifthExamFormComponent(props) {
 
   const history = useHistory();
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  /*
-  function processComponentStatus(response): number {
-    let componentStatusId = 0;
-    response.forEach((componentObject) => {
-      if (componentObject.componentId === 2) {
-        setFormStatus(componentObject.componentStatusId);
-        componentStatusId = componentObject.componentStatusId;
-      }
-    });
-    return componentStatusId;
-  }
-*/
-
   function setAppropriateFormStatus(componentStatusId_, approved, examType_, problemQuestion_) {
     if (isGettingEditedByAdmin === true) {
       setFormStatus(5);
@@ -203,33 +190,33 @@ function FifthExamFormComponent(props) {
   }
 
   useEffect(() => {
-    const localComponentStatusId = 2;
+    let localComponentStatusId = 0;
 
     if (isGettingEditedByAdmin === true) {
       processExamData(preFilledDataIn5PKFormEditedByAdmin);
       setAppropriateFormStatus(null, null, null, null);
     } else {
-      /* sendAPIRequest('api/components/getStatusOfAll', 'GET')
-           .then((response) => response.json())
-           .then(data => componentStatus = data)
-           .then((data) => processComponentStatus(data))
-           .then((processedComponentStatusId) => {
-           localComponentStatusId = processedComponentStatusId
-           })
-           .then(() => setAppropriateFormStatus(localComponentStatusId, null, null, null))
-           .then(sendAPIRequest('api/abitur/getExamData'...) */
-      sendAPIRequest('api/abitur/getExamData', 'GET')
+      sendAPIRequest('api/components/getTransitionDatesOfAll', 'GET')
         .then((response) => response.json())
         .then((data) => {
-          processExamData(data);
-          // eslint-disable-next-line max-len
-          setAppropriateFormStatus(localComponentStatusId, data.approved, data.examType, data.problemQuestion);
+          localComponentStatusId = getComponentStatusId(data, 'fifthExam');
+          setAppropriateFormStatus(localComponentStatusId, null, null, null);
+          setComponentStatusId(localComponentStatusId);
+          setApplicationDeadlineString(getTransitionDisplayString(data, 'fifthExam'));
+        })
+        .then(() => {
+          sendAPIRequest('api/abitur/getExamData', 'GET')
+            .then((response) => response.json())
+            .then((data) => {
+              processExamData(data);
+              // eslint-disable-next-line max-len
+              setAppropriateFormStatus(localComponentStatusId, data.approved, data.examType, data.problemQuestion);
+            });
         })
         .catch((err) => {
           console.log(err.message);
-          setAppropriateFormStatus(localComponentStatusId, null, null, null);
+          setAppropriateFormStatus(0, null, null, null);
         });
-      setComponentStatusId(localComponentStatusId);
     }
   }, []);
 
@@ -353,7 +340,10 @@ function FifthExamFormComponent(props) {
             </text>
           )}
         <div style={{ height: '50px' }}>
-          {areInputFieldsOriginalDataFields || formStatus === 5 || formStatus === 6
+          {areInputFieldsOriginalDataFields
+          || formStatus === 5
+          || formStatus === 6
+          || (formStatus === 2 && !examType)
             ? (
               <FormControl component="fieldset">
                 <FormLabel component="legend">Prüfungsart</FormLabel>
@@ -547,7 +537,7 @@ function FifthExamFormComponent(props) {
   function getAppropriateTooltip() {
     let tooltipText;
     if (formStatus === 6) {
-      tooltipText = 'Der Antrag wurde aufgrund der Fristüberschreitung deaktiviert. Bitte reichen sie ihren Antrag über den Button "Antrag nachträglich einreichen" ein';
+      tooltipText = 'Der Button wurde aufgrund der Fristüberschreitung deaktiviert. Bitte reichen sie ihren Antrag über den Button "Antrag nachträglich einreichen" ein';
     } else if (formStatus === 1) {
       tooltipText = 'Es müssen die Prüfungsart, Prüflingsname, Referenzfach, Bezugsfach, Tutor, Prüfer:in und Themenbereich  eingetragen werden.';
     } else if (formStatus === 2 && examType === 'PP') {
@@ -600,7 +590,15 @@ function FifthExamFormComponent(props) {
     }
     if (formStatus === 6) {
       buttonArray.push(
-        <Tooltip title="Alle bearbeitbaren Felder (außer das Partnerfeld) müssen ausgefüllt werden.">
+        <Tooltip
+          style={{ fontSize: 'medium' }}
+          title={(
+            <Typography style={{ fontSize: 'medium' }}>
+              Alle bearbeitbaren
+              Felder (außer das Partnerfeld) müssen ausgefüllt werden.
+            </Typography>
+          )}
+        >
           <span>
             <Button
               id="lateSubmitButtonFifthExam"
@@ -632,7 +630,6 @@ function FifthExamFormComponent(props) {
           marginRight: '0', marginLeft: 'auto', width: '50vw', maxWidth: '320px',
         }}
         />
-
       </div>
       <Paper className="fifthExamPaper">
         { displayAppropriateApplicationStatus() }
@@ -649,9 +646,12 @@ function FifthExamFormComponent(props) {
         </div>
         {formStatus === 2 || formStatus === 3 ? getAppropriateCheckboxes() : null}
         <p style={{ color: 'red', fontWeight: 'bold', marginTop: verticalComponentDistance }}>
-          Abgabetermin:
-          {' '}
-          {EINREICHFRIST_FUENFTE_PK}
+          { applicationDeadlineString }
+          <br />
+          <br />
+          { formStatus === 6
+            ? 'Die Abgabefrist ist abgelaufen. Bitte reichen sie das Formular über den Button "Antrag nachträglich einreichen" ein. Das verspätete Abgabedatum wird registriert.'
+            : null}
         </p>
         <div id="buttonContainer5PK">
           {getSubmitAndGeneratePDFButtons()}
@@ -663,7 +663,7 @@ function FifthExamFormComponent(props) {
 
 function mapStateToProps(state) {
   return {
-    preFilledDataIn5PKFormEditedByAdmin: state.FifthExamReducer.preFilledDataIn5PKFormEditedByAdmin,
+    preFilledDataIn5PKFormEditedByAdmin: state.fifthExamReducer.preFilledDataIn5PKFormEditedByAdmin,
     userName: state.authReducer.userName,
   };
 }

@@ -50,10 +50,14 @@ function StatusButton() {
             fifthExamDates = json[i];
           }
         }
-
-        setTransitionDate1(fifthExamDates.transitionDate1);
-        setTransitionDate2(fifthExamDates.transitionDate2);
-        setTransitionDate3(fifthExamDates.transitionDate3);
+        try {
+          setTransitionDate1(fifthExamDates.transitionDate1);
+          setTransitionDate2(fifthExamDates.transitionDate2);
+          setTransitionDate3(fifthExamDates.transitionDate3);
+        } catch (e) {
+          // @ts-ignore
+          console.log(`Übergangszeitpunkte konnten nicht geladen werden. Fehler: ${e.message}`);
+        }
       });
 
     return () => {
@@ -70,7 +74,7 @@ function StatusButton() {
         <DialogTitle style={{ fontSize: '35px' }}>Freigabe bearbeiten</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Schritt 0: Komponente zur Eingabe für Schüler freigeben.
+            Schritt 0: Komponente für Schüler freigeben.
           </DialogContentText>
           <TextField
             autoFocus
@@ -98,7 +102,7 @@ function StatusButton() {
             style={{ marginBottom: '50px' }}
           />
           <DialogContentText>
-            Schritt 2: Komponente zur Themen Abgabe sperren
+            Schritt 2: Komponente sperren
           </DialogContentText>
           <TextField
             autoFocus
