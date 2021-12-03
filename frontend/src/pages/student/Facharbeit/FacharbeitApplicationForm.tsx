@@ -16,10 +16,10 @@ function FacharbeitApplicationForm(props) {
   const { isGettingEditedByAdmin, preFilledDataIn5PKFormEditedByAdmin } = props;
   const [studentName, setStudentName] = useState('');
   const [studentClass, setStudentClass] = useState('');
-  const [choosenSubject, setChoosenSubject] = useState();
-  const [betreuendeLehrkraft, setBetreuendeLehrkraft] = useState();
-  const [unterrichtendeLehrkraft, setUnterrichtendeLehrkraft] = useState();
-  const [topicTextArea, setTopicTextArea] = useState('');
+  const [subject, setSubject] = useState();
+  const [choosenTeacher, setChoosenTeacher] = useState();
+  const [subjectTeacher, setSubjectTeacher] = useState();
+  const [topic, setTopic] = useState('');
   const [formStatus, setFormStatus] = useState(0);
 
   const handleStudentNameInputChange = (event) => {
@@ -29,16 +29,16 @@ function FacharbeitApplicationForm(props) {
     setStudentClass(event.target.value);
   };
   const handleSubjectInputChange = (event) => {
-    setChoosenSubject(event.target.value);
+    setSubject(event.target.value);
   };
   const handleBetreuendeLehrkraftInputChange = (event) => {
-    setBetreuendeLehrkraft(event.target.value);
+    setChoosenTeacher(event.target.value);
   };
   const handleUnterrichtendeLehrkraftInputChange = (event) => {
-    setUnterrichtendeLehrkraft(event.target.value);
+    setSubjectTeacher(event.target.value);
   };
   const handleTopicInputChange = (event) => {
-    setTopicTextArea(event.target.value);
+    setTopic(event.target.value);
   };
 
   useEffect(() => {
@@ -50,10 +50,10 @@ function FacharbeitApplicationForm(props) {
   const handleSubmitFacharbeit = () => {
     const requestBody = JSON.stringify({
       studentId: 0,
-      topic: topicTextArea,
-      subjectId: choosenSubject,
-      responsibleTeacher: betreuendeLehrkraft,
-      teachingTeacher: unterrichtendeLehrkraft,
+      topic: topic,
+      subjectId: subject,
+      responsibleTeacher: choosenTeacher,
+      teachingTeacher:  subjectTeacher,
     });
     fetch('placeholder/api/facharbeit/chooseTopic', {
       method: 'POST',
@@ -65,10 +65,10 @@ function FacharbeitApplicationForm(props) {
   const handleSubmitAdminFacharbeit = () => {
     const requestBody = JSON.stringify({
       studentId: 0,
-      topic: topicTextArea,
-      subjectId: choosenSubject,
-      responsibleTeacher: betreuendeLehrkraft,
-      teachingTeacher: unterrichtendeLehrkraft,
+      topic: topic,
+      subjectId: subject,
+      responsibleTeacher: choosenTeacher,
+      teachingTeacher:  subjectTeacher,
     });
     fetch('placeholder/api/facharbeit/chooseTopic', {
       method: 'POST',
