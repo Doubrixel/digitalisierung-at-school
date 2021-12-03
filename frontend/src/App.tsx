@@ -22,7 +22,9 @@ import AdminFacharbeitEinzelnerSchueler from './pages/admin/AdminFacharbeitEinze
 import NoAccessPage from './pages/NoAccessPage';
 import sendAPIRequest from './APIRequestFunction';
 import { login, setUserData } from './actions/authActions';
-import { FA_ADMIN_ROLE, FIFTH_PK_ADMIN_ROLE, SUPER_ADMIN_ROLE } from './reducer/authReducer';
+import {
+  FA_ADMIN_ROLE, FIFTH_PK_ADMIN_ROLE, SUPER_ADMIN_ROLE, STUDENT_ROLE,
+} from './reducer/authReducer';
 
 function App(props) {
   const { role } = props;
@@ -45,13 +47,23 @@ function App(props) {
           <Switch>
             {/* Schüler-Seiten */}
             <Route exact path="/"><HomePage /></Route>
-            <Route exact path="/student/ag"><AGEntryPage /></Route>
-            <Route exact path="/student/ag/agbuchung"><AGSinglePage /></Route>
-            <Route exact path="/student/facharbeit"><FacharbeitsEntryPage /></Route>
-            <Route exact path="/student/wahlpflicht"><WahlpflichtEntryPage /></Route>
-            <Route exact path="/student/pruefungskomponente"><PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /></Route>
-            <Route exact path="/student/facharbeit/schuelerliste"><FacharbeitStudentListPage /></Route>
-            <Route exact path="/student/facharbeit/beantragen"><FacharbeitApplicationForm /></Route>
+            <Route exact path="/student/ag">{ role === STUDENT_ROLE ? <AGEntryPage /> : <NoAccessPage /> }</Route>
+            <Route exact path="/student/ag/agbuchung">{ role === STUDENT_ROLE ? <AGSinglePage /> : <NoAccessPage /> }</Route>
+            <Route exact path="/student/facharbeit">{ role === STUDENT_ROLE ? <FacharbeitsEntryPage /> : <NoAccessPage /> }</Route>
+            <Route exact path="/student/wahlpflicht">
+              { role === STUDENT_ROLE ? <WahlpflichtEntryPage /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/student/pruefungskomponente">
+              { /* eslint-disable-next-line max-len */ }
+              { role === STUDENT_ROLE ? <PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /> : <NoAccessPage /> }
+            </Route>
+            <Route exact path="/student/facharbeit/schuelerliste">
+              { role === STUDENT_ROLE ? <AGSinglePage /> : <NoAccessPage /> }
+              <FacharbeitStudentListPage />
+            </Route>
+            <Route exact path="/student/facharbeit/beantragen">
+              { role === STUDENT_ROLE ? <FacharbeitApplicationForm /> : <NoAccessPage /> }
+            </Route>
             {/* Admin-Seiten */}
             {/* Facharbeitsseiten */}
             <Route exact path="/admin/facharbeit">
