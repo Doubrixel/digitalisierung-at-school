@@ -19,22 +19,41 @@ function StatusButton() {
   const [thirdDateFieldError, setThirdDateFieldError] = useState(false);
 
   function validateDateFields(date1, date2, date3) {
+    let allFieldsOK = true;
     setFirstDateFieldError(false);
     setSecondDateFieldError(false);
     setThirdDateFieldError(false);
+    const regex = /\d{4}-\d{2}-\d{2}/;
+
+    if (!regex.test(date1)) {
+      setFirstDateFieldError(true);
+      allFieldsOK = false;
+    }
+    if (!regex.test(date2)) {
+      setSecondDateFieldError(true);
+      allFieldsOK = false;
+    }
+    if (!regex.test(date3)) {
+      setThirdDateFieldError(true);
+      allFieldsOK = false;
+    }
 
     if (date1 >= date2) {
       setFirstDateFieldError(true);
       setSecondDateFieldError(true);
+      allFieldsOK = false;
     }
     if (date1 >= date3) {
       setFirstDateFieldError(true);
       setThirdDateFieldError(true);
+      allFieldsOK = false;
     }
     if (date2 >= date3) {
       setSecondDateFieldError(true);
       setThirdDateFieldError(true);
+      allFieldsOK = false;
     }
+    return allFieldsOK;
   }
 
   function handleSetTransitionDate1(event) {
@@ -84,6 +103,10 @@ function StatusButton() {
   };
 
   const save = () => {
+    // eslint-disable-next-line max-len
+    if (!validateDateFields(transitionDate1, transitionDate2, transitionDate3)) {
+      return;
+    }
     const body = {
       transitionDate1,
       transitionDate2,
