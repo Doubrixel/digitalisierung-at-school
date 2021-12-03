@@ -51,9 +51,9 @@ function FacharbeitApplicationForm(props) {
     const requestBody = JSON.stringify({
       studentId: 0,
       topic: topic,
-      subjectId: subject,
-      responsibleTeacher: choosenTeacher,
-      teachingTeacher:  subjectTeacher,
+      subject: subject,
+      choosenTeacher: choosenTeacher,
+      subjectTeacher:  subjectTeacher,
     });
     fetch('placeholder/api/facharbeit/chooseTopic', {
       method: 'POST',
@@ -66,9 +66,9 @@ function FacharbeitApplicationForm(props) {
     const requestBody = JSON.stringify({
       studentId: 0,
       topic: topic,
-      subjectId: subject,
-      responsibleTeacher: choosenTeacher,
-      teachingTeacher:  subjectTeacher,
+      subject: subject,
+      choosenTeacher: choosenTeacher,
+      subjectTeacher:  subjectTeacher,
     });
     fetch('placeholder/api/facharbeit/chooseTopic', {
       method: 'POST',
