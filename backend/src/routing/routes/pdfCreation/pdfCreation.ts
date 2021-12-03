@@ -253,17 +253,17 @@ async function makeFormblatt3Pdf(pdfPath: string, abiturDetails: iAbiturDetails,
 }
 
 async function getFromDatabase(sql: string, args: Array<string|number>){
-    return new Promise<object>(resolve => {
+    return new Promise<object>((resolve, reject) => {
         getFirstResult(sql, args, (obj, err) => {
             if (err) {
-                throw err;
+                reject(err);
             } else {
                 if (obj) {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     resolve (obj);
                 } else {
-                    throw new Error('Kein Datensatz für den Nutzer gefunden');
+                    reject(new Error('Kein Datensatz für den Nutzer gefunden'));
                 }
             }
         });
