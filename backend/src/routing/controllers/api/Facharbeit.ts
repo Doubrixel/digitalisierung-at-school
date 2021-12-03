@@ -32,20 +32,38 @@ export default class Facharbeit {
         if (studentId === -1) return;
         getFirstResult(sql, [studentId], (obj, err) => {
             if (err) {
-                res.status(500).json(err.name);
+                res.status(500).json(err.message);
+            } else if (obj) {
+                res.status(400).json('Dieser Schüler hat bereits eine Facharbeit ausgewählt.');
             } else {
-                if (obj) {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    updateColumns(obj.id);
-                } else {
-                    insertFirstSubmission();
-                }
+                insertFirstSubmission();
             }
         });
 
-        const {topic, subject, choosenTeacher, subjectTeacher} = req.body;
+        const insertFirstSubmission = () => {
+            const {topic, subject, choosenTeacher, subjectTeacher} = req.body;
+            const args: (string|number)[] = [topic, subject, choosenTeacher, subjectTeacher, studentId];
+
+            const sql = 'INSERT INTO facharbeiten (thema, fach, gewaehlterLehrer, unterrichtenderlehrer, studentId) VALUES (?, ?, ?, ?, ?)';
+            insertData(sql, args, defaultInsertCallback(res));
+        };
+    }
+
+    static POSTeditTopic(req: Request, res: Response): void {
+        if (rejectWhenValidationsFail(req, res)) return;
+
+        const sql = 'SELECT id FROM facharbeiten WHERE studentID = ?';
+        const {studentId, topic, subject, choosenTeacher, subjectTeacher} = req.body;
         const args: (string|number)[] = [];
+        getFirstResult(sql, [studentId], (obj, err) => {
+            if (err) {
+                res.status(500).json(err.message);
+            } else if (obj) {
+                updateColumns(studentId);
+            } else {
+                res.status(400).json(`Der Schüler mit der Id ${studentId} ist für keine Facharbeit eingeschrieben.`);
+            }
+        });
 
         const buildSetString = (): string => {
             let setString = '';
@@ -67,20 +85,10 @@ export default class Facharbeit {
             return setString;
         };
 
-        const updateColumns = (id: number) => {
-            const sql = `UPDATE facharbeiten SET ${buildSetString()} WHERE id = ?`;
-            args.push(id);
+        const updateColumns = (studentId: number) => {
+            const sql = `UPDATE facharbeiten SET ${buildSetString()} WHERE studentId = ?`;
+            args.push(studentId);
             updateData(sql, args, defaultUpdateCallback(res));
-        };
-
-        const insertFirstSubmission = () => {
-            if (!topic || !subject || !choosenTeacher || !studentId) {
-                res.status(400).send('Thema, Fach, gewählter Lehrer und unterrichtender Lehrer müssen initial angegeben werden.');
-                return;
-            }
-            const sql = 'INSERT INTO facharbeiten (thema, fach, gewaehlterLehrer, unterrichtenderlehrer, studentId) VALUES (?, ?, ?, ?, ?)';
-            args.push(topic, subject, choosenTeacher, subjectTeacher, studentId);
-            insertData(sql, args, defaultInsertCallback(res));
         };
     }
     static async POSTuploadDocument(req: Request, res: Response): Promise<void> {
