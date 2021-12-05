@@ -175,10 +175,10 @@ function FifthExamFormComponent(props) {
   }
 
   function processExamData(prefillDataObject) {
-    if (prefillDataObject.examType) {
+    if (prefillDataObject.examType && prefillDataObject.examType !== '') {
       setFirstFormAlreadySubmitted(true);
     }
-    if (prefillDataObject.problemQuestion) {
+    if (prefillDataObject.problemQuestion && prefillDataObject.problemQuestion !== '') {
       setSecondFormAlreadySubmitted(true);
     }
     setExamType(prefillDataObject.examType);
