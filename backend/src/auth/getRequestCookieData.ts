@@ -4,6 +4,11 @@ import {getFirstResult} from '../db/dbAccessor';
 
 const getStudentId = async function (req : Request, res : Response): Promise<number> {
     try {
+        if (process.env.NODE_ENV === 'development')
+        {
+            // Im development mode, daher muss SSO gemockt werden
+            return 1;
+        }
         const user = await createUser(req.session?.user);
         return new Promise<number>(resolve => {
             const sql = 'SELECT id FROM nutzer WHERE iServUuid = ?';
