@@ -7,6 +7,7 @@ Bei Updates bleibt dieser Ordner und seine Inhalte erhalten.
 - *digitalisierung-at-school.db*: Datenbank für sämtliche Nutzerdaten
 - *.env*: Sensible Daten, die nicht öffentlich sein dürfen, darunter OAuth Daten für iServ
 - *facharbeiten/*: Ordner mit allen abgegebenen Facharbeiten 
+- *backups/*: Ordner mit täglichen Backups der Datenbank der letzten 7 Tage
 
 ## Vorhandene Data Ordner auf dem Immanuel Kant Server
 - *digitalisierung-at-school-data-test*: Data Ordner für das Testsystem
