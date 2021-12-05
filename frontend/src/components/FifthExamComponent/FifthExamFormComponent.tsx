@@ -264,7 +264,7 @@ function FifthExamFormComponent(props) {
   };
 
   const handleSubmitFifthExamForm = () => {
-    if (formStatus === 2 || 3 || 6) {
+    if (formStatus === 2 || formStatus === 3 || formStatus === 6) {
       const confirmSubmit = window.confirm('Wollen sie die Daten jetzt absenden? Änderungen sind nur noch möglich falls ihr Antrag abgelehnt wird.');
       if (!confirmSubmit) return;
     }
@@ -663,7 +663,8 @@ function FifthExamFormComponent(props) {
       </div>
       <Paper className="fifthExamPaper">
         { displayAppropriateApplicationStatus() }
-        { formStatus === 2 || 3 || 5 || 6 || (formStatus === 0 && componentStatusId !== 0) ? (
+        {/* eslint-disable-next-line max-len */}
+        { formStatus === 2 || formStatus === 3 || formStatus === 5 || formStatus === 6 || (formStatus === 0 && componentStatusId !== 0) ? (
           <div style={{
             display: 'flex',
             width: '100%',
@@ -691,18 +692,19 @@ function FifthExamFormComponent(props) {
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {getStepOneInputFields(true)}
           {/* eslint-disable-next-line max-len */}
-          {formStatus === 2 || 3 || 5 || 6 || (formStatus === 0 && (componentStatusId !== 0))
+          {formStatus === 2 || formStatus === 3 || formStatus === 5 || formStatus === 6 || (formStatus === 0 && (componentStatusId !== 0))
             ? getStepOneInputFields(false) : null}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {/* eslint-disable-next-line max-len */}
-          {formStatus === 2 || 3 || 5 || 6 || (formStatus === 0 && (componentStatusId !== 0))
+          {formStatus === 2 || formStatus === 3 || formStatus === 5 || formStatus === 6 || (formStatus === 0 && (componentStatusId !== 0))
             ? getStepTwoInputFields(true) : null}
           {/* eslint-disable-next-line max-len */}
-          {formStatus === 3 || 5 || 6 || (formStatus === 0 && (componentStatusId !== 0))
+          {formStatus === 3 || formStatus === 5 || formStatus === 6 || (formStatus === 0 && (componentStatusId !== 0))
             ? getStepTwoInputFields(false) : null}
         </div>
-        {formStatus === 2 || 3 || 6 ? getAppropriateCheckboxes() : null}
+        {/* eslint-disable-next-line max-len */}
+        {formStatus === 2 || formStatus === 3 || formStatus === 6 ? getAppropriateCheckboxes() : null}
         <p style={{ color: 'red', fontWeight: 'bold', marginTop: verticalComponentDistance }}>
           { applicationDeadlineString }
           <br />

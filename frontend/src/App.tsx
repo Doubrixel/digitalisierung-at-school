@@ -9,13 +9,9 @@ import Footer from './components/Footer/Footer';
 
 // Pages Import
 import HomePage from './pages/student/HomePage';
-import AGEntryPage from './pages/student/AGEntryPage';
-import AGSinglePage from './pages/student/AGSinglePage';
 import FacharbeitsEntryPage from './pages/student/Facharbeit/FacharbeitEntryPage';
-import WahlpflichtEntryPage from './pages/student/WahlpflichtEntryPage';
 import PruefungskomponenteEntryPage from './pages/student/PruefungskomponenteEntryPage';
 import FacharbeitApplicationForm from './pages/student/Facharbeit/FacharbeitApplicationForm';
-import FacharbeitStudentListPage from './pages/student/Facharbeit/FacharbeitStudentListPage';
 import AdminFacharbeitPage from './pages/admin/AdminFacharbeitPage';
 import AdminPruefungskomponentePage from './pages/admin/AdminPruefungskomponentePage';
 import AdminFacharbeitEinzelnerSchueler from './pages/admin/AdminFacharbeitEinzelnerSchueler';
@@ -47,19 +43,10 @@ function App(props) {
           <Switch>
             {/* Schüler-Seiten */}
             <Route exact path="/"><HomePage /></Route>
-            <Route exact path="/student/ag">{ role === STUDENT_ROLE ? <AGEntryPage /> : <NoAccessPage /> }</Route>
-            <Route exact path="/student/ag/agbuchung">{ role === STUDENT_ROLE ? <AGSinglePage /> : <NoAccessPage /> }</Route>
             <Route exact path="/student/facharbeit">{ role === STUDENT_ROLE ? <FacharbeitsEntryPage /> : <NoAccessPage /> }</Route>
-            <Route exact path="/student/wahlpflicht">
-              { role === STUDENT_ROLE ? <WahlpflichtEntryPage /> : <NoAccessPage /> }
-            </Route>
             <Route exact path="/student/pruefungskomponente">
               { /* eslint-disable-next-line max-len */ }
               { role === STUDENT_ROLE ? <PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /> : <NoAccessPage /> }
-            </Route>
-            <Route exact path="/student/facharbeit/schuelerliste">
-              { role === STUDENT_ROLE ? <AGSinglePage /> : <NoAccessPage /> }
-              <FacharbeitStudentListPage />
             </Route>
             <Route exact path="/student/facharbeit/beantragen">
               { role === STUDENT_ROLE ? <FacharbeitApplicationForm /> : <NoAccessPage /> }
