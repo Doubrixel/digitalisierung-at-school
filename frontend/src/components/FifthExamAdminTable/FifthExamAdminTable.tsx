@@ -21,7 +21,6 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import CreateIcon from '@mui/icons-material/Create';
@@ -358,7 +357,7 @@ function FifthExamAdminTable(props) {
         return true;
       }
     })
-    setPreFilledDataIn5PKFormEditedByAdmin(selectedRowData)
+    dispatch(setPreFilledDataIn5PKFormEditedByAdmin(selectedRowData));
     history.push('/admin/pruefungskomponente/editStudentApplication')
   }
 
@@ -552,8 +551,8 @@ function FifthExamAdminTable(props) {
                         </Button>
                       </TableCell>
                       <TableCell align="right">{showAppropriateCellContent(row.presentationForm, row.updatedPresentationForm)}</TableCell>
-                      <TableCell align="right">{transformISOstringToGermanDateString(new Date(row.firstSubmissionDate).toISOString())}</TableCell>
-                      <TableCell align="right">{transformISOstringToGermanDateString(new Date(row.finalSubmissionDate).toISOString())}</TableCell>
+                      <TableCell align="right">{ row.firstSubmissionDate ? transformISOstringToGermanDateString(new Date(row.firstSubmissionDate).toISOString()) : '-'}</TableCell>
+                      <TableCell align="right">{ row.finalSubmissionDate ? transformISOstringToGermanDateString(new Date(row.finalSubmissionDate).toISOString()) : '-'}</TableCell>
                       <TableCell align="right">{row.approved ? "Ja" : "Nein"}</TableCell>
                     </TableRow>
                   );

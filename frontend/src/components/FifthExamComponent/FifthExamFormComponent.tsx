@@ -63,6 +63,8 @@ function FifthExamFormComponent(props) {
 
   const [rejectionReason, setRejectionReason] = useState('');
   const [applicationDeadlineString, setApplicationDeadlineString] = useState('Keine Deadline vorhanden');
+  const [firstFormAlreadySubmitted, setFirstFormAlreadySubmitted] = useState(false);
+  const [secondFormAlreadySubmitted, setSecondFormAlreadySubmitted] = useState(false);
 
   // originalDataField Handler
   const handleExamTypeInputChange = (event) => {
@@ -129,8 +131,15 @@ function FifthExamFormComponent(props) {
     // eslint-disable-next-line max-len
             || (formStatus === 1 && (!examType || !referenzfach || !bezugsfach || !tutor || !examiner || !topicArea))
             || ((formStatus === 2 || formStatus === 3) && (
-              (examType === 'PP' && (!problemQuestion || !presentationForm || !PPCheckBox1 || !PPCheckBox2 || !PPCheckBox3 || !PPCheckBox4))
-                || (examType === 'BLL' && (!problemQuestion || !BLLCheckBox1 || !BLLCheckBox2 || !BLLCheckBox3 || !BLLCheckBox4)))
+              ((examType === 'PP' || updatedExamType === 'PP') && (!problemQuestion || !presentationForm || !PPCheckBox1 || !PPCheckBox2 || !PPCheckBox3 || !PPCheckBox4))
+                || ((examType === 'BLL' || updatedExamType === 'BLL') && (!problemQuestion || !BLLCheckBox1 || !BLLCheckBox2 || !BLLCheckBox3 || !BLLCheckBox4))
+                || (examType !== 'PP' && examType !== 'BLL' && updatedExamType !== 'PP' && updatedExamType !== 'BLL')
+                || (!referenzfach && !updatedReferenzfach)
+                || (!bezugsfach && !updatedBezugsfach)
+                || (!tutor && !updatedTutor)
+                || (!examiner && !updatedExaminer)
+                || (!topicArea && !updatedTopicArea)
+                || (!problemQuestion && !updatedProblemQuestion))
             );
   }
 
@@ -159,16 +168,19 @@ function FifthExamFormComponent(props) {
     }
     // That if-clause checks, if a student already submitted the
     // form in a specific formStatus, which means he can't submit it again
-    // @ts-ignore
-    if ((examType_ && componentStatusId_ === 1)
-      // @ts-ignore
-      || (problemQuestion_ && componentStatusId_ === 2)) {
+    if (((examType_ === 'PP' || examType_ === 'BLL') && componentStatusId_ === 1) || (problemQuestion_ && componentStatusId_ === 2)) {
       setFormStatus(0);
       alert('Das Formular wurde bereits abgesendet und kann erst zu einem späteren Zeitpunkt nochmals bearbeitet werden, z.B. wenn der Antrag abgelehnt wurde.');
     }
   }
 
   function processExamData(prefillDataObject) {
+    if (prefillDataObject.examType && prefillDataObject.examType !== '') {
+      setFirstFormAlreadySubmitted(true);
+    }
+    if (prefillDataObject.problemQuestion && prefillDataObject.problemQuestion !== '') {
+      setSecondFormAlreadySubmitted(true);
+    }
     setExamType(prefillDataObject.examType);
     setStudentPartner(prefillDataObject.partnerStudentName);
     setReferenzfach(prefillDataObject.referenzfach);
@@ -257,6 +269,7 @@ function FifthExamFormComponent(props) {
       };
     } else if (formStatus === 2) {
       requestBodyParams = {
+        examType: examType ? null : updatedExamType,
         updatedPartnerStudentName: updatedStudentPartner,
         updatedReferenzfach,
         updatedBezugsfach,
@@ -302,9 +315,21 @@ function FifthExamFormComponent(props) {
         alert('Daten konnten nicht gespeichert werden. Bitte kontaktieren Sie einen Administrator.');
       }
     }
-    sendAPIRequest('api/abitur/applyForTopic', 'POST', requestBodyParams)
-      .then((response) => (checkIfDataHasBeenSaved(response)))
-      .then(() => handleGeneratePDF(componentStatusId));
+    if (formStatus === 5) {
+      sendAPIRequest(`api/abitur/editData/${preFilledDataIn5PKFormEditedByAdmin.examId}`, 'POST', requestBodyParams)
+        .then((response) => (checkIfDataHasBeenSaved(response)));
+    } else {
+      sendAPIRequest('api/abitur/applyForTopic', 'POST', requestBodyParams)
+        .then((response) => (checkIfDataHasBeenSaved(response)))
+        // eslint-disable-next-line max-len
+        .then(() => handleGeneratePDF(componentStatusId === 3 || componentStatusId === 0 ? 2 : componentStatusId));
+      if (examType || updatedExamType) {
+        setFirstFormAlreadySubmitted(true);
+      }
+      if (problemQuestion) {
+        setSecondFormAlreadySubmitted(true);
+      }
+    }
   };
 
   function getStepOneInputFields(areInputFieldsOriginalDataFields) {
@@ -322,30 +347,13 @@ function FifthExamFormComponent(props) {
     }
     return (
       <div style={{ display: 'flex', flexDirection: 'column', width: '48%' }}>
-        {!areInputFieldsOriginalDataFields
-          ? (
-            <text>
-              Wenn Daten geändert werden müssen, tragen Sie diese in die rechte Spalte ein.
-              Wird ein Feld in der rechten Spalte nicht ausgefüllt, bleiben die bereits
-              eingetragenen Daten aus der linken Spalte erhalten.
-              <br />
-              <br />
-            </text>
-          )
-          : (
-            <text>
-              <br />
-              <br />
-              <br />
-            </text>
-          )}
-        <div style={{ height: '50px' }}>
+        <div style={{ height: '50px', marginBottom: '40px' }}>
           {areInputFieldsOriginalDataFields
           || formStatus === 5
           || formStatus === 6
           || (formStatus === 2 && !examType)
             ? (
-              <FormControl component="fieldset">
+              <FormControl component="fieldset" style={{ marginBottom: '200px' }}>
                 <FormLabel component="legend">Prüfungsart</FormLabel>
                 <RadioGroup
                   aria-label="Prüfungsart"
@@ -378,7 +386,7 @@ function FifthExamFormComponent(props) {
           label="Prüfling"
           variant="outlined"
           style={{ marginTop: verticalComponentDistance }}
-          value={userName}
+          value={formStatus === 5 ? preFilledDataIn5PKFormEditedByAdmin.studentName : userName}
           disabled
         />
         <TextField
@@ -485,7 +493,7 @@ function FifthExamFormComponent(props) {
 
   function getAppropriateCheckboxes() {
     const checkboxGroupStyle = { marginTop: '2vh' };
-    if (examType === 'PP') {
+    if (examType === 'PP' || updatedExamType === 'PP') {
       return (
         <FormGroup style={checkboxGroupStyle}>
           <FormControlLabel control={<Checkbox checked={PPCheckBox1} onChange={() => setPPCheckBox1(!PPCheckBox1)} />} label="Eine Gliederung und der Protokollbogen müssen dem Antrag beigelegt werden. (* Bei einer Gruppen- oder Partnerprüfung sind in der Gliederung die spezifischen Anteile der einzelnen Teilnehmer*innen auszuweisen)" />
@@ -495,7 +503,7 @@ function FifthExamFormComponent(props) {
         </FormGroup>
       );
     }
-    if (examType === 'BLL') {
+    if (examType === 'BLL' || updatedExamType === 'BLL') {
       return (
         <FormGroup style={checkboxGroupStyle}>
           <FormControlLabel control={<Checkbox checked={BLLCheckBox1} onChange={() => setBLLCheckBox1(!BLLCheckBox1)} />} label="Eine Gliederung und der Protokollbogen müssen dem Antrag beigelegt werden." />
@@ -569,15 +577,20 @@ function FifthExamFormComponent(props) {
           </Button>
         </span>
       </Tooltip>,
-      <CreatePDFButton
-        style={{
-          marginTop: verticalComponentDistance, marginRight: distanceBetweenButtons, width: '18vw', minWidth: '188px',
-        }}
-        onClick={() => handleGeneratePDF(1)}
-        label="Erste Rückmeldung als PDF generieren"
-      />,
     ];
-    if (formStatus !== 1) {
+    if (firstFormAlreadySubmitted) {
+      buttonArray.push(
+        <CreatePDFButton
+          style={{
+            marginTop: verticalComponentDistance, marginRight: distanceBetweenButtons, width: '18vw', minWidth: '188px',
+          }}
+          onClick={() => handleGeneratePDF(1)}
+          label="Erste Rückmeldung als PDF generieren"
+        />,
+      );
+    }
+
+    if (formStatus !== 1 && secondFormAlreadySubmitted) {
       buttonArray.push(
         <CreatePDFButton
           style={{
@@ -633,16 +646,39 @@ function FifthExamFormComponent(props) {
       </div>
       <Paper className="fifthExamPaper">
         { displayAppropriateApplicationStatus() }
+        { formStatus === 2 || formStatus === 3 || formStatus === 5 || formStatus === 6 ? (
+          <div style={{
+            display: 'flex',
+            width: '100%',
+            justifyContent: 'space-around',
+            marginBottom: '2vh',
+          }}
+          >
+            <div style={{ display: 'flex', alignItems: 'flex-end', width: '52%' }}>
+              <Typography style={{ fontSize: 'large' }}>Originale Daten</Typography>
+            </div>
+            <div style={{ width: '48%' }}>
+              <Typography style={{ marginBottom: '1vh' }}>
+                Wenn Daten geändert werden müssen, tragen Sie diese in die rechte Spalte ein.
+                Wird ein Feld in der rechten Spalte nicht ausgefüllt, bleiben die bereits
+                eingetragenen Daten aus der linken Spalte erhalten.
+              </Typography>
+              <Typography style={{ fontSize: 'large' }}>Aktualisierte Daten</Typography>
+            </div>
+          </div>
+        ) : null }
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           {getStepOneInputFields(true)}
-          {formStatus === 2 || formStatus === 3 || formStatus === 5 || formStatus === 6
+          {/* eslint-disable-next-line max-len */}
+          {formStatus === 2 || formStatus === 3 || formStatus === 5 || formStatus === 6 || (formStatus === 0 && (componentStatusId === 2 || 1))
             ? getStepOneInputFields(false) : null}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          {formStatus === 2 || formStatus === 3 || formStatus === 5
+          {/* eslint-disable-next-line max-len */}
+          {formStatus === 2 || formStatus === 3 || formStatus === 5 || (formStatus === 0 && (componentStatusId === 2 || 1))
             ? getStepTwoInputFields(true) : null}
           {/* eslint-disable-next-line max-len */}
-          {formStatus === 3 || formStatus === 5 || formStatus === 6 ? getStepTwoInputFields(false) : null}
+          {formStatus === 3 || formStatus === 5 || formStatus === 6 || (formStatus === 0 && (componentStatusId === 2 || 1)) ? getStepTwoInputFields(false) : null}
         </div>
         {formStatus === 2 || formStatus === 3 ? getAppropriateCheckboxes() : null}
         <p style={{ color: 'red', fontWeight: 'bold', marginTop: verticalComponentDistance }}>
