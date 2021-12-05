@@ -117,12 +117,23 @@ function StatusButton() {
     close();
   };
 
-  const reset = () => {
-    const confirmed = window.confirm('Wollen Sie die Abiturpüfungskomponente wirklich zurücksetzen?');
-    if (confirmed) window.confirm('Wenn Sie die Komponente zurücksetzen, dann gehen alle von den Schülern eingetragene Daten verloren. Dies sollte nur am Ende des Schuljahres passieren. \nWirklich zurücksetzen?');
-    if (confirmed) {
-      sendAPIRequest('/api/abitur/clearAllData', 'POST');
+  function checkIfDataHasBeenSaved(response) {
+    if (response.ok) {
+      alert('Daten wurden erfolgreich zurückgesetzt.');
       window.location.reload();
+    }
+    alert('Daten konnten nicht zurückgesetzt werden. Bitte kontaktieren Sie einen Administrator.');
+  }
+
+  const reset = () => {
+    const confirmed1 = window.confirm('Wollen Sie die Abiturpüfungskomponente wirklich zurücksetzen?');
+    let confirmed2 = false;
+    if (confirmed1) {
+      confirmed2 = window.confirm('Wenn Sie die Komponente zurücksetzen, dann gehen alle von den Schülern eingetragene Daten verloren. Dies sollte nur am Ende des Schuljahres passieren. \nWirklich zurücksetzen?');
+    }
+    if (confirmed1 && confirmed2) {
+      sendAPIRequest('/api/abitur/clearAllData', 'POST')
+        .then((response) => checkIfDataHasBeenSaved(response));
     }
   };
 
