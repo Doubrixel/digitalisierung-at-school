@@ -129,6 +129,7 @@ export default class Abitur {
                 presentationForm,
                 updatedPresentationForm,
                 genehmigt AS approved,
+                ablehnungsgrund,   
                 nutzer.name AS studentName,
                 studentID AS studentId,
                 tutor,
