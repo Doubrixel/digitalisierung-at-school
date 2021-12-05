@@ -18,5 +18,8 @@ RUN rm -rf frontend/ backend/
 # Der Port 5000 wird aus dem docker container freigegeben
 EXPOSE 5000
 
+# Produktionsmodus
+ENV NODE_ENV production
+
 # Zum Starten des Servers die index.js Datei ausführen
 CMD [ "node", "build/src/index.js" ]
