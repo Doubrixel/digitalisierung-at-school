@@ -59,13 +59,12 @@ function App(props) {
             </Route>
             <Route exact path="/admin/facharbeit/einzelnerSchueler">
               { role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
-                ? <AdminFacharbeitEinzelnerSchueler /> : <NoAccessPage /> }
+                ? <AdminFacharbeitUebersicht isGettingEditedByAdmin /> : <NoAccessPage /> }
             </Route>
             <Route exact path="/admin/facharbeit">
               { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
                 ? <AdminFacharbeitPage /> : <NoAccessPage /> }
             </Route>
-            <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitUebersicht isGettingEditedByAdmin /></Route>
 
             {/* 5. PK seiten */}
             <Route exact path="/admin/pruefungskomponente">
