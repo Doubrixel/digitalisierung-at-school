@@ -1,3 +1,15 @@
-.LogoutAnsichtContainer{
+.flexboxLougoutContainer{
+    margin-top: 20vh;
+}
 
+#LogoutHomepage{
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 3px;
+    padding: 20px;
+    margin: 20px;
+    font-size: 25px;
+    text-align: center;
+    color: var(--blue);
+    background-color: var(--toolbar-main);
 }
