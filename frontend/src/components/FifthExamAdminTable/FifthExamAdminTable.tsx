@@ -172,6 +172,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'Genehmigt',
   },
+  {
+    id: 'ablehnungsgrund',
+    numeric: true,
+    disablePadding: false,
+    label: 'Ablehnungsgrund',
+  },
 ];
 
 interface EnhancedTableProps {
@@ -342,6 +348,7 @@ function FifthExamAdminTable(props) {
     rows.map((row) => {
       if(String(row.examId) == currentSelectedExamId){
         row.approved=false;
+        row.ablehnungsgrund=currentDeclineReason;
       }
     });
   };
@@ -449,7 +456,7 @@ function FifthExamAdminTable(props) {
   // Avoid a layout jump when reaching the last page with empty rowsWithIds.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const showAppropriateCellContent = (originalProperty: any, updatedProperty: any) =>{
+  const showAppropriateCellContent = (originalProperty: any, updatedProperty: any = '') =>{
     const updatedPropertyExists = !(updatedProperty === null || updatedProperty === '');
       return (
         <div style={{display: "flex", justifyContent: 'end', alignItems: 'center'}}>
@@ -560,6 +567,11 @@ function FifthExamAdminTable(props) {
                       <TableCell align="right">{ row.firstSubmissionDate ? transformISOstringToGermanDateString(new Date(row.firstSubmissionDate).toISOString()) : '-'}</TableCell>
                       <TableCell align="right">{ row.finalSubmissionDate ? transformISOstringToGermanDateString(new Date(row.finalSubmissionDate).toISOString()) : '-'}</TableCell>
                       <TableCell align="right">{getTextForApprovalState(row.approved)}</TableCell>
+                      <TableCell align="right">
+                        <Button title="Ablehnungsgrund ansehen" onClick={() => openDialogWithContent(showAppropriateCellContent(row.ablehnungsgrund))}>
+                          <DescriptionIcon />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   );
                 })}

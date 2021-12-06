@@ -26,6 +26,7 @@ export interface ExamInterface {
   firstSubmissionDate: Date,
   finalSubmissionDate: Date,
   approved: boolean,
+  ablehnungsgrund: string,
 }
 
 const initialState: FifthExamState = {
