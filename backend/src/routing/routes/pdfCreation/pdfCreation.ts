@@ -63,8 +63,12 @@ export async function makePdf(FormblattVersion: number, studentID: number):Promi
     // Get submission date from DB
     const abiturYearSql = "SELECT * FROM komponenten WHERE name='fifthExam'";
     const transitionDates: iTransitionDates = await getFromDatabase(abiturYearSql, []) as iTransitionDates;
-    transitionDates.transitionDate2 = new Date(transitionDates.transitionDate2).toISOString();
-    transitionDates.transitionDate3 = new Date(transitionDates.transitionDate3).toISOString();
+    let helpDate = new Date(transitionDates.transitionDate2);
+    helpDate.setDate(helpDate.getDate()+7);
+    transitionDates.transitionDate2 = helpDate.toISOString();
+    helpDate = new Date(transitionDates.transitionDate3);
+    helpDate.setDate(helpDate.getDate()+7);
+    transitionDates.transitionDate3 = helpDate.toISOString();
 
     let doc:PDFDocument;
 
@@ -113,6 +117,7 @@ async function makeFormblatt1Pdf(pdfPath: string, abiturDetails: iAbiturDetails,
         size=14,
         color:Color=rgb(0.0, 0.0, 0.0)) =>
     {
+        if (value === null) value = '';
         firstPage.drawText(value, {
             x,
             y,
@@ -186,6 +191,7 @@ async function makeFormblatt3Pdf(pdfPath: string, abiturDetails: iAbiturDetails,
         size=11,
         color:Color=rgb(0.0, 0.0, 0.0)) =>
     {
+        if (value === null) value = '';
         firstPage.drawText(value, {
             x,
             y,
@@ -227,11 +233,17 @@ async function makeFormblatt3Pdf(pdfPath: string, abiturDetails: iAbiturDetails,
     drawText(finalExaminer, 217, 480.2);
     if (abiturDetails.art == 'PP') {
         drawText(finalPresentationForm, 75, 438.2);
+        if (finalPartnerStudentName && finalPartnerStudentName !== ''){
+            drawText('X', 70.5, 416);
+        }
         drawText(finalPartnerStudentName, 75, 397.2);
         drawText('xx.xx.xxxx', 482.2, 274.25, helveticaBoldFont,10.5);
         drawText(finalApprovalDateAsString, 390, 56.8, helveticaBoldFont, 10.5);
     }
     else if (abiturDetails.art == 'BLL') {
+        if (finalPartnerStudentName && finalPartnerStudentName !== ''){
+            drawText('X', 70.5, 457);
+        }
         drawText(finalPartnerStudentName, 75, 438.2);
         drawText('xx.xx.xxxx', 253, 350.9, helveticaBoldFont, 10.5);
         drawText(finalApprovalDateAsString, 390, 163.9, helveticaBoldFont, 10.5);
@@ -241,22 +253,17 @@ async function makeFormblatt3Pdf(pdfPath: string, abiturDetails: iAbiturDetails,
 }
 
 async function getFromDatabase(sql: string, args: Array<string|number>){
-    return new Promise<object>(resolve => {
+    return new Promise<object>((resolve, reject) => {
         getFirstResult(sql, args, (obj, err) => {
             if (err) {
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-               // @ts-ignore
-                resolve (undefined);
+                reject(err);
             } else {
                 if (obj) {
                     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                     // @ts-ignore
                     resolve (obj);
                 } else {
-                    console.log('object not there');
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
-                    resolve (undefined);
+                    reject(new Error('Kein Datensatz für den Nutzer gefunden'));
                 }
             }
         });

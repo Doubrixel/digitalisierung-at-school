@@ -21,7 +21,6 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import CreateIcon from '@mui/icons-material/Create';
@@ -41,7 +40,10 @@ import { useEffect } from 'react';
 import { setPreFilledDataIn5PKFormEditedByAdmin } from '../../actions/FifthExamActions'
 import sendApiRequest from "../../APIRequestFunction"
 import TextField from '@mui/material/TextField';
-import { transformISOstringToGermanDateString } from '../ReusableComponentsAndFunctions/processComponentStatusFunctions';
+import {
+  getComponentStatusId,
+  transformISOstringToGermanDateString
+} from '../ReusableComponentsAndFunctions/processComponentStatusFunctions';
 
 let handleOnClickApprove;
 let handleEditRowClick;
@@ -170,6 +172,12 @@ const headCells: readonly HeadCell[] = [
     disablePadding: false,
     label: 'Genehmigt',
   },
+  {
+    id: 'ablehnungsgrund',
+    numeric: true,
+    disablePadding: false,
+    label: 'Ablehnungsgrund',
+  },
 ];
 
 interface EnhancedTableProps {
@@ -228,10 +236,11 @@ interface EnhancedTableToolbarProps {
   numSelected: number;
   selectedRows: any;
   setPreFilledDataIn5PKFormEditedByAdmin: any;
+  componentStatus: number;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected, selectedRows} = props;
+  const { numSelected, selectedRows, componentStatus} = props;
 
   return (
     <Toolbar
@@ -266,46 +275,32 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           </IconButton>
         </Tooltip>
       )}
-      {numSelected > 0 ? (
+      {numSelected > 0 && componentStatus === 3 ? (
         <Tooltip title="Ausgewählte Einträge genehmigen">
           <IconButton onClick={(event: React.MouseEvent<unknown>) =>handleOnClickApprove(event, true)}>
             <CheckIcon color="success" />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Zum Genehmigen müssen Einträge ausgewählt werden">
+        <Tooltip title={componentStatus === 3 ? "Zum Genehmigen müssen Einträge ausgewählt werden." : "Anträge können erst angenommen werden, wenn die Einreichfrist vorbei ist."}>
           <IconButton>
             <CheckIcon color="disabled" />
           </IconButton>
         </Tooltip>
       )}
-      {numSelected == 1 ? (
+      {numSelected == 1  && componentStatus === 3 ? (
         <Tooltip title="Eintrag ablehnen">
           <IconButton>
             <ClearIcon onClick={(event: React.MouseEvent<unknown>) =>handleOnClickApprove(event, false)} sx={{ color: 'red' }} />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="Zum Ablehnen muss genau ein Eintrag ausgewählt sein">
+        <Tooltip title={componentStatus === 3 ? "Zum Ablehnen muss genau ein Eintrag ausgewählt sein" : "Anträge können erst abgelehnt werden, wenn die Einreichfrist vorbei ist."}>
           <IconButton>
             <ClearIcon color="disabled" />
           </IconButton>
         </Tooltip>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="select Data">
-          <IconButton>
-            <DeleteIcon color="disabled" />
-          </IconButton>
-        </Tooltip>
-      )}
-
     </Toolbar>
   );
 };
@@ -318,6 +313,7 @@ function FifthExamAdminTable(props) {
   const [showDeclineReasonDialog, setShowDeclineReasonDialog] = React.useState(false);
   const [currentDeclineReason, setCurrentDeclineReason] = React.useState('');
   const [currentSelectedExamId, setCurrentSelectedExamId] = React.useState('');
+  const [componentStatus, setComponentStatus] = React.useState(0);
 
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof ExamInterface>('studentName');
@@ -352,6 +348,7 @@ function FifthExamAdminTable(props) {
     rows.map((row) => {
       if(String(row.examId) == currentSelectedExamId){
         row.approved=false;
+        row.ablehnungsgrund=currentDeclineReason;
       }
     });
   };
@@ -367,7 +364,7 @@ function FifthExamAdminTable(props) {
         return true;
       }
     })
-    setPreFilledDataIn5PKFormEditedByAdmin(selectedRowData)
+    dispatch(setPreFilledDataIn5PKFormEditedByAdmin(selectedRowData));
     history.push('/admin/pruefungskomponente/editStudentApplication')
   }
 
@@ -459,13 +456,15 @@ function FifthExamAdminTable(props) {
   // Avoid a layout jump when reaching the last page with empty rowsWithIds.
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-  const showAppropriateCellContent = (originalProperty: any, updatedProperty: any) =>{
+  const showAppropriateCellContent = (originalProperty: any, updatedProperty: any = '') =>{
     const updatedPropertyExists = !(updatedProperty === null || updatedProperty === '');
       return (
         <div style={{display: "flex", justifyContent: 'end', alignItems: 'center'}}>
-          {updatedPropertyExists ?<Typography style={{textDecoration: 'line-through', backgroundColor: '#fd4c4c'}}>{originalProperty}</Typography> : null}
+          {updatedPropertyExists
+            ? <Typography style={{textDecoration: 'line-through', backgroundColor: '#fd4c4c'}}>{originalProperty}</Typography>
+            : <Typography>{originalProperty}</Typography>}
           {updatedProperty ? <ArrowRightAltIcon/> : null}
-          <Typography style={updatedPropertyExists ? {backgroundColor: '#a3ff97'} : {}}>{originalProperty}</Typography>
+          <Typography style={updatedPropertyExists ? {backgroundColor: '#a3ff97'} : {}}>{updatedProperty}</Typography>
         </div>
       )
     }
@@ -476,13 +475,25 @@ function FifthExamAdminTable(props) {
       .then((json) => {
         dispatch({ type: 'LOAD_ALL_EXAMS', payload: json });
       });
+    sendApiRequest('api/components/getTransitionDatesOfAll', 'GET')
+        .then((response) => response.json())
+        .then((data) => setComponentStatus(getComponentStatusId(data, 'fifthExam')));
   }, [])
+
+  const getTextForApprovalState = (approvalState) => {
+    if (approvalState === null || approvalState === undefined) return "Noch offen";
+    if (approvalState) return "Ja";
+    return "Nein";
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} selectedRows={selected} setPreFilledDataIn5PKFormEditedByAdmin={props.setPreFilledDataIn5PKFormEditedByAdmin} />
-        <TableContainer>
+        <EnhancedTableToolbar numSelected={selected.length}
+                              selectedRows={selected}
+                              setPreFilledDataIn5PKFormEditedByAdmin={props.setPreFilledDataIn5PKFormEditedByAdmin}
+                              componentStatus={componentStatus} />
+        <TableContainer style={{maxWidth: '98vw'}}>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
@@ -553,9 +564,14 @@ function FifthExamAdminTable(props) {
                         </Button>
                       </TableCell>
                       <TableCell align="right">{showAppropriateCellContent(row.presentationForm, row.updatedPresentationForm)}</TableCell>
-                      <TableCell align="right">{transformISOstringToGermanDateString(new Date(row.firstSubmissionDate).toISOString())}</TableCell>
-                      <TableCell align="right">{transformISOstringToGermanDateString(new Date(row.finalSubmissionDate).toISOString())}</TableCell>
-                      <TableCell align="right">{row.approved ? "Ja" : "Nein"}</TableCell>
+                      <TableCell align="right">{ row.firstSubmissionDate ? transformISOstringToGermanDateString(new Date(row.firstSubmissionDate).toISOString()) : '-'}</TableCell>
+                      <TableCell align="right">{ row.finalSubmissionDate ? transformISOstringToGermanDateString(new Date(row.finalSubmissionDate).toISOString()) : '-'}</TableCell>
+                      <TableCell align="right">{getTextForApprovalState(row.approved)}</TableCell>
+                      <TableCell align="right">
+                        <Button title="Ablehnungsgrund ansehen" onClick={() => openDialogWithContent(showAppropriateCellContent(row.ablehnungsgrund))}>
+                          <DescriptionIcon />
+                        </Button>
+                      </TableCell>
                     </TableRow>
                   );
                 })}

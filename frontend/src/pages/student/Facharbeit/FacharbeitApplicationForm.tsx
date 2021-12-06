@@ -1,28 +1,26 @@
 /**
  * Übersichtsseite für die Facharbeit.
  */
-
-import React, { useState } from 'react';
+/* eslint-disable */
+import React, {useEffect, useState} from 'react';
 import {
   Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField,
 } from '@material-ui/core';
 import CreatePDFButton from '../../../components/Buttons/CreatePDFButton';
 import UploadedFileInformationPanel from '../../../components/FileInformationPanel/UploadedFileInformationPanel';
+import sendAPIRequest from "../../../APIRequestFunction";
 
-const lehrkraefteMock = [{ id: 1, name: 'Miss X' }, { id: 2, name: 'Mister A' }, { id: 3, name: 'Lady Y' }];
-const subjectMock = [{ id: 1, name: 'Mathe' }, { id: 2, name: 'Deutsch' }, { id: 3, name: 'English' }];
 
-function FacharbeitApplicationForm() {
+
+function FacharbeitApplicationForm(props) {
+  const { isGettingEditedByAdmin, preFilledDataIn5PKFormEditedByAdmin } = props;
   const [studentName, setStudentName] = useState('');
   const [studentClass, setStudentClass] = useState('');
-  const [choosenSubject, setChoosenSubject] = useState();
-  const [betreuendeLehrkraft, setBetreuendeLehrkraft] = useState();
-  const [unterrichtendeLehrkraft, setUnterrichtendeLehrkraft] = useState();
-  const [topicTextArea, setTopicTextArea] = useState('');
-
-  const betreuendeLehrkraefteList = lehrkraefteMock;
-  const unterrichtendeLehrkraftList = lehrkraefteMock;
-  const subjectList = subjectMock;
+  const [subject, setSubject] = useState();
+  const [choosenTeacher, setChoosenTeacher] = useState();
+  const [subjectTeacher, setSubjectTeacher] = useState();
+  const [topic, setTopic] = useState('');
+  const [formStatus, setFormStatus] = useState(0);
 
   const handleStudentNameInputChange = (event) => {
     setStudentName(event.target.value);
@@ -31,24 +29,30 @@ function FacharbeitApplicationForm() {
     setStudentClass(event.target.value);
   };
   const handleSubjectInputChange = (event) => {
-    setChoosenSubject(event.target.value);
+    setSubject(event.target.value);
   };
   const handleBetreuendeLehrkraftInputChange = (event) => {
-    setBetreuendeLehrkraft(event.target.value);
+    setChoosenTeacher(event.target.value);
   };
   const handleUnterrichtendeLehrkraftInputChange = (event) => {
-    setUnterrichtendeLehrkraft(event.target.value);
+    setSubjectTeacher(event.target.value);
   };
   const handleTopicInputChange = (event) => {
-    setTopicTextArea(event.target.value);
+    setTopic(event.target.value);
   };
+
+  useEffect(() => {
+    if (isGettingEditedByAdmin === true) {
+      setFormStatus(3);
+    }
+  }, []);
+
   const handleSubmitFacharbeit = () => {
     const requestBody = JSON.stringify({
-      studentId: 0,
-      topic: topicTextArea,
-      subjectId: choosenSubject,
-      responsibleTeacher: betreuendeLehrkraft,
-      teachingTeacher: unterrichtendeLehrkraft,
+      topic: topic,
+      subject: subject,
+      choosenTeacher: choosenTeacher,
+      subjectTeacher:  subjectTeacher,
     });
     fetch('placeholder/api/facharbeit/chooseTopic', {
       method: 'POST',
@@ -56,6 +60,20 @@ function FacharbeitApplicationForm() {
       body: requestBody,
     });
   };
+
+  const handleSubmitAdminFacharbeit = () => {
+    const requestBody = JSON.stringify({
+      topic: topic,
+      subject: subject,
+      choosenTeacher: choosenTeacher,
+      subjectTeacher:  subjectTeacher,
+    });
+    fetch('placeholder/api/facharbeit/chooseTopic', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: requestBody,
+    });
+  }
 
   const handleGeneratePDF = () => {
     alert('pdf generiert...');
@@ -69,7 +87,10 @@ function FacharbeitApplicationForm() {
   return (
     <div>
       <div>
+        {formStatus === 3 ? <h1>Facharbeit Übersicht</h1>
+          :
         <h1>Facharbeit beantragen</h1>
+        }
       </div>
       <Paper className="facharbeitRootPaper">
         <div
@@ -97,41 +118,23 @@ function FacharbeitApplicationForm() {
         <div id="teacherInputsAndButtons" style={{ display: 'flex', flexDirection: 'column', width: '40%' }}>
           <h2> </h2>
           <FormControl style={{ width: '100%', marginTop: '32px' }} variant="outlined">
-            <InputLabel>Fach</InputLabel>
-            <Select
-              label="Fach"
-              onChange={handleSubjectInputChange}
-            >
-              {subjectList.map((subject) => (
-                <MenuItem value={subject.id}>{subject.name}</MenuItem>
-              ))}
-            </Select>
+            <TextField label="Fach" variant="outlined" style={{ width: '100%', minWidth: '65px' }} onChange={handleSubjectInputChange} />
           </FormControl>
           <FormControl style={{ width: '100%', marginTop: '3vh' }} variant="outlined">
-            <InputLabel>Betreuende Lehrkraft</InputLabel>
-            <Select
-              label="Betreuende Lehrkraft"
-              onChange={handleBetreuendeLehrkraftInputChange}
-            >
-              {betreuendeLehrkraefteList.map((lehrkraft) => (
-                <MenuItem value={lehrkraft.id}>{lehrkraft.name}</MenuItem>
-              ))}
-            </Select>
+            <TextField label="Betreuende Lehrkraft" variant="outlined" style={{ width: '100%', minWidth: '65px' }} onChange={handleBetreuendeLehrkraftInputChange} />
           </FormControl>
           <FormControl style={{ width: '100%', marginTop: '3vh' }} variant="outlined">
-            <InputLabel>Unterrichtende Lehrkraft</InputLabel>
-            <Select
-              label="Unterrichtende Lehrkraft"
-              onChange={handleUnterrichtendeLehrkraftInputChange}
-            >
-              {unterrichtendeLehrkraftList.map((lehrkraft) => (
-                <MenuItem value={lehrkraft.id}>{lehrkraft.name}</MenuItem>
-              ))}
-            </Select>
+            <TextField label="Unterrichtende Lehrkraft" variant="outlined" style={{ width: '100%', minWidth: '65px' }} onChange={handleUnterrichtendeLehrkraftInputChange} />
           </FormControl>
-          <Button style={{ marginTop: '3vh' }} variant="contained" color="primary" onClick={handleSubmitFacharbeit}>
-            Facharbeit einreichen / ändern
-          </Button>
+          {formStatus === 3 ? 
+            <Button style={{ marginTop: '3vh' }} variant="contained" color="primary" onClick={handleSubmitAdminFacharbeit}>
+              Facharbeit ändern
+            </Button>
+          :
+            <Button style={{ marginTop: '3vh' }} variant="contained" color="primary" onClick={handleSubmitFacharbeit}>
+              Facharbeit einreichen / ändern
+            </Button>
+          }
           <CreatePDFButton style={{ marginTop: '3vh' }} onClick={handleGeneratePDF} />
         </div>
       </Paper>

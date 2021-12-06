@@ -61,7 +61,7 @@ export default class Abitur {
             }
         });
 
-        const buildSetString = (args: (string|number)[]):string => {
+        const buildSetString = (args: (string|number|null)[]):string => {
             const {updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedTopicArea, problemQuestion, updatedProblemQuestion, presentationForm, updatedPresentationForm, updatedTutor} = req.body;
             let setString = '';
             setString += ' updatedExaminer = ?'; args.push(updatedExaminer ? updatedExaminer : null);
@@ -78,18 +78,18 @@ export default class Abitur {
         };
 
         const updateUpdateColumns = (id: number) => {
-            const args: (string | number)[] = [];
+            const args: (string | number | null)[] = [];
             const setString = buildSetString(args);
             const { submitDate } = req.body;
-            sql = 'UPDATE abiturpruefungen SET' + setString +', finalSubmissionDate = ? WHERE id = ?';
-            args.push(submitDate, id);
+            sql = 'UPDATE abiturpruefungen SET' + setString +', finalSubmissionDate = ?, genehmigt = ? WHERE id = ?';
+            args.push(submitDate, null, id);
             updateData(sql, args, defaultUpdateCallback(res));
         };
 
         const setUpdateColumns = () => {
-            const {updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedTopicArea, problemQuestion, presentationForm, updatedTutor, examType, submitDate} = req.body;
-            sql = 'INSERT INTO abiturpruefungen (updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedThema, problemQuestion, presentationForm, updatedTutor, art, finalSubmissionDate, studentID) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-            const args = [updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedTopicArea, problemQuestion, presentationForm, updatedTutor, examType, submitDate, studentId];
+            const {updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedTopicArea, updatedProblemQuestion, updatedPresentationForm, updatedTutor, examType, submitDate} = req.body;
+            sql = 'INSERT INTO abiturpruefungen (updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedThema, updatedProblemQuestion, updatedPresentationForm, updatedTutor, art, finalSubmissionDate, studentID) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+            const args = [updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedTopicArea, updatedProblemQuestion, updatedPresentationForm, updatedTutor, examType, submitDate, studentId];
             insertData(sql, args, defaultInsertCallback(res));
         };
 
@@ -129,6 +129,7 @@ export default class Abitur {
                 presentationForm,
                 updatedPresentationForm,
                 genehmigt AS approved,
+                ablehnungsgrund,   
                 nutzer.name AS studentName,
                 studentID AS studentId,
                 tutor,
@@ -187,10 +188,11 @@ export default class Abitur {
         if (rejectWhenValidationsFail(req, res)) return;
         const studentID = await getStudentId(req, res);
         if (studentID == -1) return;
-        const { submitNumber } = req.body;
+        const { submitNumber } = req.params;
+        const submitNumberAsNumber = submitNumber as unknown as number;
         try {
-            const pdfPath = await pdfCreation.makePdf(submitNumber, studentID);
-            const rueckmeldungString = submitNumber === 1 ? '_erste_rueckmeldung' : '_finale_rueckmeldung';
+            const pdfPath = await pdfCreation.makePdf(submitNumberAsNumber, studentID);
+            const rueckmeldungString = submitNumberAsNumber === 1 ? '_erste_rueckmeldung' : '_finale_rueckmeldung';
             res.download(pdfPath.filePath, pdfPath.studentName+rueckmeldungString+'.pdf');
             setTimeout(() => {
                 fs.rm(pdfPath.filePath, () => {console.log('Pdf deleted.');});
@@ -200,5 +202,10 @@ export default class Abitur {
             res.status(500).json('unexpected error while creating PDF: '+ e.message);
         }
 
+    }
+
+    static POSTclearAllData(req: Request, res: Response): void{
+        const sql = 'DELETE FROM abiturpruefungen';
+        updateData(sql, [], defaultUpdateCallback(res));
     }
 }
