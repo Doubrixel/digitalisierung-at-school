@@ -18,6 +18,8 @@ export const LoginLogoutButton = () => {
   };
 
   const onClickLogout = () => {
+    alert('Bitte melden Sie sich auch bei iServ ab.');
+    window.open('https://kant-gymnasium.de/iserv/');
     dispatch(logout());
     history.push('/auth/logout');
     window.location.reload();
