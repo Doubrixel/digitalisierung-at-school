@@ -37,7 +37,7 @@ Grundsätzliche werden in der Datei "authReducer.tsx" 3 wichtige Werte gesetzt:
 * role
 * class
 
-Normalerweise werden die Nutzerdaten über die SSO-Schnittstelle abgefragt und in "authReducertsx" werden sie ausgelesen und ausgewertet.
+Normalerweise werden die Nutzerdaten über die SSO-Schnittstelle abgefragt und in "authReducer.tsx" werden sie ausgelesen und ausgewertet.
 In der Funktion "getUserRole" wird *role* ausgelesen und zurückgegeben.
 In der Funktion "getUserClass" wird *class* ausgelesen und zurückgegeben.
 Durch die Funktion "login" und "logout" wird *isLoggedIn* gesetzt.
