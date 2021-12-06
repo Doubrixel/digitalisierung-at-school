@@ -27,6 +27,11 @@ npm i
 node_modules/db-migrate/bin/db-migrate up
 ```
 
+5. Auf Windows muss die Umgebungsvariable NODE_ENV für den Entwicklermodus gesetzt werden: 
+```bash
+npm install -g win-node-env
+```
+
 Nun kann entwickelt werden!
 
 Folgender Befehl startet den Server im Entwicklermodus:

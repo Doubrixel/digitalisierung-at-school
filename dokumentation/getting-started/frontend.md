@@ -4,7 +4,6 @@ Um im Frontend entwickeln zu können, sind einige Programme notwendig:
 
 * Git
 * Nodejs
-* ???
 
 ## Installation
 
@@ -23,11 +22,9 @@ cd digitalisierung-at-school/frontend/
 npm i
 ```
 
-4. ???
-
 Nun kann entwickelt werden!
 
 Folgender Befehl startet das Frontend:
 ```bash
-???
+npm start
 ```
