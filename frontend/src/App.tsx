@@ -23,7 +23,7 @@ import {
 } from './reducer/authReducer';
 
 function App(props) {
-  const { role } = props;
+  const { role, classNumber } = props;
   const dispatch = useDispatch();
   sendAPIRequest('auth/getUserData', 'GET')
     .then((response) => response.json())
@@ -33,7 +33,7 @@ function App(props) {
     })
     .catch((err) => {
       console.log(`error: ${err.message}`);
-      dispatch(setUserData('Nicht eingeloggt', [], []));
+      dispatch(setUserData('Nicht eingeloggt', {}, {}));
     });
   return (
     <BrowserRouter>
@@ -43,13 +43,14 @@ function App(props) {
           <Switch>
             {/* Schüler-Seiten */}
             <Route exact path="/"><HomePage /></Route>
-            <Route exact path="/student/facharbeit">{ role === STUDENT_ROLE ? <FacharbeitsEntryPage /> : <NoAccessPage /> }</Route>
+            <Route exact path="/student/facharbeit">{ role === STUDENT_ROLE && classNumber === 9 ? <FacharbeitsEntryPage /> : <NoAccessPage /> }</Route>
             <Route exact path="/student/pruefungskomponente">
               { /* eslint-disable-next-line max-len */ }
-              { role === STUDENT_ROLE ? <PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /> : <NoAccessPage /> }
+              { role === STUDENT_ROLE && (classNumber === 11 || classNumber === 12) ? <PruefungskomponenteEntryPage isGettingEditedByAdmin={false} /> : <NoAccessPage /> }
             </Route>
             <Route exact path="/student/facharbeit/beantragen">
-              { role === STUDENT_ROLE ? <FacharbeitApplicationForm /> : <NoAccessPage /> }
+              { role === STUDENT_ROLE && classNumber === 9
+                ? <FacharbeitApplicationForm /> : <NoAccessPage /> }
             </Route>
             {/* Admin-Seiten */}
             {/* Facharbeitsseiten */}
@@ -91,6 +92,7 @@ function App(props) {
 function mapStateToProps(state) {
   return {
     role: state.authReducer.role,
+    classNumber: state.authReducer.classNumber,
   };
 }
 
