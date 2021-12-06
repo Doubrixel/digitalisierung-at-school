@@ -14,7 +14,7 @@ import PruefungskomponenteEntryPage from './pages/student/PruefungskomponenteEnt
 import FacharbeitApplicationForm from './pages/student/Facharbeit/FacharbeitApplicationForm';
 import AdminFacharbeitPage from './pages/admin/AdminFacharbeitPage';
 import AdminPruefungskomponentePage from './pages/admin/AdminPruefungskomponentePage';
-import AdminFacharbeitEinzelnerSchueler from './pages/admin/AdminFacharbeitEinzelnerSchueler';
+import AdminFacharbeitUebersicht from './pages/admin/AdminFacharbeitEntryPage';
 import NoAccessPage from './pages/NoAccessPage';
 import sendAPIRequest from './APIRequestFunction';
 import { login, setUserData } from './actions/authActions';
@@ -65,7 +65,7 @@ function App(props) {
               { role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
                 ? <AdminFacharbeitPage /> : <NoAccessPage /> }
             </Route>
-            <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitEinzelnerSchueler /></Route>
+            <Route exact path="/admin/facharbeit/einzelnerSchueler"><AdminFacharbeitUebersicht isGettingEditedByAdmin /></Route>
 
             {/* 5. PK seiten */}
             <Route exact path="/admin/pruefungskomponente">
