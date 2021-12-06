@@ -18,7 +18,7 @@ import {
 
 function Toolbar(props) {
   const {
-    isLoggedIn, userName, role,
+    isLoggedIn, userName, role, classNumber,
   } = props;
   let appropriateRolePath;
   if (role === STUDENT_ROLE) {
@@ -31,13 +31,15 @@ function Toolbar(props) {
       id: 1,
       name: 'Facharbeit',
       path: `/${appropriateRolePath}/facharbeit`,
-      disabled: role === FIFTH_PK_ADMIN_ROLE || !isLoggedIn || !appropriateRolePath,
+      disabled: (role === STUDENT_ROLE && classNumber !== 9)
+                || role === FIFTH_PK_ADMIN_ROLE || !isLoggedIn || !appropriateRolePath,
     },
     {
       id: 2,
       name: '5. PK',
       path: `/${appropriateRolePath}/pruefungskomponente`,
-      disabled: role === FA_ADMIN_ROLE || !isLoggedIn || !appropriateRolePath,
+      disabled: (role === STUDENT_ROLE && classNumber !== 11 && classNumber !== 12)
+                || role === FA_ADMIN_ROLE || !isLoggedIn || !appropriateRolePath,
     },
   ];
   const windowDimensions = useWindowDimensions();
@@ -105,6 +107,7 @@ function mapStateToProps(state) {
     isLoggedIn: state.authReducer.isLoggedIn,
     userName: state.authReducer.userName,
     role: state.authReducer.role,
+    classNumber: state.authReducer.classNumber,
   };
 }
 

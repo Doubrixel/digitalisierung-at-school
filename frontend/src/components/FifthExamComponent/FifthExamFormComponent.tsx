@@ -158,7 +158,7 @@ function FifthExamFormComponent(props) {
       setFormStatus(5);
       return;
     }
-    if (componentStatusId_ === 3 && examType_ === null) {
+    if (componentStatusId_ === 3 && (examType_ === null || examType_ === '')) {
       setFormStatus(6);
     } else if (componentStatusId_ === 3) {
       setFormStatus(0);
@@ -264,7 +264,7 @@ function FifthExamFormComponent(props) {
   };
 
   const handleSubmitFifthExamForm = () => {
-    if (formStatus === 2 || formStatus === 3 || formStatus === 6) {
+    if (formStatus !== 5) {
       const confirmSubmit = window.confirm('Wollen sie die Daten jetzt absenden? Änderungen sind nur noch möglich falls ihr Antrag abgelehnt wird.');
       if (!confirmSubmit) return;
     }
@@ -593,7 +593,7 @@ function FifthExamFormComponent(props) {
             onClick={handleSubmitFifthExamForm}
             disabled={allFieldsAreDisabled || getIsSubmitFormButtonDisabled()}
           >
-            { formStatus === 1 ? 'Zwischenspeicherung (Änderungen noch möglich)' : 'Endgültig speichern' }
+            Endgültig speichern
           </Button>
         </span>
       </Tooltip>,

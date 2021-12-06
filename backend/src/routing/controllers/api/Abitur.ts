@@ -87,9 +87,9 @@ export default class Abitur {
         };
 
         const setUpdateColumns = () => {
-            const {updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedTopicArea, problemQuestion, presentationForm, updatedTutor, examType, submitDate} = req.body;
-            sql = 'INSERT INTO abiturpruefungen (updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedThema, problemQuestion, presentationForm, updatedTutor, art, finalSubmissionDate, studentID) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
-            const args = [updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedTopicArea, problemQuestion, presentationForm, updatedTutor, examType, submitDate, studentId];
+            const {updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedTopicArea, updatedProblemQuestion, updatedPresentationForm, updatedTutor, examType, submitDate} = req.body;
+            sql = 'INSERT INTO abiturpruefungen (updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedThema, updatedProblemQuestion, updatedPresentationForm, updatedTutor, art, finalSubmissionDate, studentID) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+            const args = [updatedExaminer, updatedBezugsfach, updatedPartnerStudentName, updatedReferenzfach, updatedTopicArea, updatedProblemQuestion, updatedPresentationForm, updatedTutor, examType, submitDate, studentId];
             insertData(sql, args, defaultInsertCallback(res));
         };
 
