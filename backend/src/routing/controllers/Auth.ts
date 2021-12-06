@@ -2,7 +2,8 @@ import {NextFunction, Request, Response} from 'express';
 import {
     iservConnectToLoginError,
     iservRevokeTokenError,
-    iservRetrieveUserDataError, iservLogoutError
+    iservRetrieveUserDataError,
+    iservLogoutError
 } from '../../auth/staticAuthStrings';
 import {clearSessionCookie, setSessionCookie} from '../../auth/cookie';
 import {getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
@@ -68,6 +69,9 @@ export default class Auth {
         try {
             const client = req.app.authClient;
             const tokenSet = req.session?.tokenSet;
+
+            // Make sure the access token we got from the identity provider
+            // gets revoked, this is for security reasons
             await client!.revoke(tokenSet!.access_token!);
         } catch (err) {
             console.error(iservRevokeTokenError, err);
@@ -77,6 +81,8 @@ export default class Auth {
         res.redirect('/');
     }
 
+
+    // does not work, because IServ does not provide the necessary endpoints in the Discovery Document
     static async GETlogoutSso(req: Request, res: Response, next: NextFunction): Promise<void> {
         try {
             const client = req.app.authClient;
