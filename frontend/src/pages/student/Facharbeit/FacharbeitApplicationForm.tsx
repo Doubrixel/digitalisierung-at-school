@@ -49,7 +49,6 @@ function FacharbeitApplicationForm(props) {
 
   const handleSubmitFacharbeit = () => {
     const requestBody = JSON.stringify({
-      studentId: 0,
       topic: topic,
       subject: subject,
       choosenTeacher: choosenTeacher,
@@ -64,7 +63,6 @@ function FacharbeitApplicationForm(props) {
 
   const handleSubmitAdminFacharbeit = () => {
     const requestBody = JSON.stringify({
-      studentId: 0,
       topic: topic,
       subject: subject,
       choosenTeacher: choosenTeacher,
