@@ -6,4 +6,4 @@ services:
       - "127.0.0.1:5000:5000" # docker überschreibt die iptables der firewall. Ohne 127.0.0.1 wäre der externe Port von außerhalb erreichbar, selbst wenn die firewall den Zugriff verbietet.
     volumes:
       - ~/digitalisierung-at-school-data-test:/usr/share/html/data
-    command: [sh, -c, "cd build/; node_modules/db-migrate/bin/db-migrate up; node src/index.js"]
+    command: [sh, -c, "cd build/; node_modules/db-migrate/bin/db-migrate up; NODE_ENV=production node src/index.js"]

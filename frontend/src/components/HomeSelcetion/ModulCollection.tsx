@@ -11,7 +11,7 @@ import {
 } from '../../reducer/authReducer';
 
 function ModulCollection(props) {
-  const { role } = props;
+  const { role, classNumber } = props;
   let approprateRolePath = '';
   if (role === STUDENT_ROLE) {
     approprateRolePath = 'student';
@@ -21,7 +21,8 @@ function ModulCollection(props) {
 
   return (
     <div className="flexboxModul">
-      {role === STUDENT_ROLE || role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
+      {/* eslint-disable-next-line max-len */}
+      {(role === STUDENT_ROLE && classNumber === 9) || role === SUPER_ADMIN_ROLE || role === FA_ADMIN_ROLE
         ? (
           <div className="flexModulItem">
             <SelectionComponent
@@ -32,7 +33,8 @@ function ModulCollection(props) {
             />
           </div>
         ) : null}
-      {role === STUDENT_ROLE || role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
+      {/* eslint-disable-next-line max-len */}
+      {(role === STUDENT_ROLE && (classNumber === 11 || classNumber === 12)) || role === SUPER_ADMIN_ROLE || role === FIFTH_PK_ADMIN_ROLE
         ? (
           <div className="flexModulItem">
             <SelectionComponent
@@ -50,6 +52,7 @@ function ModulCollection(props) {
 function mapStateToProps(state) {
   return {
     role: state.authReducer.role,
+    classNumber: state.authReducer.classNumber,
   };
 }
 

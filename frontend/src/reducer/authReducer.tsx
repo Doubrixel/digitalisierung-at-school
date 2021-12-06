@@ -7,17 +7,19 @@ export interface AuthState {
   isLoggedIn: boolean,
   userName: string,
   role: string,
+  classNumber: number,
 }
 
 const initialState: AuthState = {
   isLoggedIn: window.location.origin === 'http://localhost:3000',
   userName: '',
   role: '',
+  classNumber: 0,
 };
 
 function getUserRole(roles, groups) {
   if (window.location.origin === 'http://localhost:3000') {
-    /// return STUDENT_ROLE;
+    // return STUDENT_ROLE;
     return SUPER_ADMIN_ROLE;
   }
   const groupValueArray = Object.values(groups);
@@ -40,6 +42,29 @@ function getUserRole(roles, groups) {
   return null;
 }
 
+function getUserClass(groups) {
+  if (window.location.origin === 'http://localhost:3000') {
+    // return 9;
+    return 11;
+  }
+  let extractedClassNumber = 0;
+  const groupValueArray = Object.values(groups);
+  groupValueArray.forEach((group) => {
+    // @ts-ignore
+    const groupName = group.name;
+    if (groupName.includes('klasse') || groupName.includes('Klasse')) {
+      const firstIndexOfClassNumber = groupName.indexOf('-') + 1;
+      let lastIndexOfClassNumber = groupName.indexOf('.');
+      if (lastIndexOfClassNumber === -1) {
+        lastIndexOfClassNumber = groupName.length;
+      }
+      // eslint-disable-next-line max-len
+      extractedClassNumber = parseInt(groupName.substring(firstIndexOfClassNumber, lastIndexOfClassNumber), 10);
+    }
+  });
+  return extractedClassNumber;
+}
+
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'LOGIN':
@@ -52,7 +77,8 @@ const authReducer = (state = initialState, action) => {
       };
     case 'SET_USER_DATA':
       return {
-        ...state, userName: action.userName, role: getUserRole(action.roles, action.groups),
+        // eslint-disable-next-line max-len
+        ...state, userName: action.userName, role: getUserRole(action.roles, action.groups), classNumber: getUserClass(action.groups),
       };
     default:
       return state;

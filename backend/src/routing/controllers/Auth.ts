@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from 'express';
 import {
     iservConnectToLoginError,
     iservRevokeTokenError,
-    iservRetrieveUserDataError
+    iservRetrieveUserDataError, iservLogoutError
 } from '../../auth/staticAuthStrings';
 import {clearSessionCookie, setSessionCookie} from '../../auth/cookie';
 import {getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
@@ -58,18 +58,16 @@ export default class Auth {
             const sessionCookie = serialize({ tokenSet, user });
             setSessionCookie(res, sessionCookie);
 
-            res.redirect('/');
         } catch (e) {
             console.error(iservRetrieveUserDataError, e);
-            return next(e);
         }
+        res.redirect('/');
     }
 
     static async GETlogout(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const client = req.app.authClient;
-        const tokenSet = req.session?.tokenSet;
-
         try {
+            const client = req.app.authClient;
+            const tokenSet = req.session?.tokenSet;
             await client!.revoke(tokenSet!.access_token!);
         } catch (err) {
             console.error(iservRevokeTokenError, err);
@@ -80,12 +78,18 @@ export default class Auth {
     }
 
     static async GETlogoutSso(req: Request, res: Response, next: NextFunction): Promise<void> {
-        const client = req.app.authClient;
+        try {
+            const client = req.app.authClient;
 
-        clearSessionCookie(res);
+            clearSessionCookie(res);
 
-        const endSessionUrl = client!.endSessionUrl();
-        res.redirect(endSessionUrl);
+            const endSessionUrl = client!.endSessionUrl();
+            res.redirect(endSessionUrl);
+        } catch (err) {
+            console.error(iservLogoutError, err);
+            res.redirect('/');
+        }
+
     }
 
     static async GETuserData(req: Request, res: Response, next: NextFunction): Promise<void> {

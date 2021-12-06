@@ -19,22 +19,41 @@ function StatusButton() {
   const [thirdDateFieldError, setThirdDateFieldError] = useState(false);
 
   function validateDateFields(date1, date2, date3) {
+    let allFieldsOK = true;
     setFirstDateFieldError(false);
     setSecondDateFieldError(false);
     setThirdDateFieldError(false);
+    const regex = /\d{4}-\d{2}-\d{2}/;
+
+    if (!regex.test(date1)) {
+      setFirstDateFieldError(true);
+      allFieldsOK = false;
+    }
+    if (!regex.test(date2)) {
+      setSecondDateFieldError(true);
+      allFieldsOK = false;
+    }
+    if (!regex.test(date3)) {
+      setThirdDateFieldError(true);
+      allFieldsOK = false;
+    }
 
     if (date1 >= date2) {
       setFirstDateFieldError(true);
       setSecondDateFieldError(true);
+      allFieldsOK = false;
     }
     if (date1 >= date3) {
       setFirstDateFieldError(true);
       setThirdDateFieldError(true);
+      allFieldsOK = false;
     }
     if (date2 >= date3) {
       setSecondDateFieldError(true);
       setThirdDateFieldError(true);
+      allFieldsOK = false;
     }
+    return allFieldsOK;
   }
 
   function handleSetTransitionDate1(event) {
@@ -84,6 +103,10 @@ function StatusButton() {
   };
 
   const save = () => {
+    // eslint-disable-next-line max-len
+    if (!validateDateFields(transitionDate1, transitionDate2, transitionDate3)) {
+      return;
+    }
     const body = {
       transitionDate1,
       transitionDate2,
@@ -94,12 +117,23 @@ function StatusButton() {
     close();
   };
 
-  const reset = () => {
-    const confirmed = window.confirm('Wollen Sie die Abiturpüfungskomponente wirklich zurücksetzen?');
-    if (confirmed) window.confirm('Wenn Sie die Komponente zurücksetzen, dann gehen alle von den Schülern eingetragene Daten verloren. Dies sollte nur am Ende des Schuljahres passieren. \nWirklich zurücksetzen?');
-    if (confirmed) {
-      sendAPIRequest('/api/abitur/clearAllData', 'POST');
+  function checkIfDataHasBeenSaved(response) {
+    if (response.ok) {
+      alert('Daten wurden erfolgreich zurückgesetzt.');
       window.location.reload();
+    }
+    alert('Daten konnten nicht zurückgesetzt werden. Bitte kontaktieren Sie einen Administrator.');
+  }
+
+  const reset = () => {
+    const confirmed1 = window.confirm('Wollen Sie die Abiturpüfungskomponente wirklich zurücksetzen?');
+    let confirmed2 = false;
+    if (confirmed1) {
+      confirmed2 = window.confirm('Wenn Sie die Komponente zurücksetzen, dann gehen alle von den Schülern eingetragene Daten verloren. Dies sollte nur am Ende des Schuljahres passieren. \nWirklich zurücksetzen?');
+    }
+    if (confirmed1 && confirmed2) {
+      sendAPIRequest('/api/abitur/clearAllData', 'POST')
+        .then((response) => checkIfDataHasBeenSaved(response));
     }
   };
 
