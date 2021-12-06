@@ -5,8 +5,10 @@ import {
     iservRetrieveUserDataError
 } from '../../auth/staticAuthStrings';
 import {clearSessionCookie, setSessionCookie} from '../../auth/cookie';
-import {deserializeAuthState, getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
-import {createUser, serialize, User} from '../../auth';
+import {getAuthStateCookie, serializeAuthState, setAuthStateCookie} from '../../auth/state';
+import {createUser, serialize} from '../../auth';
+import {User} from '../../../types/sso';
+import {addOrUpdateUserInDb} from '../../db/user';
 
 export default class Auth {
 
@@ -39,8 +41,6 @@ export default class Auth {
         try {
             const state = getAuthStateCookie(req);
 
-            const { backToPath } = deserializeAuthState(state);
-
             const client = req.app.authClient;
 
             const params = client!.callbackParams(req);
@@ -53,12 +53,12 @@ export default class Auth {
 
             const user = await client!.userinfo(tokenSet.access_token!);
 
-            console.log(user);
+            await addOrUpdateUserInDb(await createUser(user));
 
             const sessionCookie = serialize({ tokenSet, user });
             setSessionCookie(res, sessionCookie);
 
-            res.redirect(backToPath);
+            res.redirect('/');
         } catch (e) {
             console.error(iservRetrieveUserDataError, e);
             return next(e);
@@ -79,6 +79,15 @@ export default class Auth {
         res.redirect('/');
     }
 
+    static async GETlogoutSso(req: Request, res: Response, next: NextFunction): Promise<void> {
+        const client = req.app.authClient;
+
+        clearSessionCookie(res);
+
+        const endSessionUrl = client!.endSessionUrl();
+        res.redirect(endSessionUrl);
+    }
+
     static async GETuserData(req: Request, res: Response, next: NextFunction): Promise<void> {
         const session = req.session;
         if (!session) {
@@ -93,7 +102,11 @@ export default class Auth {
         res.send('Student angemeldet');
     }
 
-    static GETadminTest(req: Request, res: Response, next: NextFunction): void {
-        res.send('Admin angemeldet');
+    static GETadminFATest(req: Request, res: Response, next: NextFunction): void {
+        res.send('AdminFA angemeldet');
+    }
+
+    static GETadmin5PKTest(req: Request, res: Response, next: NextFunction): void {
+        res.send('Admin5PK angemeldet');
     }
 }

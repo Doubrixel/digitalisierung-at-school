@@ -8,6 +8,8 @@ import store from './store';
 
 import theme from './Theming';
 
+document.title = 'Einschreibung Kant-Gymnasium';
+
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>

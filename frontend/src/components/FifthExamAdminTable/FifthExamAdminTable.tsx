@@ -21,10 +21,10 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import DeleteIcon from '@mui/icons-material/Delete';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import CreateIcon from '@mui/icons-material/Create';
+import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 
 import Button from '@material-ui/core/Button';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -33,72 +33,20 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
-import { setPreFilledDataIn5PKFormEditedByAdmin } from '../../actions/FifthExamActions';
+import {useSelector, useDispatch} from "react-redux";
+import {RootState} from "../../reducer";
+import { ExamInterface } from '../../reducer/fifthExamReducer';
+import { useEffect } from 'react';
+import { setPreFilledDataIn5PKFormEditedByAdmin } from '../../actions/FifthExamActions'
+import sendApiRequest from "../../APIRequestFunction"
+import TextField from '@mui/material/TextField';
+import {
+  getComponentStatusId,
+  transformISOstringToGermanDateString
+} from '../ReusableComponentsAndFunctions/processComponentStatusFunctions';
 
-interface Data {
-  partnerName: string;
-  referenzfach: string;
-  examiner: string;
-  bezugsfach: string;
-  studentName: string;
-  examType: string;
-  topicArea: string;
-  approved: string;
-  id: any;
-}
-let rowID=0;
-function createData(
-  studentName: string,
-  partnerName: string,
-  examType: string,
-  referenzfach: string,
-  bezugsfach: string,
-  examiner: string,
-  topicArea: string,
-  approved:string,
-): Data {
-  let id=rowID;
-  rowID++;
-  return {
-    studentName,
-    partnerName,
-    examType,
-    referenzfach,
-    bezugsfach,
-    examiner,
-    topicArea,
-    approved,
-    id,
-  };
-}
-
-const rowsMock = [
-  createData('Alex Schmidt', 'Cupcake', 'BLL', 'Deutsch', 'Englisch', 'Mr. Jonson', 'Delfine','Nein'),
-  createData('Alex Schmidt', 'Donut', 'BLL', 'Mathe', 'Mathe', 'Mrs. Heathrow', 'Wasser', 'Ja'),
-  createData('Peter Becker', 'Eclair', 'PP', 'Physik', 'Physik', 'Miss Daisy', 'Feuer', 'Ja'),
-  createData('Maria Koch', 'Frozen yoghurt', 'BLL', '6.0', '24', '4.0', 'jssghdhgsdvjhcbsdjsdhcvjsdsdghvjssdhg sgfgfkysg f kysgf kkcgksdgckd c drkjcfg dzfg', 'Ja'),
-  createData('Monika Meyer', 'Partner1', 'PP', '16.0', '49', '3.9', 'b', 'Nein'),
-  createData('Ursula Schneider', 'Honeycomb', '408', '3.2', '87', '6.5', 'c', 'Nein'),
-  createData('Brigitte Schmitz', 'Ice cream sandwich', '237', '9.0', '37', '4.3', 'd', 'Nein'),
-  createData('Renate Müller', 'Jelly Bean', '375', '0.0', '94', '0.0', 'a', 'Ja'),
-  createData('Heinz Hoffmann', 'KitKat', '518', '26.0', '65', '7.0', 'Wasser', 'Nein'),
-  createData('Gisela Peters', 'Lollipop', '392', '0.2', '98', '0.0', 'Geist', 'Nein'),
-  createData('Karl Klein', 'Marshmallow', '318', '0', '81', '2.0', 'h', 'Nein'),
-  createData('Hildegard Jansen', 'Nougat', '360', '19.0', '9', '37.0', 'k', 'Nein'),
-  createData('Renate Köhler', 'Oreo', '437', '18.0', '63', '4.0', 'g', 'Nein'),
-];
-
-const addIdsToRows = (rows: any)=>{
-  let currentId = 0;
-  rows.forEach((row)=>{
-    row.id = currentId;
-    currentId++;
-  })
-  return rows;
-}
-let rowsWithIds=[];
-rowsWithIds = addIdsToRows(rowsMock);
-
+let handleOnClickApprove;
+let handleEditRowClick;
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -140,7 +88,7 @@ function stableSort<T>(array: readonly T[], comparator: (a: T, b: T) => number) 
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Data;
+  id: keyof ExamInterface;
   label: string;
   numeric: boolean;
 }
@@ -153,7 +101,7 @@ const headCells: readonly HeadCell[] = [
     label: 'Schüler:in',
   },
   {
-    id: 'partnerName',
+    id: 'partnerStudentName',
     numeric: false,
     disablePadding: true,
     label: 'Partner:in',
@@ -183,10 +131,40 @@ const headCells: readonly HeadCell[] = [
     label: 'Prüfer:in',
   },
   {
+    id: 'tutor',
+    numeric: true,
+    disablePadding: false,
+    label: 'Tutor:in',
+  },
+  {
     id: 'topicArea',
     numeric: true,
     disablePadding: false,
     label: 'Themenbereich',
+  },
+  {
+    id: 'problemQuestion',
+    numeric: true,
+    disablePadding: false,
+    label: 'Problemfrage',
+  },
+  {
+    id: 'presentationForm',
+    numeric: true,
+    disablePadding: false,
+    label: 'Präsentationsform (Medien)',
+  },
+  {
+    id: 'firstSubmissionDate',
+    numeric: true,
+    disablePadding: false,
+    label: 'Abgabe erstes Formular',
+  },
+  {
+    id: 'finalSubmissionDate',
+    numeric: true,
+    disablePadding: false,
+    label: 'Abgabe finales Formular',
   },
   {
     id: 'approved',
@@ -198,7 +176,7 @@ const headCells: readonly HeadCell[] = [
 
 interface EnhancedTableProps {
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Data) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof ExamInterface) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
@@ -209,7 +187,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof ExamInterface) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -223,14 +201,14 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{
-              'aria-label': 'select all desserts',
+              'aria-label': 'select all',
             }}
           />
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align={headCell.numeric ? 'right' : 'left'}
+            align={"right"}
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
@@ -252,21 +230,11 @@ interface EnhancedTableToolbarProps {
   numSelected: number;
   selectedRows: any;
   setPreFilledDataIn5PKFormEditedByAdmin: any;
+  componentStatus: number;
 }
 
 const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
-  const { numSelected, selectedRows, setPreFilledDataIn5PKFormEditedByAdmin } = props;
-  const history = useHistory();
-  function handleEditRowClick(selectedRows){
-    const selectedRowData = rowsWithIds.find((row) => {
-      // @ts-ignore
-      if(row.id === selectedRows[0]){
-        return true;
-      }
-    })
-    setPreFilledDataIn5PKFormEditedByAdmin(selectedRowData)
-    history.push('/admin/pruefungskomponente/editStudentApplication')
-  }
+  const { numSelected, selectedRows, componentStatus} = props;
 
   return (
     <Toolbar
@@ -279,26 +247,15 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
         }),
       }}
     >
-      {numSelected > 0 ? (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          color="inherit"
-          variant="subtitle1"
-          component="div"
-        >
-          {numSelected}
-          selected
-        </Typography>
-      ) : (
-        <Typography
-          sx={{ flex: '1 1 100%' }}
-          variant="h6"
-          id="tableTitle"
-          component="div"
-        >
-          Anträge
-        </Typography>
-      )}
+    <Typography
+      sx={{ flex: '1 1 100%' }}
+      color="inherit"
+      variant="subtitle1"
+      component="div"
+    >
+      {numSelected === 1 ? '1 Antrag ausgewählt' : `${numSelected} Anträge ausgewählt` }
+    </Typography>
+
       {numSelected == 1 ? (
         <Tooltip title="Eintrag bearbeiten">
           <IconButton>
@@ -312,72 +269,129 @@ const EnhancedTableToolbar = (props: EnhancedTableToolbarProps) => {
           </IconButton>
         </Tooltip>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Genehmigen">
-          <IconButton>
+      {numSelected > 0 && componentStatus === 3 ? (
+        <Tooltip title="Ausgewählte Einträge genehmigen">
+          <IconButton onClick={(event: React.MouseEvent<unknown>) =>handleOnClickApprove(event, true)}>
             <CheckIcon color="success" />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="select Data">
+        <Tooltip title={componentStatus === 3 ? "Zum Genehmigen müssen Einträge ausgewählt werden." : "Anträge können erst angenommen werden, wenn die Einreichfrist vorbei ist."}>
           <IconButton>
             <CheckIcon color="disabled" />
           </IconButton>
         </Tooltip>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Ablehnen">
+      {numSelected == 1  && componentStatus === 3 ? (
+        <Tooltip title="Eintrag ablehnen">
           <IconButton>
-            <ClearIcon sx={{ color: 'red' }} />
+            <ClearIcon onClick={(event: React.MouseEvent<unknown>) =>handleOnClickApprove(event, false)} sx={{ color: 'red' }} />
           </IconButton>
         </Tooltip>
       ) : (
-        <Tooltip title="select Data">
+        <Tooltip title={componentStatus === 3 ? "Zum Ablehnen muss genau ein Eintrag ausgewählt sein" : "Anträge können erst abgelehnt werden, wenn die Einreichfrist vorbei ist."}>
           <IconButton>
             <ClearIcon color="disabled" />
           </IconButton>
         </Tooltip>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Delete">
-          <IconButton>
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <Tooltip title="select Data">
-          <IconButton>
-            <DeleteIcon color="disabled" />
-          </IconButton>
-        </Tooltip>
-      )}
-
     </Toolbar>
   );
 };
 
 function FifthExamAdminTable(props) {
-  const [open, setOpen] = React.useState(false);
-  const [currentAnnotation, setCurrentAnnotation] = React.useState('');
+  const dispatch = useDispatch();
+
+  const [showDialogWithLargeContent, setShowDialogWithLargeContent] = React.useState(false);
+  const [currentlyDisplayedContentOfDialog, setCurrentlyDisplayedContentOfDialog] = React.useState('');
+  const [showDeclineReasonDialog, setShowDeclineReasonDialog] = React.useState(false);
+  const [currentDeclineReason, setCurrentDeclineReason] = React.useState('');
+  const [currentSelectedExamId, setCurrentSelectedExamId] = React.useState('');
+  const [componentStatus, setComponentStatus] = React.useState(0);
 
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('studentName');
-  const [selected, setSelected] = React.useState<readonly string[]>([]);
+  const [orderBy, setOrderBy] = React.useState<keyof ExamInterface>('studentName');
+  const [selected, setSelected] = React.useState<readonly any[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const showFullTopic = (annotation) => {
-    setOpen(true);
-    setCurrentAnnotation(annotation);
+  const [forceRerender, setForceRerender] = React.useState(true);
+
+  const rows: ExamInterface[] = useSelector((state: RootState) => state.fifthExamReducer.allExams );
+
+  const openDialogWithContent = (content) => {
+    setShowDialogWithLargeContent(true);
+    setCurrentlyDisplayedContentOfDialog(content);
   };
+
   const hideFullTopic = () => {
-    setOpen(false);
+    setShowDialogWithLargeContent(false);
   };
+  const hideDeclineReasonAndSendApiRequest = () => {
+    setShowDeclineReasonDialog(false);
+
+    let body = {examId: currentSelectedExamId, approved: false, reason: currentDeclineReason}
+    sendApiRequest('/api/abitur/setApprovalState', 'POST', body)
+      .then((response) => {
+        if (response.status != 200) {
+          console.log('Fehler beim Ablehnen: Http-Statuscode: ' + response.status)
+        }
+      });
+    //no need for page reloading
+    rows.map((row) => {
+      if(String(row.examId) == currentSelectedExamId){
+        row.approved=false;
+      }
+    });
+  };
+  const handleCurrentDeclineReasonOnChange= (event) => {
+    setCurrentDeclineReason(event.target.value);
+  };
+
+  const history = useHistory();
+  handleEditRowClick = (selectedRows) => {
+    const selectedRowData = rows.find((row) => {
+      // @ts-ignore
+      if(row.examId === selectedRows[0]){
+        return true;
+      }
+    })
+    dispatch(setPreFilledDataIn5PKFormEditedByAdmin(selectedRowData));
+    history.push('/admin/pruefungskomponente/editStudentApplication')
+  }
+
+  handleOnClickApprove= (event: React.MouseEvent<unknown>, isApproved: boolean) => {
+    if(isApproved){
+      //approve
+      let body, examId;
+
+      for (let i = 0; i < selected.length; i++) {
+        examId = selected[i];
+        body = {examId: examId, approved: isApproved}
+        sendApiRequest('/api/abitur/setApprovalState', 'POST', body)
+          .then((response) => {
+            if (response.status != 200) {
+              console.log('Fehler beim Genehmigen: Http-Statuscode: ' + response.status)
+            }
+          });
+        rows.map((row) => {
+          if(String(row.examId) == examId){
+            row.approved=true;
+            setForceRerender(!forceRerender);
+          }
+        });
+      }
+    }else{
+      //decline
+      setCurrentSelectedExamId(selected[0]);
+      setShowDeclineReasonDialog(true);
+    }
+  }
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Data,
+    property: keyof ExamInterface,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -387,9 +401,9 @@ function FifthExamAdminTable(props) {
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
       // @ts-ignore
-      const newSelecteds = rowsWithIds.map((row) => {
+      const newSelecteds = rows.map((row) => {
         // @ts-ignore
-        return row.id;
+        return row.examId;
       });
       setSelected(newSelecteds);
       return;
@@ -433,13 +447,40 @@ function FifthExamAdminTable(props) {
   const isSelected = (name: any) => selected.indexOf(name) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rowsWithIds.
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rowsWithIds.length) : 0;
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
+
+  const showAppropriateCellContent = (originalProperty: any, updatedProperty: any) =>{
+    const updatedPropertyExists = !(updatedProperty === null || updatedProperty === '');
+      return (
+        <div style={{display: "flex", justifyContent: 'end', alignItems: 'center'}}>
+          {updatedPropertyExists
+            ? <Typography style={{textDecoration: 'line-through', backgroundColor: '#fd4c4c'}}>{originalProperty}</Typography>
+            : <Typography>{originalProperty}</Typography>}
+          {updatedProperty ? <ArrowRightAltIcon/> : null}
+          <Typography style={updatedPropertyExists ? {backgroundColor: '#a3ff97'} : {}}>{updatedProperty}</Typography>
+        </div>
+      )
+    }
+
+  useEffect(() => {
+    sendApiRequest('/api/abitur/getAllExams', 'GET')
+      .then((response) => response.json())
+      .then((json) => {
+        dispatch({ type: 'LOAD_ALL_EXAMS', payload: json });
+      });
+    sendApiRequest('api/components/getTransitionDatesOfAll', 'GET')
+        .then((response) => response.json())
+        .then((data) => setComponentStatus(getComponentStatusId(data, 'fifthExam')));
+  }, [])
 
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} selectedRows={selected} setPreFilledDataIn5PKFormEditedByAdmin={props.setPreFilledDataIn5PKFormEditedByAdmin} />
-        <TableContainer>
+        <EnhancedTableToolbar numSelected={selected.length}
+                              selectedRows={selected}
+                              setPreFilledDataIn5PKFormEditedByAdmin={props.setPreFilledDataIn5PKFormEditedByAdmin}
+                              componentStatus={componentStatus} />
+        <TableContainer style={{maxWidth: '98vw'}}>
           <Table
             sx={{ minWidth: 750 }}
             aria-labelledby="tableTitle"
@@ -451,15 +492,17 @@ function FifthExamAdminTable(props) {
               orderBy={orderBy}
               onSelectAllClick={handleSelectAllClick}
               onRequestSort={handleRequestSort}
-              rowCount={rowsWithIds.length}
+              rowCount={rows.length}
             />
             <TableBody>
               {/* if you don't need to support IE11, you can replace the `stableSort` call with:
               rowsWithIds.slice().sort(getComparator(order, orderBy)) */}
-              {stableSort(rowsWithIds, getComparator(order, orderBy))
+              {/* @ts-ignore */}
+              {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row, index) => {
-                  const isItemSelected = isSelected(row.id);
+                  // @ts-ignore
+                  const isItemSelected = isSelected(row.examId);
                   const labelId = `enhanced-table-checkbox-${index}`;
 
                   return (
@@ -468,8 +511,10 @@ function FifthExamAdminTable(props) {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       tabIndex={-1}
-                      key={row.id}
-                      onClick={(event) => handleClick(event, row.id)}
+                      // @ts-ignore
+                      key={row.examId}
+                      // @ts-ignore
+                      onClick={(event) => handleClick(event, row.examId)}
                       selected={isItemSelected}
                     >
                       <TableCell padding="checkbox">
@@ -489,17 +534,26 @@ function FifthExamAdminTable(props) {
                       >
                         {row.studentName}
                       </TableCell>
-                      <TableCell align="right">{row.partnerName}</TableCell>
-                      <TableCell align="right">{row.referenzfach}</TableCell>
-                      <TableCell align="right">{row.bezugsfach}</TableCell>
-                      <TableCell align="right">{row.examiner}</TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.partnerStudentName, row.updatedPartnerStudentName)}</TableCell>
                       <TableCell align="right">{row.examType}</TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.referenzfach, row.updatedReferenzfach)}</TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.bezugsfach, row.updatedBezugsfach)}</TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.examiner, row.updatedExaminer)}</TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.tutor, row.updatedTutor)}</TableCell>
                       <TableCell align="right">
-                        <Button title="Thema ansehen" onClick={() => showFullTopic(row.topicArea)}>
+                        <Button title="Thema ansehen" onClick={() => openDialogWithContent(showAppropriateCellContent(row.topicArea, row.updatedTopicArea))}>
                           <DescriptionIcon />
                         </Button>
                       </TableCell>
-                      <TableCell align="right">{row.approved}</TableCell>
+                      <TableCell align="right">
+                        <Button title="Problemfrage ansehen" onClick={() => openDialogWithContent(showAppropriateCellContent(row.problemQuestion, row.updatedProblemQuestion))}>
+                          <DescriptionIcon />
+                        </Button>
+                      </TableCell>
+                      <TableCell align="right">{showAppropriateCellContent(row.presentationForm, row.updatedPresentationForm)}</TableCell>
+                      <TableCell align="right">{ row.firstSubmissionDate ? transformISOstringToGermanDateString(new Date(row.firstSubmissionDate).toISOString()) : '-'}</TableCell>
+                      <TableCell align="right">{ row.finalSubmissionDate ? transformISOstringToGermanDateString(new Date(row.finalSubmissionDate).toISOString()) : '-'}</TableCell>
+                      <TableCell align="right">{row.approved ? "Ja" : "Nein"}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -518,7 +572,7 @@ function FifthExamAdminTable(props) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component="div"
-          count={rowsWithIds.length}
+          count={rows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -531,13 +585,13 @@ function FifthExamAdminTable(props) {
       />
 
       <Dialog
-        open={open}
+        open={showDialogWithLargeContent}
         onClose={hideFullTopic}
       >
-        <DialogTitle id="submit_evaluations_dialog_title">{'Thema: '}</DialogTitle>
+        <DialogTitle id="submit_evaluations_dialog_title">{'Inhalt:'}</DialogTitle>
         <DialogContent>
           <DialogContentText id="submit_evaluations__dialog_content">
-            {currentAnnotation}
+            {currentlyDisplayedContentOfDialog}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -546,7 +600,29 @@ function FifthExamAdminTable(props) {
           </Button>
         </DialogActions>
       </Dialog>
-
+      <Dialog
+        open={showDeclineReasonDialog}
+        onClose={hideDeclineReasonAndSendApiRequest}
+      >
+        <DialogTitle id="submit_evaluations_dialog_title" >{'Ablehnungsgrund: '}</DialogTitle>
+        <DialogContent
+          >
+          <TextField
+            label="Ablehnungsgrund"
+            variant="outlined"
+            onChange={handleCurrentDeclineReasonOnChange}
+            value={currentDeclineReason}
+            rows={5}
+            multiline
+            style={{ width: '50vh' }}>
+          </TextField>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={hideDeclineReasonAndSendApiRequest} color="primary">
+            Bestätigen
+          </Button>
+        </DialogActions>
+    </Dialog>
     </Box>
   );
 }

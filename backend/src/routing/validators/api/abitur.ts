@@ -1,4 +1,4 @@
-import {body, ValidationChain} from 'express-validator';
+import {body, ValidationChain, param} from 'express-validator';
 
 export default class AbiturValidators {
     static isOptionalString = (fieldName: string): ValidationChain => body(fieldName).isString().trim().optional();
@@ -17,7 +17,11 @@ export default class AbiturValidators {
         AbiturValidators.isOptionalString('updatedProblemQuestion'),
         AbiturValidators.isOptionalString('presentationForm'),
         AbiturValidators.isOptionalString('updatedPresentationForm'),
+        AbiturValidators.isOptionalString('tutor'),
+        AbiturValidators.isOptionalString('updatedTutor'),
         body('examType').isString().isIn(['BLL', 'PP']).optional(),
+        body('submitNumber').isInt().isIn([1,2]),
+        body('submitDate').isISO8601(),
     ];
     static POSTsetApprovalState = [
         body('examId').isInt(),
@@ -26,4 +30,19 @@ export default class AbiturValidators {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         body('reason').if((value: any, {req}: any) => !req.body.approved).isString(),
     ];
+
+    static POSTeditData = [
+        AbiturValidators.isOptionalString('updatedExaminer'),
+        AbiturValidators.isOptionalString('updatedBezugsfach'),
+        AbiturValidators.isOptionalString('updatedPartnerStudentName'),
+        AbiturValidators.isOptionalString('updatedReferenzfach'),
+        AbiturValidators.isOptionalString('updatedTopicArea'),
+        AbiturValidators.isOptionalString('updatedProblemQuestion'),
+        AbiturValidators.isOptionalString('updatedPresentationForm'),
+        AbiturValidators.isOptionalString('updatedTutor'),
+        body('examType').isString().isIn(['BLL', 'PP'])
+    ];
+    static GETgetPdf = [
+        param('submitNumber').isInt().isIn([1,2])
+    ]
 }
