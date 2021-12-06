@@ -473,6 +473,12 @@ function FifthExamAdminTable(props) {
         .then((data) => setComponentStatus(getComponentStatusId(data, 'fifthExam')));
   }, [])
 
+  const getTextForApprovalState = (approvalState) => {
+    if (approvalState === null || approvalState === undefined) return "Noch offen";
+    if (approvalState) return "Ja";
+    return "Nein";
+  }
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -553,7 +559,7 @@ function FifthExamAdminTable(props) {
                       <TableCell align="right">{showAppropriateCellContent(row.presentationForm, row.updatedPresentationForm)}</TableCell>
                       <TableCell align="right">{ row.firstSubmissionDate ? transformISOstringToGermanDateString(new Date(row.firstSubmissionDate).toISOString()) : '-'}</TableCell>
                       <TableCell align="right">{ row.finalSubmissionDate ? transformISOstringToGermanDateString(new Date(row.finalSubmissionDate).toISOString()) : '-'}</TableCell>
-                      <TableCell align="right">{row.approved ? "Ja" : "Nein"}</TableCell>
+                      <TableCell align="right">{getTextForApprovalState(row.approved)}</TableCell>
                     </TableRow>
                   );
                 })}

@@ -19,7 +19,7 @@ const initialState: AuthState = {
 
 function getUserRole(roles, groups) {
   if (window.location.origin === 'http://localhost:3000') {
-    /// return STUDENT_ROLE;
+    // return STUDENT_ROLE;
     return SUPER_ADMIN_ROLE;
   }
   const groupValueArray = Object.values(groups);
@@ -43,6 +43,10 @@ function getUserRole(roles, groups) {
 }
 
 function getUserClass(groups) {
+  if (window.location.origin === 'http://localhost:3000') {
+    // return 9;
+    return 11;
+  }
   let extractedClassNumber = 0;
   const groupValueArray = Object.values(groups);
   groupValueArray.forEach((group) => {
