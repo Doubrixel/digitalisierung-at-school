@@ -2,9 +2,9 @@ import {Issuer, UserinfoResponse} from 'openid-client';
 import {NextFunction, Request, Response} from 'express';
 import {deserialize, serialize} from './session';
 import {clearSessionCookie, getSessionCookie, setSessionCookie,} from './cookie';
-import {iservConnectionError, iservLink, unauthenticated} from './staticAuthStrings';
+import {iservConnectionError, unauthenticated} from './staticAuthStrings';
 import {User} from '../../types/sso';
-import {transformGroupToArray} from "../db/user";
+import {transformGroupToArray} from '../db/user';
 
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -30,7 +30,7 @@ export async function initialize(
      }
 
      try {
-         const issuer = await Issuer.discover(iservLink);
+         const issuer = await Issuer.discover(process.env.ISERV_DISCOVERY_DOCUMENT_LINK!);
          const client = new issuer.Client({
              client_id: process.env.OAUTH_CLIENT_ID!,
              client_secret: process.env.OAUTH_CLIENT_SECRET!,
