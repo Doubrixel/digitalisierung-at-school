@@ -7,3 +7,4 @@ services:
     volumes:
       - ~/digitalisierung-at-school-data-test:/usr/share/html/data
     command: [sh, -c, "cd build/; node_modules/db-migrate/bin/db-migrate up; NODE_ENV=production node src/index.js"]
+    restart: always
