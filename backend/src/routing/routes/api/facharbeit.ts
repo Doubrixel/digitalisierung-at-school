@@ -9,6 +9,7 @@ export default (): Router => {
     router.get('/getAll', Facharbeit.GETgetAll);
     router.post('/chooseTopic', FacharbeitValidators.POSTchooseTopic, Facharbeit.POSTchooseTopic);
     router.post('/uploadDocument', FacharbeitValidators.POSTuploadDocument, Facharbeit.POSTuploadDocument);
+    router.post('/editTopic', FacharbeitValidators.POSTeditTopic, Facharbeit.POSTeditTopic);
 
     return router;
 };

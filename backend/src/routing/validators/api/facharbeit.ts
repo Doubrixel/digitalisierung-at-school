@@ -6,12 +6,20 @@ const upload = multer.default({ storage: storage });
 const UPLOAD_DOCUMENT_NAME = 'document';
 
 export default class FacharbeitValidators {
-    static isOptionalString = (fieldName: string): ValidationChain => body(fieldName).isString().trim().optional();
+    static isString = (fieldName: string): ValidationChain => body(fieldName).isString().trim();
+    static isOptionalString = (fieldName: string): ValidationChain => FacharbeitValidators.isString(fieldName).optional();
     static POSTchooseTopic = [
+        FacharbeitValidators.isString('topic'),
+        FacharbeitValidators.isString('subject'),
+        FacharbeitValidators.isString('choosenTeacher'),
+        FacharbeitValidators.isString('subjectTeacher'),
+    ];
+    static POSTeditTopic = [
+        body('studentId').isInt(),
         FacharbeitValidators.isOptionalString('topic'),
         FacharbeitValidators.isOptionalString('subject'),
         FacharbeitValidators.isOptionalString('choosenTeacher'),
-        FacharbeitValidators.isOptionalString('subjectteacher'),
+        FacharbeitValidators.isOptionalString('subjectTeacher'),
     ];
     static POSTuploadDocument = [
         // multer middleware
